@@ -6,6 +6,10 @@
 #include "GameFramework/Pawn.h"
 #include "BirdsEyePlayerCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+class UCapsuleComponent;
+
 UCLASS()
 class GRIDTD_API ABirdsEyePlayerCharacter : public APawn
 {
@@ -26,4 +30,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	UCapsuleComponent* CapsuleComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CameraComponent;
 };
