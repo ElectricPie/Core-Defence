@@ -25,10 +25,29 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	UPROPERTY()
+	AActor* CurrentTarget;
+	
+	void MoveToCurrentWaypoint();
+	
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Compomnents")
 	UCapsuleComponent* CapsuleComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components");
 	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Movement");
+	float MovementSpeed = 100.f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AActor*> Waypoints;
+
+public:
+	/**
+	 * 
+	 * @param NewWaypoints 
+	 */
+	void SetWaypoints(TArray<AActor*> NewWaypoints);
 };

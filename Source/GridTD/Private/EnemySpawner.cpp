@@ -39,5 +39,7 @@ void AEnemySpawner::SpawnEnemy()
 		GetActorLocation(),
 		GetActorRotation()
 	);
+
+	NewEnemy->SetWaypoints(Waypoints);
 }
 

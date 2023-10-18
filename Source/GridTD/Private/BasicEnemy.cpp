@@ -30,5 +30,24 @@ void ABasicEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	MoveToCurrentWaypoint();
+}
+
+void ABasicEnemy::MoveToCurrentWaypoint()
+{
+	if (!CurrentTarget) return;
+
+	const FVector Direction = (CurrentTarget->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+	const FVector NewLocation = GetActorLocation() + Direction * MovementSpeed * GetWorld()->GetDeltaSeconds();
+	SetActorLocation(NewLocation);
+}
+
+void ABasicEnemy::SetWaypoints(TArray<AActor*> NewWaypoints)
+{
+	Waypoints = NewWaypoints;
+	
+	if (Waypoints.Num() == 0) return;
+	if (!Waypoints[0]) return;
+	CurrentTarget = Waypoints[0];
 }
 
