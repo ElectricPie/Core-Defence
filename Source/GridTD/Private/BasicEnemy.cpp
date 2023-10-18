@@ -50,8 +50,14 @@ void ABasicEnemy::CheckDistanceToTarget()
 {
 	const float DistanceToWaypoint = FVector::Distance(Waypoints[CurrentWaypoint]->GetActorLocation(), GetActorLocation());
 	if (DistanceToWaypoint > WaypointTriggerDistance) return;
-	if (CurrentWaypoint + 1 >= Waypoints.Num()) return;
-	CurrentWaypoint++;
+	if (CurrentWaypoint + 1 < Waypoints.Num())
+	{
+		CurrentWaypoint++;
+	}
+	else
+	{
+		Destroy();
+	}
 }
 
 void ABasicEnemy::SetWaypoints(const TArray<AActor*>& NewWaypoints)
