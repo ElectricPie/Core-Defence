@@ -31,12 +31,21 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCapsuleComponent* CapsuleComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCameraComponent* CameraComponent;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Inputs", meta = (AllowPrivateAccess = true))
+	float SpeedModifier = 1000.f;
+
+	FVector CurrentVelocity;
+	
+	void MoveXAxis(float Value);
+	void MoveYAxis(float Value);
 };

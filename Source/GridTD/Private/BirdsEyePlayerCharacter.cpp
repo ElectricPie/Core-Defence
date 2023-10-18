@@ -27,7 +27,6 @@ ABirdsEyePlayerCharacter::ABirdsEyePlayerCharacter()
 void ABirdsEyePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -35,6 +34,8 @@ void ABirdsEyePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector NewPos = GetActorLocation() + CurrentVelocity * DeltaTime;
+	SetActorLocation(NewPos);
 }
 
 // Called to bind functionality to input
@@ -42,5 +43,17 @@ void ABirdsEyePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Player
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveXAxis", this, &ABirdsEyePlayerCharacter::MoveXAxis);
+	PlayerInputComponent->BindAxis("MoveYAxis", this, &ABirdsEyePlayerCharacter::MoveYAxis);
+}
+
+void ABirdsEyePlayerCharacter::MoveXAxis(float Value)
+{
+	CurrentVelocity.X = FMath::Clamp(Value, -1.f, 1.f) * SpeedModifier;
+} 
+
+void ABirdsEyePlayerCharacter::MoveYAxis(float Value)
+{
+	CurrentVelocity.Y = FMath::Clamp(Value, -1.f, 1.f) * SpeedModifier;
 }
 
