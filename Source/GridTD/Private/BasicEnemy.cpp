@@ -30,24 +30,33 @@ void ABasicEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MoveToCurrentWaypoint();
+	
+	if (Waypoints.Num() == 0) return;
+	if (!Waypoints[CurrentWaypoint]) return;
+
+	const FVector WaypointPos = Waypoints[CurrentWaypoint]->GetActorLocation();
+	MoveToCurrentWaypoint(WaypointPos);
+	CheckDistanceToTarget();
 }
 
-void ABasicEnemy::MoveToCurrentWaypoint()
+void ABasicEnemy::MoveToCurrentWaypoint(const FVector& Position)
 {
-	if (!CurrentTarget) return;
-
-	const FVector Direction = (CurrentTarget->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+	const FVector Direction = (Position - GetActorLocation()).GetSafeNormal();
 	const FVector NewLocation = GetActorLocation() + Direction * MovementSpeed * GetWorld()->GetDeltaSeconds();
 	SetActorLocation(NewLocation);
 }
 
-void ABasicEnemy::SetWaypoints(TArray<AActor*> NewWaypoints)
+void ABasicEnemy::CheckDistanceToTarget()
 {
+	const float DistanceToWaypoint = FVector::Distance(Waypoints[CurrentWaypoint]->GetActorLocation(), GetActorLocation());
+	if (DistanceToWaypoint > WaypointTriggerDistance) return;
+	if (CurrentWaypoint + 1 >= Waypoints.Num()) return;
+	CurrentWaypoint++;
+}
+
+void ABasicEnemy::SetWaypoints(const TArray<AActor*>& NewWaypoints)
+{
+	CurrentWaypoint = 0;
 	Waypoints = NewWaypoints;
-	
-	if (Waypoints.Num() == 0) return;
-	if (!Waypoints[0]) return;
-	CurrentTarget = Waypoints[0];
 }
 

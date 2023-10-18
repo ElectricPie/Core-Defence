@@ -30,7 +30,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 }
 
-void AEnemySpawner::SpawnEnemy()
+void AEnemySpawner::SpawnEnemy() const
 {
 	if (!EnemyToSpawn) return;
 

@@ -33,5 +33,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Pathing", meta = (AllowPrivateAccess=true))
 	TArray<AActor*> Waypoints;
 
-	void SpawnEnemy();
+	void SpawnEnemy() const;
 };
