@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "EnemySpawner.generated.h"
 
+class ABasicEnemy;
+
 UCLASS()
 class GRIDTD_API AEnemySpawner : public AActor
 {
@@ -24,10 +26,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	//UPROPERTY(VisibleAnywhere)
-	//USceneComponent* SceneComponent;
+	UPROPERTY(EditAnywhere, Category = "Spawning", meta = (AllowPrivateAccess))
+	TSubclassOf<ABasicEnemy> EnemyToSpawn;
 	
 	// This will need changing if deciding to use A* later
 	UPROPERTY(EditAnywhere, Category = "Pathing", meta = (AllowPrivateAccess=true))
 	TArray<AActor*> Waypoints;
+
+	void SpawnEnemy();
 };

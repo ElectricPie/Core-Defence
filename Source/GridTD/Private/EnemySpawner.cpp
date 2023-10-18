@@ -3,6 +3,8 @@
 
 #include "EnemySpawner.h"
 
+#include "BasicEnemy.h"
+
 // Sets default values
 AEnemySpawner::AEnemySpawner()
 {
@@ -17,7 +19,8 @@ AEnemySpawner::AEnemySpawner()
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SpawnEnemy();
 }
 
 // Called every frame
@@ -25,5 +28,16 @@ void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AEnemySpawner::SpawnEnemy()
+{
+	if (!EnemyToSpawn) return;
+
+	ABasicEnemy* NewEnemy = GetWorld()->SpawnActor<ABasicEnemy>(
+		EnemyToSpawn,
+		GetActorLocation(),
+		GetActorRotation()
+	);
 }
 
