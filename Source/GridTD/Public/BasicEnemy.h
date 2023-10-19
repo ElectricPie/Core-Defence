@@ -30,9 +30,6 @@ private:
 	void CheckDistanceToTarget();
 	
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Compomnents")
-	UCapsuleComponent* CapsuleComponent;
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* StaticMeshComponent;
 

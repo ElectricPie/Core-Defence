@@ -11,11 +11,8 @@ ABasicEnemy::ABasicEnemy()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsual Component"));
-	RootComponent = CapsuleComponent;
-
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	RootComponent = StaticMeshComponent;
 }
 
 // Called when the game starts or when spawned
