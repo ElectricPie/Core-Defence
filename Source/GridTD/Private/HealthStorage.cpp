@@ -3,7 +3,9 @@
 
 #include "HealthStorage.h"
 
+#include "TowerDefencePlayer.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UHealthStorage::UHealthStorage()
@@ -29,6 +31,11 @@ void UHealthStorage::BeginPlay()
 
 	// ...
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &UHealthStorage::OnBeginOverlap);
+
+	// Update the player controller with this storages health
+	PlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
+	if (!PlayerController) return;
+	PlayerController->RegisterPlayerHealth(TotalHealth);
 }
 
 

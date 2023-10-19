@@ -7,6 +7,7 @@
 #include "HealthStorage.generated.h"
 
 
+class ATowerDefencePlayer;
 class UBoxComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -31,7 +32,10 @@ private:
 	UBoxComponent* TriggerVolume;
 
 	UPROPERTY(EditAnywhere, meta=(ClampMin = 0, UIMin = 0))
-	uint32 Health;
+	uint32 TotalHealth;
+
+	UPROPERTY()
+	ATowerDefencePlayer* PlayerController;
 
 protected:
 	UFUNCTION()
