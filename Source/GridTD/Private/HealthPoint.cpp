@@ -4,6 +4,7 @@
 #include "HealthPoint.h"
 
 #include "DrawDebugHelpers.h"
+#include "HealthOrb.h"
 #include "TowerDefencePlayer.h"
 #include "Components/BoxComponent.h"
 
@@ -29,18 +30,20 @@ void AHealthPoint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Health = MaxHealth;
+	for (uint32 i = 0; i < MaxOrbs; i++)
+	{
+		AHealthOrb* NewOrb = GetWorld()->SpawnActor<AHealthOrb>(
+			HealthOrbBlueprint,
+			GetPosFromOrbCircle(360 / MaxOrbs * i),
+			GetActorRotation()
+		);
+
+		HealthOrbs.Add(NewOrb);
+	}
 
 	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
 	if (!TowerPlayerController) return;
-	TowerPlayerController->RegisterPlayerHealth(MaxHealth);
-
-	for (int32 i = 0; i < 360; i += 90)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Create sphere @ %d"), i);
-		FVector& DebugTest = GetPosFromOrbCircle(i);
-		DrawDebugSphere(GetWorld(), DebugTest, 10.f, 12.f, FColor::Red, false, 10.f);
-	}
+	TowerPlayerController->RegisterPlayerHealth(MaxOrbs);
 }
 
 void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)

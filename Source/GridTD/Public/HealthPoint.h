@@ -36,18 +36,21 @@ private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UBoxComponent* TriggerVolume;
 	
-	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="The point health orbs will orbit around"))
+	UPROPERTY(VisibleAnywhere, Category="Components", meta=(ToolTip="The point health orbs will orbit around"))
 	USceneComponent* HealthOrbOrbitCentre;
 
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(ClampMin=0.f, UIMin=0.f, AllowPrivateAccess=true))
 	float OrbDistanceFromCentre = 100.f;
 
-	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess=true))
-	uint32 MaxHealth;
+	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true))
+	uint32 MaxOrbs;
+	
+	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true))
+	TSubclassOf<AHealthOrb> HealthOrbBlueprint;
 
 	UPROPERTY(VisibleAnywhere)
-	uint32 Health;
-
+	TArray<AHealthOrb*> HealthOrbs;
+	
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
 
