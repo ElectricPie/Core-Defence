@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "HealthPoint.generated.h"
 
+class AHealthOrb;
 class ATowerDefencePlayer;
 class UBoxComponent;
 
@@ -29,11 +30,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	UBoxComponent* TriggerVolume;
+	
+	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="The point health orbs will orbit around"))
+	USceneComponent* HealthOrbOrbitCentre;
+
+	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(ClampMin=0.f, UIMin=0.f, AllowPrivateAccess=true))
+	float OrbDistanceFromCentre = 100.f;
 
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess=true))
 	uint32 MaxHealth;
@@ -43,4 +50,6 @@ private:
 
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
+
+	FVector& GetPosFromOrbCircle(float Angle) const;
 };

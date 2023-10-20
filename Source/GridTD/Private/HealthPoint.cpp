@@ -3,6 +3,7 @@
 
 #include "HealthPoint.h"
 
+#include "DrawDebugHelpers.h"
 #include "TowerDefencePlayer.h"
 #include "Components/BoxComponent.h"
 
@@ -18,6 +19,9 @@ AHealthPoint::AHealthPoint()
 
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Volume"));
 	TriggerVolume->SetupAttachment(RootComponent);
+
+	HealthOrbOrbitCentre = CreateDefaultSubobject<USceneComponent>(TEXT("Orb Orbit Centre"));
+	HealthOrbOrbitCentre->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +34,13 @@ void AHealthPoint::BeginPlay()
 	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
 	if (!TowerPlayerController) return;
 	TowerPlayerController->RegisterPlayerHealth(MaxHealth);
+
+	for (int32 i = 0; i < 360; i += 90)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Create sphere @ %d"), i);
+		FVector& DebugTest = GetPosFromOrbCircle(i);
+		DrawDebugSphere(GetWorld(), DebugTest, 10.f, 12.f, FColor::Red, false, 10.f);
+	}
 }
 
 void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -42,5 +53,20 @@ void AHealthPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
+{
+	Angle = 2 * PI * (FMath::Clamp<float>(Angle, 0, 360) / 360);
+
+	FVector* Pos = new FVector(
+		HealthOrbOrbitCentre->GetComponentLocation().X,
+		HealthOrbOrbitCentre->GetComponentLocation().Y,
+		HealthOrbOrbitCentre->GetComponentLocation().Z);
+	
+	Pos->X += OrbDistanceFromCentre * FMath::Cos(Angle);
+	Pos->Y += OrbDistanceFromCentre * FMath::Sin(Angle);
+	
+	return *Pos;
 }
 
