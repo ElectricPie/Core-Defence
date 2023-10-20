@@ -37,7 +37,7 @@ void AHealthPoint::BeginPlay()
 			GetPosFromOrbCircle(360 / MaxOrbs * i),
 			GetActorRotation()
 		);
-
+		NewOrb->AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::KeepWorldTransform);
 		HealthOrbs.Add(NewOrb);
 	}
 
