@@ -74,3 +74,13 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 	return *Pos;
 }
 
+AHealthOrb* AHealthPoint::TakeHealthOrb()
+{
+	AHealthOrb* HealthOrb = nullptr;
+	
+	if (HealthOrbs.Num() == 0) HealthOrb;
+	
+    HealthOrb = HealthOrbs.Pop();
+	return HealthOrb;
+}
+

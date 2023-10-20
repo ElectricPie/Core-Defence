@@ -53,4 +53,7 @@ private:
 	ATowerDefencePlayer* TowerPlayerController;
 
 	FVector& GetPosFromOrbCircle(float Angle) const;
+
+public:
+	AHealthOrb* TakeHealthOrb();
 };

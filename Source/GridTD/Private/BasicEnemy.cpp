@@ -3,7 +3,9 @@
 
 #include "BasicEnemy.h"
 
-#include "Components/CapsuleComponent.h"
+#include "HealthOrb.h"
+#include "HealthPoint.h"
+
 
 // Sets default values
 ABasicEnemy::ABasicEnemy()
@@ -13,6 +15,9 @@ ABasicEnemy::ABasicEnemy()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
 	RootComponent = StaticMeshComponent;
+
+	OrbSlot = CreateDefaultSubobject<USceneComponent>(TEXT("Orb Slot"));
+	OrbSlot->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +25,22 @@ void ABasicEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ABasicEnemy::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	
+	AHealthPoint* HealthPoint = Cast<AHealthPoint>(OtherActor);
+	if (!HealthPoint) return;
+	
+	// Don't need to pick one up if have one already
+	if (HealthOrb) return;
+	HealthOrb = HealthPoint->TakeHealthOrb();
+	// Stop processing if health point doesn't have a orb
+	if (!HealthOrb) return;
+		
+	HealthOrb->AttachToComponent(OrbSlot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 // Called every frame
