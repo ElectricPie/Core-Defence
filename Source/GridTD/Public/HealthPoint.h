@@ -32,21 +32,19 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
-
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UBoxComponent* TriggerVolume;
-	
 	UPROPERTY(VisibleAnywhere, Category="Components", meta=(ToolTip="The point health orbs will orbit around"))
 	USceneComponent* HealthOrbOrbitCentre;
 
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(ClampMin=0.f, UIMin=0.f, AllowPrivateAccess=true))
 	float OrbDistanceFromCentre = 100.f;
-
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true))
 	uint32 MaxOrbs;
-	
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true))
 	TSubclassOf<AHealthOrb> HealthOrbBlueprint;
+	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="How many degrees per second the orbs will rotate"))
+	float OrbRotationSpeed = 1.f;
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<AHealthOrb*> HealthOrbs;

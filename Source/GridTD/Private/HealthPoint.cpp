@@ -55,7 +55,8 @@ void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 void AHealthPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	HealthOrbOrbitCentre->AddLocalRotation(FRotator(0.f, OrbRotationSpeed, 0.f ), false);
 }
 
 FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
