@@ -16,17 +16,33 @@ class GRIDTD_API ATowerDefencePlayer : public APlayerController
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void SetupInputComponent() override;
 	
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Health")
 	uint32 MaxHealth;
-	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Health")
 	uint32 Health;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	float SelectionRaycastDistance = 2000.f;
+
+	UFUNCTION()
+	void Select();
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver();
+
+	/**
+	 * Raycast from the screens mouse position to the world
+	 * @param HitLocation The location of the raycast hit
+	 * @param HitActor The Actor hit by the raycast if it Hits
+	 * @return True if the raycast hit an actor
+	 */
+	UFUNCTION(BlueprintCallable)
+	bool RaycastToMouse(FVector& HitLocation, AActor*& HitActor);
 
 public:
 	/**
