@@ -8,13 +8,11 @@ void ATowerDefencePlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Boop1"));
 	GameOver();
 }
 
 void ATowerDefencePlayer::GameOver_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Boop"));
 }
 
 
