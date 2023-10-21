@@ -3,6 +3,8 @@
 
 #include "HealthOrb.h"
 
+#include "TowerDefencePlayer.h"
+
 // Sets default values
 AHealthOrb::AHealthOrb()
 {
@@ -18,6 +20,17 @@ void AHealthOrb::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AHealthOrb::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (EndPlayReason != EEndPlayReason::Destroyed) return;
+
+	ATowerDefencePlayer* TowerPlayer = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
+	if (!TowerPlayer) return;
+	TowerPlayer->ReduceHealth();
 }
 
 // Called every frame

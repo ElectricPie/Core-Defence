@@ -22,5 +22,14 @@ private:
 	uint32 Health;
 
 public:
+	/**
+	 * Gives the player the provided amount of health
+	 * @param AdditionalHealth The amount of health points to give to the player
+	 */
 	void RegisterPlayerHealth(int32 AdditionalHealth);
+	
+	/**
+	 * Reduces the players health by 1
+	 */
+	void ReduceHealth();
 };

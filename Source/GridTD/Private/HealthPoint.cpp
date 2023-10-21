@@ -78,7 +78,7 @@ AHealthOrb* AHealthPoint::TakeHealthOrb()
 {
 	AHealthOrb* HealthOrb = nullptr;
 	
-	if (HealthOrbs.Num() == 0) HealthOrb;
+	if (HealthOrbs.Num() == 0) return HealthOrb;
 	
     HealthOrb = HealthOrbs.Pop();
 	return HealthOrb;
