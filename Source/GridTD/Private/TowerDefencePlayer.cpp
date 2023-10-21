@@ -7,8 +7,6 @@
 void ATowerDefencePlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GameOver();
 }
 
 void ATowerDefencePlayer::GameOver_Implementation()
