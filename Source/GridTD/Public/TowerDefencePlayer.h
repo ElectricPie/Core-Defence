@@ -13,6 +13,9 @@ UCLASS()
 class GRIDTD_API ATowerDefencePlayer : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -20,6 +23,10 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	uint32 Health;
+
+protected:
+	UFUNCTION(BlueprintNativeEvent)
+	void GameOver();
 
 public:
 	/**

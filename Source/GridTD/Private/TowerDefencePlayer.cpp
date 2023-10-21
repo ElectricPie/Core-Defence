@@ -3,6 +3,20 @@
 
 #include "TowerDefencePlayer.h"
 
+
+void ATowerDefencePlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GameOver();
+}
+
+void ATowerDefencePlayer::GameOver_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Boop"));
+}
+
+
 void ATowerDefencePlayer::RegisterPlayerHealth(int32 AdditionalHealth)
 {
 	MaxHealth += AdditionalHealth;
@@ -13,5 +27,6 @@ void ATowerDefencePlayer::ReduceHealth()
 {
 	Health--;
 
-	//TODO: Check for no health left
+	if (Health > 0) return;
+	GameOver();
 }
