@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BasicEnemy.generated.h"
 
+class AHealthOrb;
 class UCapsuleComponent;
 
 UCLASS()
@@ -21,6 +22,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -30,24 +35,24 @@ private:
 	void CheckDistanceToTarget();
 	
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Compomnents")
-	UCapsuleComponent* CapsuleComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
+	UPROPERTY(VisibleAnywhere, Category="Components", meta=(Tooltip="A place for a Health Orb"))
+	USceneComponent* OrbSlot;
 
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere, Category="Movement")
 	float MovementSpeed = 100.f;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	TArray<AActor*> Waypoints;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	int32 CurrentWaypoint;
 
 	// The distance from a waypoint to change to the next waypoint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WaypointTriggerDistance = 10.f;
+
+	UPROPERTY(VisibleAnywhere)
+	AHealthOrb* HealthOrb = nullptr;
 	
 public:
 	/**

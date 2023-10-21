@@ -3,26 +3,53 @@
 
 #include "BasicEnemy.h"
 
-#include "Components/CapsuleComponent.h"
+#include "HealthOrb.h"
+#include "HealthPoint.h"
+
 
 // Sets default values
 ABasicEnemy::ABasicEnemy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsual Component"));
-	RootComponent = CapsuleComponent;
-
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	RootComponent = StaticMeshComponent;
+
+	OrbSlot = CreateDefaultSubobject<USceneComponent>(TEXT("Orb Slot"));
+	OrbSlot->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void ABasicEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void ABasicEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (EndPlayReason != EEndPlayReason::Destroyed) return;
+	if (!HealthOrb) return;
+
+	HealthOrb->Destroy();
+}
+
+void ABasicEnemy::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	AHealthPoint* HealthPoint = Cast<AHealthPoint>(OtherActor);
+	if (!HealthPoint) return;
+
+	// Don't need to pick one up if have one already
+	if (HealthOrb) return;
+	HealthOrb = HealthPoint->TakeHealthOrb();
+	// Stop processing if health point doesn't have a orb
+	if (!HealthOrb) return;
+
+	HealthOrb->AttachToComponent(OrbSlot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 // Called every frame
@@ -30,7 +57,7 @@ void ABasicEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+
 	if (Waypoints.Num() == 0) return;
 	if (!Waypoints[CurrentWaypoint]) return;
 
@@ -48,7 +75,8 @@ void ABasicEnemy::MoveToCurrentWaypoint(const FVector& Position)
 
 void ABasicEnemy::CheckDistanceToTarget()
 {
-	const float DistanceToWaypoint = FVector::Distance(Waypoints[CurrentWaypoint]->GetActorLocation(), GetActorLocation());
+	const float DistanceToWaypoint = FVector::Distance(Waypoints[CurrentWaypoint]->GetActorLocation(),
+	                                                   GetActorLocation());
 	if (DistanceToWaypoint > WaypointTriggerDistance) return;
 	if (CurrentWaypoint + 1 < Waypoints.Num())
 	{
@@ -65,4 +93,3 @@ void ABasicEnemy::SetWaypoints(const TArray<AActor*>& NewWaypoints)
 	CurrentWaypoint = 0;
 	Waypoints = NewWaypoints;
 }
-
