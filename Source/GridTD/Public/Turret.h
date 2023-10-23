@@ -27,6 +27,7 @@ public:
 
 private:
 	float CurrentRotation = 0.f;
+	float CurrentPitch = 0.f;
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -39,4 +40,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateTurretPitch(float Pitch);
 };

@@ -31,6 +31,9 @@ void ATurret::Tick(float DeltaTime)
 
 	CurrentRotation += 20 * DeltaTime;
 	UpdateTurretRotation(CurrentRotation);
+
+	CurrentPitch += 10 * DeltaTime;
+	UpdateTurretPitch(CurrentPitch);
 }
 
 
