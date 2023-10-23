@@ -22,7 +22,6 @@ ATurret::ATurret()
 void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -30,5 +29,8 @@ void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CurrentRotation += 20 * DeltaTime;
+	UpdateTurretRotation(CurrentRotation);
 }
+
 

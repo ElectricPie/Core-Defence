@@ -26,9 +26,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere, Category="Componets")
+	float CurrentRotation = 0.f;
+	
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
 	USkeletalMeshComponent* TurretBaseMesh;
-
 	UPROPERTY(VisibleAnywhere, Category="Componets")
 	USphereComponent* SphereTriggerArea;
+	
+	UPROPERTY(VisibleAnywhere, Category="Target")
+	AActor* Target;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateTurretRotation(float Rotation);
 };
