@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "UnitHealth.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnKilledSignature);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GRIDTD_API UUnitHealth : public UActorComponent
@@ -29,6 +30,9 @@ protected:
 	int32 MaxHealth;
 	UPROPERTY(VisibleAnywhere)
 	int32 Health;
+
+	UPROPERTY(EditAnywhere, BlueprintAssignable)
+	FOnKilledSignature OnKilledEvent;
 
 public:
 	void Hit(int32 Damage);
