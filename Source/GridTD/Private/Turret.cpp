@@ -49,8 +49,8 @@ void ATurret::RotateToTarget()
 {
 	if (!Target) return;
 
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
-	UpdateTurretRotation(LookAt.Yaw + RotationOffset);
+	const FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+	UpdateTurretRotation(LookAt.Yaw + RotationOffset - GetActorRotation().Yaw);
 }
 
 
