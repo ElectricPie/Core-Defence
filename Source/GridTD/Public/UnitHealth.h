@@ -29,5 +29,8 @@ protected:
 	int32 MaxHealth;
 	UPROPERTY(VisibleAnywhere)
 	int32 Health;
+
+public:
+	void Hit(int32 Damage);
 	
 };

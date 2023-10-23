@@ -6,6 +6,7 @@
 #include "UnitHealth.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -43,6 +44,7 @@ void ATurret::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateToTarget();
+	FireAtTarget();
 }
 
 void ATurret::RotateToTarget()
@@ -53,6 +55,17 @@ void ATurret::RotateToTarget()
 	LookAt.Pitch = 0.f;
 	UpdateTurretRotation(LookAt.Yaw + RotationOffset - GetActorRotation().Yaw);
 	UpdateTurretPitch(LookAt.Pitch + PitchOffset);
+}
+
+void ATurret::FireAtTarget()
+{
+	if (!Target) return;
+
+	float GameTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
+	if (LastFireTime + FireRate > GameTime) return;
+	LastFireTime = GameTime;
+	UE_LOG(LogTemp, Warning, TEXT("Firing"));
+	Target->Hit(Damage);
 }
 
 

@@ -31,9 +31,12 @@ public:
 private:
 	float CurrentRotation = 0.f;
 	float CurrentPitch = 0.f;
-
-
+	
+	float FireCounter = 0.f;
+	float LastFireTime = 0.f;
+	
 	void RotateToTarget();
+	void FireAtTarget();
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -48,6 +51,11 @@ protected:
 	float RotationOffset = 270.f;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float PitchOffset = 90.f;
+
+	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ToolTip="The number of seconds between firing", ClampMin=0, UIMin=0))
+	float FireRate = 2.f;
+	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ClampMin=0, UIMin=0))
+	int32 Damage = 2;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);

@@ -20,7 +20,7 @@ void UUnitHealth::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	Health = MaxHealth;
 }
 
 
@@ -30,5 +30,12 @@ void UUnitHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UUnitHealth::Hit(const int32 Damage)
+{
+	Health -= Damage;
+	if (Health > 0) return;
+	// TODO: Implement death
 }
 
