@@ -46,6 +46,8 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;
+	UPROPERTY(EditAnywhere, Category="Animation")
+	float PitchOffset = 90.f;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);
