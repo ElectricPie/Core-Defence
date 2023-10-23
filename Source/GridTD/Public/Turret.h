@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
 
+class ABasicEnemy;
 class USphereComponent;
 
 UCLASS()
@@ -21,6 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,6 +31,8 @@ public:
 private:
 	float CurrentRotation = 0.f;
 	float CurrentPitch = 0.f;
+
+	void RotateToTarget();
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -36,7 +41,7 @@ protected:
 	USphereComponent* SphereTriggerArea;
 	
 	UPROPERTY(VisibleAnywhere, Category="Target")
-	AActor* Target;
+	ABasicEnemy* Target;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);

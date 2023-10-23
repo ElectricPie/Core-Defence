@@ -3,7 +3,9 @@
 
 #include "Turret.h"
 
+#include "BasicEnemy.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -24,16 +26,31 @@ void ATurret::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	ABasicEnemy* Enemy = Cast<ABasicEnemy>(OtherActor);
+	if (!Enemy) return;
+	if (Target) return;
+
+	Target = Enemy;
+}
+
 // Called every frame
 void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CurrentRotation += 20 * DeltaTime;
-	UpdateTurretRotation(CurrentRotation);
+	RotateToTarget();
+}
 
-	CurrentPitch += 10 * DeltaTime;
-	UpdateTurretPitch(CurrentPitch);
+void ATurret::RotateToTarget()
+{
+	if (!Target) return;
+
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+	UpdateTurretRotation(LookAt.Yaw);
 }
 
 
