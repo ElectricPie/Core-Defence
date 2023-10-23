@@ -32,6 +32,7 @@ private:
 	float CurrentRotation = 0.f;
 	float CurrentPitch = 0.f;
 
+
 	void RotateToTarget();
 	
 protected:
@@ -42,6 +43,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category="Target")
 	ABasicEnemy* Target;
+	
+	UPROPERTY(EditAnywhere, Category="Animation")
+	float RotationOffset = 270.f;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);
