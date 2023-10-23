@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
 
-class ABasicEnemy;
+class UUnitHealth;
 class USphereComponent;
 
 UCLASS()
@@ -42,7 +42,7 @@ protected:
 	USphereComponent* SphereTriggerArea;
 	
 	UPROPERTY(VisibleAnywhere, Category="Target")
-	ABasicEnemy* Target;
+	UUnitHealth* Target;
 	
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;

@@ -3,7 +3,7 @@
 
 #include "Turret.h"
 
-#include "BasicEnemy.h"
+#include "UnitHealth.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -30,11 +30,11 @@ void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	ABasicEnemy* Enemy = Cast<ABasicEnemy>(OtherActor);
-	if (!Enemy) return;
+	UUnitHealth* UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
+	if (!UnitHealth) return;
 	if (Target) return;
 
-	Target = Enemy;
+	Target = UnitHealth;
 }
 
 // Called every frame
@@ -49,7 +49,7 @@ void ATurret::RotateToTarget()
 {
 	if (!Target) return;
 
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetOwner()->GetActorLocation());
 	LookAt.Pitch = 0.f;
 	UpdateTurretRotation(LookAt.Yaw + RotationOffset - GetActorRotation().Yaw);
 	UpdateTurretPitch(LookAt.Pitch + PitchOffset);
