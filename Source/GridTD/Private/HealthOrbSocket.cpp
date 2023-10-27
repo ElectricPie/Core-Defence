@@ -26,6 +26,14 @@ void UHealthOrbSocket::BeginPlay()
 	
 }
 
+void UHealthOrbSocket::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (!HealthOrb) return;
+	delete HealthOrb;
+}
+
 
 // Called every frame
 void UHealthOrbSocket::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

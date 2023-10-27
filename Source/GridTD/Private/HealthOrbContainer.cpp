@@ -3,13 +3,17 @@
 
 #include "HealthOrbContainer.h"
 
+#include "HealthOrb.h"
+
 FHealthOrbContainer::FHealthOrbContainer(AHealthOrb& HealthOrbToContain, AHealthPoint& OriginPoint): HealthOrb(
-		HealthOrbToContain), OrbOriginPoint(OriginPoint)
+	                                                                                                     HealthOrbToContain), OrbOriginPoint(OriginPoint)
 {
 }
 
 FHealthOrbContainer::~FHealthOrbContainer()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Boop"));
+	HealthOrb.Destroy();
 }
 
 AHealthOrb& FHealthOrbContainer::GetHealthOrb() const
