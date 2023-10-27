@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "HealthPoint.generated.h"
 
+class FHealthOrbContainer;
 class AHealthOrb;
 class ATowerDefencePlayer;
 class UBoxComponent;
@@ -46,14 +47,11 @@ private:
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="How many degrees per second the orbs will rotate"))
 	float OrbRotationSpeed = 1.f;
 
-	UPROPERTY(VisibleAnywhere)
-	TArray<AHealthOrb*> HealthOrbs;
+	TArray<FHealthOrbContainer*> HealthOrbs;
+	
 	
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
 
 	FVector& GetPosFromOrbCircle(float Angle) const;
-
-public:
-	AHealthOrb* TakeHealthOrb();
 };

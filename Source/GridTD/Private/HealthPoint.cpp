@@ -3,8 +3,9 @@
 
 #include "HealthPoint.h"
 
-#include "DrawDebugHelpers.h"
 #include "HealthOrb.h"
+#include "HealthOrbSocket.h"
+#include "HealthOrbContainer.h"
 #include "TowerDefencePlayer.h"
 #include "Components/BoxComponent.h"
 
@@ -38,7 +39,8 @@ void AHealthPoint::BeginPlay()
 			GetActorRotation()
 		);
 		NewOrb->AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::KeepWorldTransform);
-		HealthOrbs.Add(NewOrb);
+		FHealthOrbContainer* NewContainer = new FHealthOrbContainer(*NewOrb, *this);
+		HealthOrbs.Add(NewContainer);
 	}
 
 	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
@@ -49,6 +51,12 @@ void AHealthPoint::BeginPlay()
 void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+
+	UHealthOrbSocket* OrbSocket = OtherActor->FindComponentByClass<UHealthOrbSocket>();
+	if (!OrbSocket || HealthOrbs.Num() == 0) return;
+	FHealthOrbContainer* HealthOrb = HealthOrbs.Pop();
+	
+	OrbSocket->AssignHealthOrb(*HealthOrb);
 }
 
 // Called every frame
@@ -73,14 +81,3 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 	
 	return *Pos;
 }
-
-AHealthOrb* AHealthPoint::TakeHealthOrb()
-{
-	AHealthOrb* HealthOrb = nullptr;
-	
-	if (HealthOrbs.Num() == 0) return HealthOrb;
-	
-    HealthOrb = HealthOrbs.Pop();
-	return HealthOrb;
-}
-
