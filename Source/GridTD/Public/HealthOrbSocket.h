@@ -36,4 +36,7 @@ public:
 	 * @return True if the orb was successfully assigned to the socked
 	 */
 	bool AssignHealthOrb(FHealthOrbContainer& HealthOrbToAssign);
+
+	UFUNCTION(BlueprintCallable)
+	bool HasOrb() const;
 };

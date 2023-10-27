@@ -37,8 +37,20 @@ void UHealthOrbSocket::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 bool UHealthOrbSocket::AssignHealthOrb(FHealthOrbContainer& HealthOrbToAssign)
 {
+	if (HealthOrb) return false;
+	
 	HealthOrb = &HealthOrbToAssign;
 	HealthOrb->GetHealthOrb().AttachToComponent(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	return true;
+}
+
+bool UHealthOrbSocket::HasOrb() const
+{
+	if (HealthOrb)
+	{
+		return true;
+	}
+
+	return false;
 }
 
