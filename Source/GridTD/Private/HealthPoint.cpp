@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "HealthPoint.h"
@@ -30,17 +30,25 @@ AHealthPoint::AHealthPoint()
 void AHealthPoint::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Create health orbs equal to the MaxOrbs amount and position them around the Orbit centre
 	for (uint32 i = 0; i < MaxOrbs; i++)
 	{
+		FVector NewOrbPosition = GetPosFromOrbCircle(360 / MaxOrbs * i);
+		
+		UE_LOG(LogTemp, Warning, TEXT("New Location %s"), *NewOrbPosition.ToString());
+		
 		AHealthOrb* NewOrb = GetWorld()->SpawnActor<AHealthOrb>(
 			HealthOrbBlueprint,
-			GetPosFromOrbCircle(360 / MaxOrbs * i),
+			NewOrbPosition,
 			GetActorRotation()
 		);
 		NewOrb->AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::KeepWorldTransform);
+
+		// Add the orb and its location
 		FHealthOrbContainer* NewContainer = new FHealthOrbContainer(*NewOrb, *this);
-		HealthOrbs.Add(NewContainer);
+		FOrbLocation* OrbLocation = new FOrbLocation(*NewContainer, NewOrbPosition);
+		HealthOrbs.Add(OrbLocation);
 	}
 
 	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
@@ -52,11 +60,15 @@ void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	// Assigns an orb to the actor if it has a Orb socket and there are orbs to give
 	UHealthOrbSocket* OrbSocket = OtherActor->FindComponentByClass<UHealthOrbSocket>();
 	if (!OrbSocket || HealthOrbs.Num() == 0) return;
-	FHealthOrbContainer* HealthOrb = HealthOrbs.Pop();
+	if (OrbSocket->HasOrb()) return;
+
+	const FOrbLocation* OrbLocation = HealthOrbs.Pop();
+	UnusedOrbLocations.Add(OrbLocation->OrbPosition);
 	
-	OrbSocket->AssignHealthOrb(*HealthOrb);
+	OrbSocket->AssignHealthOrb(OrbLocation->HealthOrb);
 }
 
 // Called every frame
@@ -81,3 +93,21 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 	
 	return *Pos;
 }
+
+ void AHealthPoint::SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const
+ {
+	HealthOrb.AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	UE_LOG(LogTemp, Warning, TEXT("Location %s"), *OrbRelativePos.ToString());
+	HealthOrb.SetActorRelativeLocation(OrbRelativePos);
+ }
+
+ bool AHealthPoint::AddOrb(FHealthOrbContainer& OrbContainer)
+ {
+	if (UnusedOrbLocations.Num() == 0) return false;
+	
+	FVector OrbLocation = UnusedOrbLocations.Pop();
+	FOrbLocation(OrbContainer, OrbLocation);
+	SetOrbsPosition(OrbContainer.GetHealthOrb(), OrbLocation);
+	
+	return true;
+ }

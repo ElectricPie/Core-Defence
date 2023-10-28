@@ -31,6 +31,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	struct FOrbLocation
+	{
+		FOrbLocation(FHealthOrbContainer& Orb, FVector& Position): HealthOrb(Orb), OrbPosition(Position) {}
+
+		FHealthOrbContainer& HealthOrb;
+		FVector& OrbPosition;
+	};
+	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
@@ -47,11 +55,22 @@ private:
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="How many degrees per second the orbs will rotate"))
 	float OrbRotationSpeed = 1.f;
 
-	TArray<FHealthOrbContainer*> HealthOrbs;
-	
+	// TArray<FHealthOrbContainer*> HealthOrbs;
+	TArray<FOrbLocation*> HealthOrbs;
+	TArray<FVector> UnusedOrbLocations;
 	
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
 
 	FVector& GetPosFromOrbCircle(float Angle) const;
+
+	void SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const;
+	
+public:
+	/**
+	 * Attempts to add the orb to an empty space
+	 * @param OrbContainer The orb to be added
+	 * @return Returns true if there was space to add the orb
+	 */
+	bool AddOrb(FHealthOrbContainer& OrbContainer);
 };

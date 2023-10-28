@@ -41,4 +41,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool HasOrb() const;
+
+	UFUNCTION(BlueprintCallable)
+	void ReturnOrb();
 };

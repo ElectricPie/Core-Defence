@@ -36,6 +36,8 @@ void UUnitHealth::Hit(const int32 Damage)
 {
 	Health -= Damage;
 	if (Health > 0) return;
-	// TODO: Implement death
+
+	OnKilledEvent.Broadcast();
+	GetOwner()->Destroy();
 }
 

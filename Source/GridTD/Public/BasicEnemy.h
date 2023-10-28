@@ -9,6 +9,8 @@
 class AHealthOrb;
 class UCapsuleComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExitSignature);
+
 UCLASS()
 class GRIDTD_API ABasicEnemy : public AActor
 {
@@ -44,6 +46,8 @@ protected:
 	// The distance from a waypoint to change to the next waypoint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WaypointTriggerDistance = 10.f;
+
+	FOnExitSignature OnExit;
 	
 public:
 	/**
@@ -51,4 +55,7 @@ public:
 	 * @param NewWaypoints The array of waypoints.
 	 */
 	void SetWaypoints(const TArray<AActor*>& NewWaypoints);
+
+	UFUNCTION(BlueprintCallable)
+	void ReachedExit();
 };

@@ -3,9 +3,6 @@
 
 #include "BasicEnemy.h"
 
-#include "HealthOrb.h"
-#include "HealthPoint.h"
-
 
 // Sets default values
 ABasicEnemy::ABasicEnemy()
@@ -63,4 +60,10 @@ void ABasicEnemy::SetWaypoints(const TArray<AActor*>& NewWaypoints)
 {
 	CurrentWaypoint = 0;
 	Waypoints = NewWaypoints;
+}
+
+void ABasicEnemy::ReachedExit()
+{
+	OnExit.Broadcast();
+	Destroy();
 }

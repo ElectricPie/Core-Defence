@@ -5,6 +5,7 @@
 
 #include "HealthOrb.h"
 #include "HealthOrbContainer.h"
+#include "HealthPoint.h"
 
 // Sets default values for this component's properties
 UHealthOrbSocket::UHealthOrbSocket()
@@ -61,4 +62,13 @@ bool UHealthOrbSocket::HasOrb() const
 
 	return false;
 }
+
+void UHealthOrbSocket::ReturnOrb()
+{
+	if (!HealthOrb) return;
+	HealthOrb->GetOrbOrigin().AddOrb(*HealthOrb);
+	HealthOrb = nullptr;
+}
+
+
 
