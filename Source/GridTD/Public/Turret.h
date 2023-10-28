@@ -47,7 +47,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Componets")
 	USphereComponent* SphereTriggerArea;
 	
-	TWeakObjectPtr<UUnitHealth> Target;
 	
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;
@@ -59,9 +58,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ClampMin=0, UIMin=0))
 	int32 Damage = 2;
 
+	TWeakObjectPtr<UUnitHealth> Target;
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretRotation(float Rotation);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateTurretPitch(float Pitch);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFireEvent();
 };

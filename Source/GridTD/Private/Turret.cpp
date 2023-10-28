@@ -91,6 +91,7 @@ void ATurret::Fire(UUnitHealth& UnitHealth)
 	const float GameTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
 	if (LastFireTime + FireRate > GameTime) return;
 	LastFireTime = GameTime;
+	OnFireEvent();
 	UnitHealth.Hit(Damage);
 }
 
