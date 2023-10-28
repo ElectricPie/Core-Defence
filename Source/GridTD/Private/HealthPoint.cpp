@@ -34,16 +34,18 @@ void AHealthPoint::BeginPlay()
 	// Create health orbs equal to the MaxOrbs amount and position them around the Orbit centre
 	for (uint32 i = 0; i < MaxOrbs; i++)
 	{
-		FVector NewOrbPosition = GetPosFromOrbCircle(360 / MaxOrbs * i);
+		FVector& NewOrbPosition = GetPosFromOrbCircle(360 / MaxOrbs * i);
 		
 		UE_LOG(LogTemp, Warning, TEXT("New Location %s"), *NewOrbPosition.ToString());
-		
+
+		// Attach the orbs to the orbit then set the location as GetPosFromOrbCircle gives relative pos
 		AHealthOrb* NewOrb = GetWorld()->SpawnActor<AHealthOrb>(
 			HealthOrbBlueprint,
-			NewOrbPosition,
+			HealthOrbOrbitCentre->GetComponentLocation(),
 			GetActorRotation()
 		);
-		NewOrb->AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::KeepWorldTransform);
+		NewOrb->AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		NewOrb->SetActorRelativeLocation(NewOrbPosition);
 
 		// Add the orb and its location
 		FHealthOrbContainer* NewContainer = new FHealthOrbContainer(*NewOrb, *this);
@@ -84,12 +86,9 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 	Angle = 2 * PI * (FMath::Clamp<float>(Angle, 0, 360) / 360);
 
 	FVector* Pos = new FVector(
-		HealthOrbOrbitCentre->GetComponentLocation().X,
-		HealthOrbOrbitCentre->GetComponentLocation().Y,
-		HealthOrbOrbitCentre->GetComponentLocation().Z);
-	
-	Pos->X += OrbDistanceFromCentre * FMath::Cos(Angle);
-	Pos->Y += OrbDistanceFromCentre * FMath::Sin(Angle);
+		OrbDistanceFromCentre * FMath::Cos(Angle),
+		OrbDistanceFromCentre * FMath::Sin(Angle),
+		0);
 	
 	return *Pos;
 }

@@ -62,6 +62,11 @@ private:
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
 
+	/**
+	 * Gets a position along a circle around the HealthOrbOrbitCentre component with a radius of OrbDistanceFromCentre
+	 * @param Angle The angle from the the HealthOrbOrbitCentre to find a poing from
+	 * @return The relative location from the HealthOrbOrbitCentre of the point
+	 */
 	FVector& GetPosFromOrbCircle(float Angle) const;
 
 	void SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const;
