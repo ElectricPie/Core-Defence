@@ -46,11 +46,17 @@ void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Check for other enemies if no current target
 	if (!Target.IsValid())
 	{
-		RotateToPosition(FVector(0));
-		return;
+		if (EnemiesInRange.Num() == 0) return;
+		const TWeakObjectPtr<UUnitHealth> NewTarget = EnemiesInRange.Pop();
+
+		// Confirm that the enemies hasn't been destroyed before setting it as the target
+		if (!NewTarget.IsValid()) return;
+		Target = NewTarget;
 	}
+	
 	
 	const FVector TargetPos = Target.Get()->GetOwner()->GetActorLocation();
 	RotateToPosition(TargetPos);
