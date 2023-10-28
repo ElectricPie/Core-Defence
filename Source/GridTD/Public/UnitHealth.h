@@ -8,7 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnKilledSignature);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class GRIDTD_API UUnitHealth : public UActorComponent
 {
 	GENERATED_BODY()
@@ -27,11 +27,11 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	int32 MaxHealth;
+	int32 MaxHealth = 10.f;
 	UPROPERTY(VisibleAnywhere)
-	int32 Health;
+	int32 Health = 0.f;
 
-	UPROPERTY(EditAnywhere, BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable)
 	FOnKilledSignature OnKilledEvent;
 
 public:
