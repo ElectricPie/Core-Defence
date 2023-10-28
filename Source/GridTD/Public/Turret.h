@@ -34,9 +34,11 @@ private:
 	
 	float FireCounter = 0.f;
 	float LastFireTime = 0.f;
+
+	TArray<TWeakObjectPtr<UUnitHealth>> EnemiesInRange;
 	
-	void RotateToTarget();
-	void FireAtTarget();
+	void RotateToPosition(const FVector& Position);
+	void Fire(UUnitHealth& UnitHealth);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -44,8 +46,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Componets")
 	USphereComponent* SphereTriggerArea;
 	
-	UPROPERTY(VisibleAnywhere, Category="Target")
-	UUnitHealth* Target;
+	TWeakObjectPtr<UUnitHealth> Target;
 	
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;

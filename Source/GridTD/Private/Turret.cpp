@@ -31,10 +31,13 @@ void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	UUnitHealth* UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
-	if (!UnitHealth) return;
-	if (Target) return;
-
+	TWeakObjectPtr<UUnitHealth> UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
+	if (!UnitHealth.IsValid()) return;
+	
+	EnemiesInRange.AddUnique(UnitHealth);
+	
+	if (Target.IsValid()) return;
+	
 	Target = UnitHealth;
 }
 
@@ -43,29 +46,31 @@ void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	RotateToTarget();
-	FireAtTarget();
+	if (!Target.IsValid())
+	{
+		RotateToPosition(FVector(0));
+		return;
+	}
+	
+	const FVector TargetPos = Target.Get()->GetOwner()->GetActorLocation();
+	RotateToPosition(TargetPos);
+	Fire(*Target.Get());
 }
 
-void ATurret::RotateToTarget()
+void ATurret::RotateToPosition(const FVector& Position)
 {
-	if (!Target) return;
-
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetOwner()->GetActorLocation());
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Position);
 	LookAt.Pitch = 0.f;
 	UpdateTurretRotation(LookAt.Yaw + RotationOffset - GetActorRotation().Yaw);
 	UpdateTurretPitch(LookAt.Pitch + PitchOffset);
 }
 
-void ATurret::FireAtTarget()
+void ATurret::Fire(UUnitHealth& UnitHealth)
 {
-	if (!Target) return;
-
-	float GameTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
+	const float GameTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
 	if (LastFireTime + FireRate > GameTime) return;
 	LastFireTime = GameTime;
-	UE_LOG(LogTemp, Warning, TEXT("Firing"));
-	Target->Hit(Damage);
+	UnitHealth.Hit(Damage);
 }
 
 

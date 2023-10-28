@@ -36,8 +36,6 @@ void AHealthPoint::BeginPlay()
 	{
 		FVector& NewOrbPosition = GetPosFromOrbCircle(360 / MaxOrbs * i);
 		
-		UE_LOG(LogTemp, Warning, TEXT("New Location %s"), *NewOrbPosition.ToString());
-
 		// Attach the orbs to the orbit then set the location as GetPosFromOrbCircle gives relative pos
 		AHealthOrb* NewOrb = GetWorld()->SpawnActor<AHealthOrb>(
 			HealthOrbBlueprint,
@@ -96,7 +94,6 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
  void AHealthPoint::SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const
  {
 	HealthOrb.AttachToComponent(HealthOrbOrbitCentre, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-	UE_LOG(LogTemp, Warning, TEXT("Location %s"), *OrbRelativePos.ToString());
 	HealthOrb.SetActorRelativeLocation(OrbRelativePos);
  }
 
