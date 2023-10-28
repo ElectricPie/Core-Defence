@@ -31,7 +31,7 @@ void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	TWeakObjectPtr<UUnitHealth> UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
+	const TWeakObjectPtr<UUnitHealth> UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
 	if (!UnitHealth.IsValid()) return;
 	
 	EnemiesInRange.AddUnique(UnitHealth);
@@ -39,6 +39,21 @@ void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (Target.IsValid()) return;
 	
 	Target = UnitHealth;
+}
+
+void ATurret::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	const TWeakObjectPtr<UUnitHealth> UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
+	if (!UnitHealth.IsValid()) return;
+
+	// Remove the unit from possible targets
+	EnemiesInRange.Remove(UnitHealth);
+
+	// Remove the target
+	if (Target != UnitHealth) return;
+	Target.Reset();
 }
 
 // Called every frame
