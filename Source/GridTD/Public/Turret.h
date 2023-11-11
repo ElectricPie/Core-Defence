@@ -53,12 +53,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;
 	UPROPERTY(EditAnywhere, Category="Animation", meta=(ClampMin=0.f, UIMin=0.f))
-	float RotationSpeedModifier = 80.f;
+	float RotationSpeedModifier = 120.f;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float PitchOffset = 90.f;
 	UPROPERTY(EditAnywhere, Category="Animation", meta=(ClampMin=0.f, ClampMax=1.f, UIMin=0.f, UIMax=1.f,
 		Tooltip="How closly to facing the target the turrent needs to be before it can fire (1 = Directly facing target, 0 = can fire from 90 degrees from target)"))
-	float TurretFiringArch = 0.95f;
+	float TurretFiringArch = 0.9f;
 
 	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ToolTip="The number of seconds between firing", ClampMin=0, UIMin=0))
 	float FireRate = 2.f;

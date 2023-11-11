@@ -75,7 +75,8 @@ void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 void AHealthPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	// TODO: This isn't accommodating for DeltaTime so rotates much slower at lower FPS
 	HealthOrbOrbitCentre->AddLocalRotation(FRotator(0.f, OrbRotationSpeed, 0.f ), false);
 }
 
