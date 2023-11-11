@@ -25,6 +25,10 @@ ATurret::ATurret()
 void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Sets the turret to face forward
+	UpdateTurretRotation(CurrentRotation.Yaw + RotationOffset - GetActorRotation().Yaw);
+	UpdateTurretPitch(CurrentRotation.Pitch + PitchOffset);
 }
 
 void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
