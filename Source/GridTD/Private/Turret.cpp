@@ -97,13 +97,22 @@ void ATurret::RotateToPosition(const FVector& TargetPosition, const float DeltaT
 	UpdateTurretPitch(CurrentRotation.Pitch + PitchOffset);
 }
 
-void ATurret::Fire(UUnitHealth& UnitHealth)
+void ATurret::Fire(UUnitHealth& TargetHealth)
 {
+	// Check the turret is facing the target
+	FVector TargetRotation = (TargetHealth.GetOwner()->GetActorLocation() - GetActorLocation());
+	TargetRotation.Normalize();
+	
+	FVector CurrentNormalizedRotation = CurrentRotation.Vector();
+	CurrentNormalizedRotation.Normalize();
+	
+	if (FVector::DotProduct(CurrentNormalizedRotation, TargetRotation) < TurretFiringArch) return;
+	
 	const float GameTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
 	if (LastFireTime + FireRate > GameTime) return;
 	LastFireTime = GameTime;
 	OnFireEvent();
-	UnitHealth.Hit(Damage);
+	TargetHealth.Hit(Damage);
 }
 
 

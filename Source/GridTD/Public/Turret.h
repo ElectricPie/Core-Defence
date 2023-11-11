@@ -42,7 +42,7 @@ private:
 	TArray<TWeakObjectPtr<UUnitHealth>> EnemiesInRange;
 	
 	void RotateToPosition(const FVector& TargetPosition, const float DeltaTime);
-	void Fire(UUnitHealth& UnitHealth);
+	void Fire(UUnitHealth& Target);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -56,6 +56,9 @@ protected:
 	float RotationSpeedModifier = 80.f;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float PitchOffset = 90.f;
+	UPROPERTY(EditAnywhere, Category="Animation", meta=(ClampMin=0.f, ClampMax=1.f, UIMin=0.f, UIMax=1.f,
+		Tooltip="How closly to facing the target the turrent needs to be before it can fire (1 = Directly facing target, 0 = can fire from 90 degrees from target)"))
+	float TurretFiringArch = 0.95f;
 
 	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ToolTip="The number of seconds between firing", ClampMin=0, UIMin=0))
 	float FireRate = 2.f;
