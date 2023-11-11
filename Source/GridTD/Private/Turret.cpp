@@ -72,18 +72,25 @@ void ATurret::Tick(float DeltaTime)
 		Target = NewTarget;
 	}
 	
-	
 	const FVector TargetPos = Target.Get()->GetOwner()->GetActorLocation();
-	RotateToPosition(TargetPos);
+	RotateToPosition(TargetPos, DeltaTime);
+	
+	// TODO: Only fire when facing enemy
 	Fire(*Target.Get());
 }
 
-void ATurret::RotateToPosition(const FVector& Position)
+void ATurret::RotateToPosition(const FVector& TargetPosition, const float DeltaTime)
 {
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Position);
-	LookAt.Pitch = 0.f;
-	UpdateTurretRotation(LookAt.Yaw + RotationOffset - GetActorRotation().Yaw);
-	UpdateTurretPitch(LookAt.Pitch + PitchOffset);
+	const FRotator TargetRotation = (TargetPosition - GetActorLocation()).Rotation();
+	const FRotator DeltaRotation = TargetRotation - CurrentRotation;
+	CurrentRotation = FRotator(
+		0.f,
+		CurrentRotation.Yaw += FMath::Clamp(DeltaRotation.Yaw, -DeltaTime * RotationSpeedModifier, DeltaTime * RotationSpeedModifier),
+		CurrentRotation.Roll += FMath::Clamp(DeltaRotation.Roll, -DeltaTime * RotationSpeedModifier, DeltaTime * RotationSpeedModifier)
+		);
+
+	UpdateTurretRotation(CurrentRotation.Yaw + RotationOffset - GetActorRotation().Yaw);
+	UpdateTurretPitch(CurrentRotation.Pitch + PitchOffset);
 }
 
 void ATurret::Fire(UUnitHealth& UnitHealth)

@@ -30,15 +30,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	float CurrentRotation = 0.f;
+	// Need to track the current rotation as the animation controls the rotation not the actor
+	FRotator CurrentRotation;
+	
 	float CurrentPitch = 0.f;
 	
 	float FireCounter = 0.f;
 	float LastFireTime = 0.f;
 
+
 	TArray<TWeakObjectPtr<UUnitHealth>> EnemiesInRange;
 	
-	void RotateToPosition(const FVector& Position);
+	void RotateToPosition(const FVector& TargetPosition, const float DeltaTime);
 	void Fire(UUnitHealth& UnitHealth);
 	
 protected:
@@ -47,9 +50,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="Componets")
 	USphereComponent* SphereTriggerArea;
 	
-	
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float RotationOffset = 270.f;
+	UPROPERTY(EditAnywhere, Category="Animation", meta=(ClampMin=0.f, UIMin=0.f))
+	float RotationSpeedModifier = 80.f;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	float PitchOffset = 90.f;
 
