@@ -9,6 +9,8 @@
 class AHealthOrb;
 class UCapsuleComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExitSignature);
+
 UCLASS()
 class GRIDTD_API ABasicEnemy : public AActor
 {
@@ -22,10 +24,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -37,8 +35,6 @@ private:
 protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(VisibleAnywhere, Category="Components", meta=(Tooltip="A place for a Health Orb"))
-	USceneComponent* OrbSlot;
 
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float MovementSpeed = 100.f;
@@ -51,8 +47,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float WaypointTriggerDistance = 10.f;
 
-	UPROPERTY(VisibleAnywhere)
-	AHealthOrb* HealthOrb = nullptr;
+	FOnExitSignature OnExit;
 	
 public:
 	/**
@@ -60,4 +55,7 @@ public:
 	 * @param NewWaypoints The array of waypoints.
 	 */
 	void SetWaypoints(const TArray<AActor*>& NewWaypoints);
+
+	UFUNCTION(BlueprintCallable)
+	void ReachedExit();
 };

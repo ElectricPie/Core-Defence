@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "HealthPoint.generated.h"
 
+class FHealthOrbContainer;
 class AHealthOrb;
 class ATowerDefencePlayer;
 class UBoxComponent;
@@ -30,6 +31,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	struct FOrbLocation
+	{
+		FOrbLocation(FHealthOrbContainer& Orb, FVector& Position): HealthOrb(Orb), OrbPosition(Position) {}
+
+		FHealthOrbContainer& HealthOrb;
+		FVector& OrbPosition;
+	};
+	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
@@ -46,14 +55,27 @@ private:
 	UPROPERTY(EditAnywhere, Category="Health Orbs", meta=(AllowPrivateAccess=true, ToolTip="How many degrees per second the orbs will rotate"))
 	float OrbRotationSpeed = 1.f;
 
-	UPROPERTY(VisibleAnywhere)
-	TArray<AHealthOrb*> HealthOrbs;
+	// TArray<FHealthOrbContainer*> HealthOrbs;
+	TArray<FOrbLocation*> HealthOrbs;
+	TArray<FVector> UnusedOrbLocations;
 	
 	UPROPERTY()
 	ATowerDefencePlayer* TowerPlayerController;
 
+	/**
+	 * Gets a position along a circle around the HealthOrbOrbitCentre component with a radius of OrbDistanceFromCentre
+	 * @param Angle The angle from the the HealthOrbOrbitCentre to find a poing from
+	 * @return The relative location from the HealthOrbOrbitCentre of the point
+	 */
 	FVector& GetPosFromOrbCircle(float Angle) const;
 
+	void SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const;
+	
 public:
-	AHealthOrb* TakeHealthOrb();
+	/**
+	 * Attempts to add the orb to an empty space
+	 * @param OrbContainer The orb to be added
+	 * @return Returns true if there was space to add the orb
+	 */
+	bool AddOrb(FHealthOrbContainer& OrbContainer);
 };
