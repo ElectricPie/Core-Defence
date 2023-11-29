@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TowerDefencePlayer.generated.h"
 
+class UTowerDefenceHudWidget;
 /**
  * 
  */
@@ -25,9 +26,15 @@ private:
 	UPROPERTY(VisibleAnywhere, Category="Health")
 	uint32 Health;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category="Input")
 	float SelectionRaycastDistance = 2000.f;
 
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UTowerDefenceHudWidget> HudWidget;
+
+	UPROPERTY()
+	UUserWidget* SelectionWidget;
+	
 	UFUNCTION()
 	void Select();
 

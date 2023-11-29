@@ -3,13 +3,20 @@
 
 #include "TowerDefencePlayer.h"
 
+#include "Ui/TowerDefenceHudWidget.h"
+
 
 void ATowerDefencePlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
 	bShowMouseCursor = true;
+
+	if (!HudWidget) return;
+	SelectionWidget = CreateWidget(GetWorld(), HudWidget);
+	SelectionWidget->AddToViewport();
 }
+
 
 void ATowerDefencePlayer::SetupInputComponent()
 {
