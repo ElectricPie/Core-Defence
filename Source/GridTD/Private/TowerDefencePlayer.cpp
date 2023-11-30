@@ -12,9 +12,7 @@ void ATowerDefencePlayer::BeginPlay()
 
 	bShowMouseCursor = true;
 
-	if (!HudWidget) return;
-	SelectionWidget = CreateWidget(GetWorld(), HudWidget);
-	SelectionWidget->AddToViewport();
+	SetupUi();
 }
 
 
@@ -38,6 +36,13 @@ void ATowerDefencePlayer::Select()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit: %s, %s"), *HitActor->GetActorLabel(), *HitLocation.ToString());
 	}
+}
+
+void ATowerDefencePlayer::SetupUi()
+{
+	if (!HudWidgetBlueprint) return;
+	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
+	HudWidget->AddToViewport();
 }
 
 bool ATowerDefencePlayer::RaycastToMouse(FVector& HitLocation, AActor*& HitActor)

@@ -30,13 +30,14 @@ private:
 	float SelectionRaycastDistance = 2000.f;
 
 	UPROPERTY(EditDefaultsOnly, Category="UI")
-	TSubclassOf<UTowerDefenceHudWidget> HudWidget;
-
+	TSubclassOf<UTowerDefenceHudWidget> HudWidgetBlueprint;
 	UPROPERTY()
-	UUserWidget* SelectionWidget;
+	UTowerDefenceHudWidget* HudWidget;
 	
 	UFUNCTION()
 	void Select();
+
+	void SetupUi();
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)
