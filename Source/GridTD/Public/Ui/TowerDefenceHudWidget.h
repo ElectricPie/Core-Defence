@@ -13,8 +13,15 @@ UCLASS()
 class GRIDTD_API UTowerDefenceHudWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	void NativeConstruct() override;
+	
+private:
+	void SetUpWidgets() const;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UUserWidget* SelectionWidget;
+	UUserWidget* TurretSelectionWidget;
+	
 };
