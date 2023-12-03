@@ -32,7 +32,12 @@ void ATowerDefencePlayer::Select()
 {
 	FVector HitLocation;
 	AActor* HitActor = nullptr;
-	if (RaycastToMouse(HitLocation, HitActor))
+
+	FVector2D MouseScreenPos;
+	// Get the screen position of the mouse
+	if (!GetMouseScreenPos(MouseScreenPos)) return;
+	
+	if (RaycastToMouse(MouseScreenPos, HitLocation, HitActor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit: %s, %s"), *HitActor->GetActorLabel(), *HitLocation.ToString());
 	}
@@ -45,39 +50,40 @@ void ATowerDefencePlayer::SetupUi()
 	HudWidget->AddToViewport();
 }
 
-bool ATowerDefencePlayer::RaycastToMouse(FVector& HitLocation, AActor*& HitActor)
+bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const
 {
 	int32 ViewportSizeX;
 	int32 ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
-	FVector2D MouseScreenLocation;
-	
+
 	// Get the screen position of the mouse
-	if (GetMousePosition(MouseScreenLocation.X, MouseScreenLocation.Y))
+	return GetMousePosition(MouseScreenPos.X, MouseScreenPos.Y);
+}
+
+bool ATowerDefencePlayer::RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const
+{
+	// Get the direction of the mouse
+	FVector WorldPosition;
+	FVector WorldDirection;
+	DeprojectScreenPositionToWorld(MouseScreenPos.X, MouseScreenPos.Y, WorldPosition, WorldDirection);
+	
+	// Raycast
+	FHitResult HitResult;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldPosition,
+	WorldPosition + WorldDirection * SelectionRaycastDistance, ECC_Visibility, QueryParams))
 	{
-		// Get the direction of the mouse
-		FVector WorldPosition;
-		FVector WorldDirection;
-		DeprojectScreenPositionToWorld(MouseScreenLocation.X, MouseScreenLocation.Y, WorldPosition, WorldDirection);
-	
-		// Raycast
-		FHitResult HitResult;
-		FCollisionQueryParams QueryParams;
-		QueryParams.AddIgnoredActor(this);
-	
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldPosition,
-			WorldPosition + WorldDirection * SelectionRaycastDistance, ECC_Visibility, QueryParams))
-		{
-			HitActor = HitResult.GetActor();
-			HitLocation = HitResult.ImpactPoint;
-			return true;
-		}
+		HitActor = HitResult.GetActor();
+		HitLocation = HitResult.ImpactPoint;
+		return true;
 	}
 
 	return false;
 }
 
-void ATowerDefencePlayer::RegisterPlayerHealth(int32 AdditionalHealth)
+void ATowerDefencePlayer::RegisterPlayerHealth(const int32 AdditionalHealth)
 {
 	MaxHealth += AdditionalHealth;
 	Health += AdditionalHealth;

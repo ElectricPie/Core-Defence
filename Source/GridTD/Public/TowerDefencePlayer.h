@@ -42,15 +42,19 @@ private:
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver();
-
+	
+	UFUNCTION()
+	bool GetMouseScreenPos(FVector2D& MouseScreenPos) const;
+	
 	/**
 	 * Raycast from the screens mouse position to the world
+	 * @param MouseScreenPos
 	 * @param HitLocation The location of the raycast hit
 	 * @param HitActor The Actor hit by the raycast if it Hits
 	 * @return True if the raycast hit an actor
 	 */
 	UFUNCTION(BlueprintCallable)
-	bool RaycastToMouse(FVector& HitLocation, AActor*& HitActor);
+	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
 public:
 	/**
