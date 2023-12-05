@@ -3,6 +3,7 @@
 
 #include "TowerDefencePlayer.h"
 
+#include "TurretSocket.h"
 #include "Kismet/GameplayStatics.h"
 #include "Ui/TowerDefenceHudWidget.h"
 
@@ -42,6 +43,8 @@ void ATowerDefencePlayer::Select()
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
 	// TODO: Check if tower spot
+	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
+	if (!TurretSocket) return;
 	
 	HudWidget->MoveTurretSelectionWidgetToMouse();
 }
