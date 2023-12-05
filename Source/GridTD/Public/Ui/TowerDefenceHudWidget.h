@@ -6,6 +6,10 @@
 #include "Blueprint/UserWidget.h"
 #include "TowerDefenceHudWidget.generated.h"
 
+class UCanvasPanel;
+class UImage;
+class URadialSelectionWidget;
+class UCanvasPanelSlot;
 /**
  * 
  */
@@ -15,13 +19,18 @@ class GRIDTD_API UTowerDefenceHudWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	void NativeConstruct() override;
+	virtual void NativeConstruct() override;
 	
 private:
 	void SetUpWidgets() const;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UUserWidget* TurretSelectionWidget;
-	
+	URadialSelectionWidget* TurretSelectionWidget;
+
+	UPROPERTY()
+	UPanelSlot* Panel;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void MoveTurretSelectionWidgetToMouse();
 };

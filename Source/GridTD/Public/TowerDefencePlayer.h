@@ -42,13 +42,18 @@ private:
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver();
-	
+
+	/**
+	 * Gets the position of the mouse on the screen
+	 * @param MouseScreenPos A FVector to store the mouses position
+	 * @return False if no mouse device is detected
+	 */
 	UFUNCTION()
 	bool GetMouseScreenPos(FVector2D& MouseScreenPos) const;
 	
 	/**
 	 * Raycast from the screens mouse position to the world
-	 * @param MouseScreenPos
+	 * @param MouseScreenPos The location of the mouse on the screen
 	 * @param HitLocation The location of the raycast hit
 	 * @param HitActor The Actor hit by the raycast if it Hits
 	 * @return True if the raycast hit an actor

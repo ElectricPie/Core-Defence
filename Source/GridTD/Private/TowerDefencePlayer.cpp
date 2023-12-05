@@ -3,6 +3,7 @@
 
 #include "TowerDefencePlayer.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "Ui/TowerDefenceHudWidget.h"
 
 
@@ -30,17 +31,19 @@ void ATowerDefencePlayer::GameOver_Implementation()
 
 void ATowerDefencePlayer::Select()
 {
-	FVector HitLocation;
-	AActor* HitActor = nullptr;
-
-	FVector2D MouseScreenPos;
+	if (!HudWidget) return;
+	
 	// Get the screen position of the mouse
+	FVector2D MouseScreenPos;
 	if (!GetMouseScreenPos(MouseScreenPos)) return;
 	
-	if (RaycastToMouse(MouseScreenPos, HitLocation, HitActor))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit: %s, %s"), *HitActor->GetActorLabel(), *HitLocation.ToString());
-	}
+	FVector HitLocation;
+	AActor* HitActor = nullptr;
+	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
+
+	// TODO: Check if tower spot
+	
+	HudWidget->MoveTurretSelectionWidgetToMouse();
 }
 
 void ATowerDefencePlayer::SetupUi()
