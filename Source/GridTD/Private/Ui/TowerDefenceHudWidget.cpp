@@ -3,7 +3,6 @@
 
 #include "Ui/TowerDefenceHudWidget.h"
 
-#include "Components/CanvasPanelSlot.h"
 #include "Components/Image.h"
 #include "Ui/RadialSelectionWidget.h"
 
@@ -22,6 +21,12 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 	{
 		TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
+}
+
+void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
+{
+	if (!TurretSelectionWidget) return;
+	TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UTowerDefenceHudWidget::MoveTurretSelectionWidgetToMouse_Implementation()

@@ -33,6 +33,7 @@ void ATowerDefencePlayer::GameOver_Implementation()
 void ATowerDefencePlayer::Select()
 {
 	if (!HudWidget) return;
+	HudWidget->CloseTurretSelectionWidget();
 	
 	// Get the screen position of the mouse
 	FVector2D MouseScreenPos;
@@ -42,8 +43,8 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
-	// TODO: Check if tower spot
-	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
+	// Check if tower spot
+	const ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!TurretSocket) return;
 	
 	HudWidget->MoveTurretSelectionWidgetToMouse();

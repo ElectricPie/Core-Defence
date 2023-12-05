@@ -33,4 +33,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void MoveTurretSelectionWidgetToMouse();
+
+	void CloseTurretSelectionWidget() const;
 };
