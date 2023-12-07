@@ -36,13 +36,13 @@ void ATurretSocket::AddTurret(TSubclassOf<ATurret> TurretBlueprint)
 {
 	if (TurretInSocket)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Attempted to assigne turret to occupied turret socket"));
+		UE_LOG(LogTemp, Error, TEXT("Attempted to assigne turret to occupied turret socket"));
 		return;
 	}
 
 	if (!TurretBlueprint)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Attempted to assign turret with null value"));
+		UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret with null value"));
 		return;
 	}
 
