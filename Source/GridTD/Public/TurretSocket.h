@@ -28,6 +28,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddTurret(TSubclassOf<ATurret> TurretBlueprint);
 
+	/**
+	 * Checks if the socket contains a turret
+	 * @return True if the socket has a turret
+	 */
+	bool HasTurret() const;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* MeshComponent;

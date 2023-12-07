@@ -39,19 +39,29 @@ void ATurretSocket::AddTurret(TSubclassOf<ATurret> TurretBlueprint)
 		UE_LOG(LogTemp, Error, TEXT("Attempted to assigne turret to occupied turret socket"));
 		return;
 	}
-
+	
 	if (!TurretBlueprint)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret with null value"));
 		return;
 	}
-
+	
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
 		TurretBlueprint,
 		Socket->GetComponentLocation(),
 		Socket->GetComponentRotation()
 	);
-
+	
 	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
+}
+
+bool ATurretSocket::HasTurret() const
+{
+	if (TurretInSocket)
+	{
+		return true;
+	}
+	
+	return false;
 }
 

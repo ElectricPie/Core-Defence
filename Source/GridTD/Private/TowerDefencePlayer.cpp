@@ -46,7 +46,14 @@ void ATowerDefencePlayer::Select()
 	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!TurretSocket) return;
 	
-	HudWidget->SelectTurretSocket(TurretSocket);
+	if (TurretSocket->HasTurret())
+	{
+		// TODO: Handle turret upgrades and displays
+	}
+	else
+	{
+		HudWidget->SelectTurretSocket(TurretSocket);
+	}
 }
 
 void ATowerDefencePlayer::SetupUi()
