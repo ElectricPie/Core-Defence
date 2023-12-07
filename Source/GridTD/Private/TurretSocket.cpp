@@ -51,5 +51,7 @@ void ATurretSocket::AddTurret(TSubclassOf<ATurret> TurretBlueprint)
 		Socket->GetComponentLocation(),
 		Socket->GetComponentRotation()
 	);
+
+	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
 }
 
