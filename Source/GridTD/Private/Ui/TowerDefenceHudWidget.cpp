@@ -23,12 +23,12 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 	}
 }
 
+void UTowerDefenceHudWidget::SelectTurretSocket_Implementation(ATurretSocket* TurretSocket)
+{
+}
+
 void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
 {
 	if (!TurretSelectionWidget) return;
 	TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
-}
-
-void UTowerDefenceHudWidget::MoveTurretSelectionWidgetToMouse_Implementation()
-{
 }

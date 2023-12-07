@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "TurretSocket.generated.h"
 
+class ATurret;
+
 UCLASS()
 class GRIDTD_API ATurretSocket : public AActor
 {
@@ -23,9 +25,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void AddTurret(TSubclassOf<ATurret> TurretBlueprint);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* MeshComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
-	USceneComponent* TurretSocket;
+	USceneComponent* Socket;
+	UPROPERTY()
+	ATurret* TurretInSocket;
 };

@@ -14,5 +14,4 @@ class GRIDTD_API URadialSelectionWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	
 };

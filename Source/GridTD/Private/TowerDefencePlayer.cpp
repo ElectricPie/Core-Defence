@@ -43,11 +43,10 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
-	// Check if tower spot
-	const ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
+	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!TurretSocket) return;
 	
-	HudWidget->MoveTurretSelectionWidgetToMouse();
+	HudWidget->SelectTurretSocket(TurretSocket);
 }
 
 void ATowerDefencePlayer::SetupUi()
