@@ -33,12 +33,11 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCapsuleComponent* CapsuleComponent;
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCameraComponent* CameraComponent;
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Inputs", meta = (AllowPrivateAccess = true))

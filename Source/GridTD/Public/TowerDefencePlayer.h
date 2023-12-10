@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TowerDefencePlayer.generated.h"
 
+class UTowerDefenceHudWidget;
 /**
  * 
  */
@@ -16,17 +17,49 @@ class GRIDTD_API ATowerDefencePlayer : public APlayerController
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void SetupInputComponent() override;
 	
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Health")
 	uint32 MaxHealth;
-	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category="Health")
 	uint32 Health;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	float SelectionRaycastDistance = 2000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	TSubclassOf<UTowerDefenceHudWidget> HudWidgetBlueprint;
+	UPROPERTY()
+	UTowerDefenceHudWidget* HudWidget;
+	
+	UFUNCTION()
+	void Select();
+
+	void SetupUi();
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver();
+
+	/**
+	 * Gets the position of the mouse on the screen
+	 * @param MouseScreenPos A FVector to store the mouses position
+	 * @return False if no mouse device is detected
+	 */
+	UFUNCTION()
+	bool GetMouseScreenPos(FVector2D& MouseScreenPos) const;
+	
+	/**
+	 * Raycast from the screens mouse position to the world
+	 * @param MouseScreenPos The location of the mouse on the screen
+	 * @param HitLocation The location of the raycast hit
+	 * @param HitActor The Actor hit by the raycast if it Hits
+	 * @return True if the raycast hit an actor
+	 */
+	UFUNCTION(BlueprintCallable)
+	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
 public:
 	/**
