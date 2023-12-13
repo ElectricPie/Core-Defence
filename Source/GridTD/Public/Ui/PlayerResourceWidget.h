@@ -19,6 +19,9 @@ class GRIDTD_API UPlayerResourceWidget : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
+
+private:
+	TArray<UHealthOrbWidget*> HealthGrid;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Resources")
@@ -38,4 +41,6 @@ public:
 	float GridPadding = 1.f;
 
 	void GenerateHealthOrbWidgets(uint16 HealthOrbCount);
+
+	void ClearOrbWidgets();
 };

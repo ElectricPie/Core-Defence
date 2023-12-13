@@ -11,8 +11,6 @@
 void UPlayerResourceWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	GenerateHealthOrbWidgets(DebugAmount);
 }
 
 void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
@@ -48,7 +46,6 @@ void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
 		const uint8 Column = i % GridColumns;
 		const uint8 Row = i / GridColumns;
 		
-		// Create new Health Orb widget
 		UHealthOrbWidget* NewHealthWidget = CreateWidget<UHealthOrbWidget>(GetWorld(), HealthOrbBlueprint);
 
 		// Add widget to grid
@@ -56,5 +53,14 @@ void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
 		GridSlot->SetColumn(Column);
 		GridSlot->SetRow(Row);
 		GridSlot->SetPadding(GridPadding);
+		// TODO: Add nudging by half the heath widgets size
+
+		HealthGrid.Add(NewHealthWidget);
 	}
+}
+
+void UPlayerResourceWidget::ClearOrbWidgets()
+{
+	HealthGridWidget->ClearChildren();
+	HealthGrid.Empty();
 }
