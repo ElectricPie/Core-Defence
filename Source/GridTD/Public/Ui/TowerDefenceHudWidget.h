@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "TowerDefenceHudWidget.generated.h"
 
+class UPlayerResourceWidget;
 class ATurretSocket;
 class ATurret;
 class URadialSelectionWidget;
@@ -33,13 +34,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
 	TSubclassOf<ATurret> BuffTurretBlueprint;
 	
-	
 private:
 	void SetUpWidgets() const;
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Widgets")
 	URadialSelectionWidget* TurretSelectionWidget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Widgets")
+	UPlayerResourceWidget* ResourceWidget;
 
 	UPROPERTY()
 	UPanelSlot* Panel;
@@ -48,4 +50,8 @@ public:
 	void SelectTurretSocket(ATurretSocket* TurretSocket);
 	
 	void CloseTurretSelectionWidget() const;
+
+	// Resource widget
+	void ClearHealth() const;
+	void AddHealth(uint32 HealthOrbCount) const;
 };

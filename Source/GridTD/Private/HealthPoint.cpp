@@ -6,7 +6,6 @@
 #include "HealthOrb.h"
 #include "HealthOrbSocket.h"
 #include "HealthOrbContainer.h"
-#include "TowerDefencePlayer.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -50,10 +49,6 @@ void AHealthPoint::BeginPlay()
 		FOrbLocation* OrbLocation = new FOrbLocation(*NewContainer, NewOrbPosition);
 		HealthOrbs.Add(OrbLocation);
 	}
-
-	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
-	if (!TowerPlayerController) return;
-	TowerPlayerController->RegisterPlayerHealth(MaxOrbs);
 }
 
 void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -107,4 +102,9 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 	SetOrbsPosition(OrbContainer.GetHealthOrb(), OrbLocation);
 	
 	return true;
+ }
+
+ uint32 AHealthPoint::GetOrbCount() const
+ {
+	return HealthOrbs.Num();
  }

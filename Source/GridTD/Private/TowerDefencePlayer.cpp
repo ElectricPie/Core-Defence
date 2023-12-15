@@ -3,8 +3,9 @@
 
 #include "TowerDefencePlayer.h"
 
+#include "EngineUtils.h"
+#include "HealthPoint.h"
 #include "TurretSocket.h"
-#include "Kismet/GameplayStatics.h"
 #include "Ui/TowerDefenceHudWidget.h"
 
 
@@ -13,8 +14,20 @@ void ATowerDefencePlayer::BeginPlay()
 	Super::BeginPlay();
 
 	bShowMouseCursor = true;
-
+	
 	SetupUi();
+
+	// Get all health points and update the Hud
+	UWorld* World = GetWorld();
+	if (!World) return;
+	for (const AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
+	{
+		const uint32 AdditionalHealth = HealthPoint->GetOrbCount();
+		HudWidget->AddHealth(AdditionalHealth);
+		
+		MaxHealth += AdditionalHealth;
+		Health += AdditionalHealth;
+	}
 }
 
 
@@ -94,12 +107,6 @@ bool ATowerDefencePlayer::RaycastToMouse(const FVector2D& MouseScreenPos, FVecto
 	}
 
 	return false;
-}
-
-void ATowerDefencePlayer::RegisterPlayerHealth(const int32 AdditionalHealth)
-{
-	MaxHealth += AdditionalHealth;
-	Health += AdditionalHealth;
 }
 
 void ATowerDefencePlayer::ReduceHealth()

@@ -40,7 +40,15 @@ public:
 	UPROPERTY(EditAnywhere, Category="Health")
 	float GridPadding = 1.f;
 
-	void GenerateHealthOrbWidgets(uint16 HealthOrbCount);
+	/**
+	 * Creates the given number of HealthOrbWidgets and adds them to the resource grid
+	 * @param HealthOrbCount The number of HealthOrbWidgets to be added
+	 */
+	void AddHealthOrbWidgets(uint32 HealthOrbCount);
+	/**
+	 * Creates a HealthOrbWidget and add it to the health grid
+	 */
+	void AddHealthOrbWidget();
 
 	void ClearOrbWidgets();
 };

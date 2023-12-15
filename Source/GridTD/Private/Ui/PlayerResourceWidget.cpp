@@ -13,20 +13,19 @@ void UPlayerResourceWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
-void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
+void UPlayerResourceWidget::AddHealthOrbWidgets(uint32 HealthOrbCount)
 {
+	// Check if all references are valid
 	if (!ResourcesValueWidget)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PlayerResource Widget is missing referance to 'ResourcesValueWidget'") );
 		return;
 	}
-
 	if (!HealthGridWidget)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PlayerResource Widget is missing referance to 'HealthGridWidget'") );
 		return;
 	}
-	
 	if (!HealthOrbBlueprint)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PlayerResource Widget is missing referance to 'HealthOrbBlueprint'") );
@@ -34,17 +33,18 @@ void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
 	}
 
 	// Prevent the orbs from overfilling the grid
-	const int16 TotalSlots = GridColumns * GridRows;
-	if (HealthOrbCount > TotalSlots)
+	const uint32 GridCurrentSize = HealthGrid.Num();
+	const uint32 FreeSlots = GridCurrentSize + GridColumns * GridRows;
+	if (HealthOrbCount > FreeSlots)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Attempted to add more orbs (%d) than available positions (%d: %dx%d) PlayerResource widget"), HealthOrbCount, TotalSlots, GridColumns, GridRows);
-		HealthOrbCount = TotalSlots;
+		UE_LOG(LogTemp, Warning, TEXT("Attempted to add more orbs (%d) than available positions (%d: %dx%d) PlayerResource widget"), HealthOrbCount, FreeSlots, GridColumns, GridRows);
+		HealthOrbCount = FreeSlots;
 	}
 
-	for (uint8 i = 0; i < HealthOrbCount; i++)
+	for (uint32 i = GridCurrentSize; i < HealthOrbCount + GridCurrentSize; i++)
 	{
-		const uint8 Column = i % GridColumns;
-		const uint8 Row = i / GridColumns;
+		const uint32 Column = i % GridColumns;
+		const uint32 Row = i / GridColumns;
 		
 		UHealthOrbWidget* NewHealthWidget = CreateWidget<UHealthOrbWidget>(GetWorld(), HealthOrbBlueprint);
 
@@ -57,6 +57,10 @@ void UPlayerResourceWidget::GenerateHealthOrbWidgets(uint16 HealthOrbCount)
 
 		HealthGrid.Add(NewHealthWidget);
 	}
+}
+
+void UPlayerResourceWidget::AddHealthOrbWidget()
+{
 }
 
 void UPlayerResourceWidget::ClearOrbWidgets()

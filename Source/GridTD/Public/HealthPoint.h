@@ -78,4 +78,6 @@ public:
 	 * @return Returns true if there was space to add the orb
 	 */
 	bool AddOrb(FHealthOrbContainer& OrbContainer);
+
+	 uint32 GetOrbCount() const;
 };
