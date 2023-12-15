@@ -47,6 +47,7 @@ void UPlayerResourceWidget::AddHealthOrbWidgets(uint32 HealthOrbCount)
 		const uint32 Row = i / GridColumns;
 		
 		UHealthOrbWidget* NewHealthWidget = CreateWidget<UHealthOrbWidget>(GetWorld(), HealthOrbBlueprint);
+		NewHealthWidget->SetState(Stored);
 
 		// Add widget to grid
 		UGridSlot* GridSlot = HealthGridWidget->AddChildToGrid(NewHealthWidget);
