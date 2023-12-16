@@ -22,17 +22,18 @@ protected:
 
 private:
 	TArray<UHealthOrbWidget*> HealthGrid;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	UTextBlock* ResourcesValueWidget;
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	UGridPanel* HealthGridWidget;
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Resources")
-	UTextBlock* ResourcesValueWidget;
-
 	UPROPERTY(EditAnywhere, Category="Health")
 	uint8 DebugAmount;
 	UPROPERTY(EditAnywhere, Category="Health")
 	TSubclassOf<UHealthOrbWidget> HealthOrbBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
-	UGridPanel* HealthGridWidget;
 	UPROPERTY(EditAnywhere, Category="Health")
 	uint8 GridColumns = 0.f;
 	UPROPERTY(EditAnywhere, Category="Health")
