@@ -21,6 +21,15 @@ class GRIDTD_API UTowerDefenceHudWidget : public UUserWidget
 protected:
 	virtual void NativeConstruct() override;
 
+private:
+	void SetUpWidgets() const;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	URadialSelectionWidget* TurretSelectionWidget;
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	UPlayerResourceWidget* ResourceWidget;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
 	TSubclassOf<ATurret> GunTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
@@ -34,15 +43,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
 	TSubclassOf<ATurret> BuffTurretBlueprint;
 	
-private:
-	void SetUpWidgets() const;
-	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Widgets")
-	URadialSelectionWidget* TurretSelectionWidget;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Widgets")
-	UPlayerResourceWidget* ResourceWidget;
-
 	UPROPERTY()
 	UPanelSlot* Panel;
 
