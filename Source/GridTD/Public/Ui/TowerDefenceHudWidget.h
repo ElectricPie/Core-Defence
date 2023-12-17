@@ -23,6 +23,19 @@ protected:
 
 private:
 	void SetUpWidgets() const;
+	
+	UFUNCTION()
+	void BuildGunTurret();
+	UFUNCTION()
+	void BuildCannonTurret();
+	UFUNCTION()
+	void BuildRocketTurret();
+	UFUNCTION()
+	void BuildPiercingTurret();
+	UFUNCTION()
+	void BuildSlowTurret();
+	UFUNCTION()
+	void BuildBuffTurret();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
@@ -42,13 +55,19 @@ protected:
 	TSubclassOf<ATurret> SlowTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
 	TSubclassOf<ATurret> BuffTurretBlueprint;
+
+	UPROPERTY(BlueprintReadOnly)
+	ATurretSocket* SelectedTurretSocket;
 	
 public:
 	UPROPERTY()
 	UPanelSlot* Panel;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION()
 	void SelectTurretSocket(ATurretSocket* TurretSocket);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SelectedTurretEvent();
 	
 	void CloseTurretSelectionWidget() const;
 

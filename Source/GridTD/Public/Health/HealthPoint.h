@@ -11,7 +11,7 @@ class AHealthOrb;
 class ATowerDefencePlayer;
 class UBoxComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrbStateChagedSignature, int32, asdf, a, qwe)
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrbStateChagedSignature, int32, asdf, a, qwe)
 
 UCLASS()
 class GRIDTD_API AHealthPoint : public AActor
