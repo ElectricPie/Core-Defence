@@ -3,8 +3,6 @@
 
 #include "Health/HealthOrb.h"
 
-#include "TowerDefencePlayer.h"
-
 // Sets default values
 AHealthOrb::AHealthOrb()
 {

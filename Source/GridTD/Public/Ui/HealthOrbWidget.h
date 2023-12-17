@@ -4,17 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Health/HealthOrbState.h"
 #include "HealthOrbWidget.generated.h"
 
 class UImage;
-
-UENUM(BlueprintType)
-enum EOrbState
-{
-	Stored,
-	Taken,
-	Lost
-};
 
 /**
  * 
@@ -37,5 +30,5 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetState(const EOrbState State) const;
+	void SetState(const EHealthOrbState State) const;
 };

@@ -1,10 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Ui/HealthOrbWidget.h"
 #include "Components/Image.h"
+#include "Health/HealthOrbState.h"
 
-void UHealthOrbWidget::SetState(const EOrbState State) const
+void UHealthOrbWidget::SetState(const EHealthOrbState State) const
 {
 	if (!OrbImage)
 	{
