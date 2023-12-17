@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealthOrbSocket.h"
+#include "Health/HealthOrbSocket.h"
 
-#include "HealthOrb.h"
-#include "HealthOrbContainer.h"
-#include "HealthPoint.h"
+#include "Health/HealthOrb.h"
+#include "Health/HealthOrbContainer.h"
+#include "Health/HealthPoint.h"
 
 // Sets default values for this component's properties
 UHealthOrbSocket::UHealthOrbSocket()

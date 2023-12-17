@@ -4,7 +4,7 @@
 #include "TowerDefencePlayer.h"
 
 #include "EngineUtils.h"
-#include "HealthPoint.h"
+#include "Health/HealthPoint.h"
 #include "TurretSocket.h"
 #include "Ui/TowerDefenceHudWidget.h"
 

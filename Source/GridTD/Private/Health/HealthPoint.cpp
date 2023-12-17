@@ -1,11 +1,11 @@
  // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealthPoint.h"
+#include "Health/HealthPoint.h"
 
-#include "HealthOrb.h"
-#include "HealthOrbSocket.h"
-#include "HealthOrbContainer.h"
+#include "Health/HealthOrb.h"
+#include "Health/HealthOrbSocket.h"
+#include "Health/HealthOrbContainer.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values

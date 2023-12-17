@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealthOrbContainer.h"
+#include "Health/HealthOrbContainer.h"
 
-#include "HealthOrb.h"
-#include "HealthPoint.h"
+#include "Health/HealthOrb.h"
 
 FHealthOrbContainer::FHealthOrbContainer(AHealthOrb& HealthOrbToContain, AHealthPoint& OriginPoint):
 	HealthOrb(HealthOrbToContain), OrbOriginPoint(OriginPoint) {}
