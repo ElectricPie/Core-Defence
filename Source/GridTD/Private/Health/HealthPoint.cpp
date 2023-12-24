@@ -1,12 +1,11 @@
  // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealthPoint.h"
+#include "Health/HealthPoint.h"
 
-#include "HealthOrb.h"
-#include "HealthOrbSocket.h"
-#include "HealthOrbContainer.h"
-#include "TowerDefencePlayer.h"
+#include "Health/HealthOrb.h"
+#include "Health/HealthOrbSocket.h"
+#include "Health/HealthOrbContainer.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -50,10 +49,6 @@ void AHealthPoint::BeginPlay()
 		FOrbLocation* OrbLocation = new FOrbLocation(*NewContainer, NewOrbPosition);
 		HealthOrbs.Add(OrbLocation);
 	}
-
-	TowerPlayerController = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
-	if (!TowerPlayerController) return;
-	TowerPlayerController->RegisterPlayerHealth(MaxOrbs);
 }
 
 void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -65,10 +60,13 @@ void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (!OrbSocket || HealthOrbs.Num() == 0) return;
 	if (OrbSocket->HasOrb()) return;
 
+	// Keep track of where the empty space
 	const FOrbLocation* OrbLocation = HealthOrbs.Pop();
 	UnusedOrbLocations.Add(OrbLocation->OrbPosition);
 	
 	OrbSocket->AssignHealthOrb(OrbLocation->HealthOrb);
+	
+	OrbStateChangedEvent.Broadcast(Taken);
 }
 
 // Called every frame
@@ -101,10 +99,29 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
  bool AHealthPoint::AddOrb(FHealthOrbContainer& OrbContainer)
  {
 	if (UnusedOrbLocations.Num() == 0) return false;
-	
+
+	// Set the orb in a free position
 	FVector OrbLocation = UnusedOrbLocations.Pop();
 	FOrbLocation(OrbContainer, OrbLocation);
 	SetOrbsPosition(OrbContainer.GetHealthOrb(), OrbLocation);
 	
+	OrbStateChangedEvent.Broadcast(Stored);
+	
 	return true;
+ }
+
+ uint32 AHealthPoint::GetOrbCount() const
+ {
+	return HealthOrbs.Num();
+ }
+
+ TArray<TWeakPtr<const FHealthOrbContainer>> AHealthPoint::GetHealthOrbs() const
+ {
+	TArray<TWeakPtr<const FHealthOrbContainer>> Orbs;
+	for (const FOrbLocation* Orb : HealthOrbs)
+	{
+		Orbs.Add(MakeShared<FHealthOrbContainer>(Orb->HealthOrb));
+	}
+
+	return Orbs;
  }

@@ -1,9 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HealthOrb.h"
-
-#include "TowerDefencePlayer.h"
+#include "Health/HealthOrb.h"
 
 // Sets default values
 AHealthOrb::AHealthOrb()

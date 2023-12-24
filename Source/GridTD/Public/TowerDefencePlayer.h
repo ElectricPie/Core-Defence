@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Health/HealthOrbState.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTowerDefenceHudWidget;
@@ -39,6 +40,9 @@ private:
 
 	void SetupUi();
 
+	UFUNCTION()
+	void OnOrbStateChanged(EHealthOrbState OrbState);
+
 protected:
 	UFUNCTION(BlueprintNativeEvent)
 	void GameOver();
@@ -61,14 +65,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
-public:
-	/**
-	 * Gives the player the provided amount of health
-	 * @param AdditionalHealth The amount of health points to give to the player
-	 */
-	UFUNCTION(BlueprintCallable)
-	void RegisterPlayerHealth(int32 AdditionalHealth);
-	
+public:	
 	/**
 	 * Reduces the players health by 1
 	 */
