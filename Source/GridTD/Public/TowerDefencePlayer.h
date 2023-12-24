@@ -65,7 +65,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
-public:	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Resources")
+	int32 Resources;
+	
 	/**
 	 * Reduces the players health by 1
 	 */
