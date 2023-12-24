@@ -105,3 +105,8 @@ void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
 	
 	ResourceWidget->AddHealthOrbWidgets(HealthOrbCount);
 }
+
+void UTowerDefenceHudWidget::ChangeOrbState(const EHealthOrbState OrbState)
+{
+	ResourceWidget->ChangeOrbState(OrbState);
+}

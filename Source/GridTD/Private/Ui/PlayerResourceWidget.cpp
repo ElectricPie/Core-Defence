@@ -13,6 +13,26 @@ void UPlayerResourceWidget::NativeConstruct()
 	Super::NativeConstruct();
 }
 
+void UPlayerResourceWidget::OrbStored()
+{
+}
+
+void UPlayerResourceWidget::OrbTaken()
+{
+	if (TakenOrbCount + LostOrbCount >= HealthGrid.Num()) return;
+	
+	TakenOrbCount++;
+
+	UHealthOrbWidget* t = HealthGrid[TakenOrbCount + LostOrbCount - 1];
+	t->SetState(Taken);
+}
+
+void UPlayerResourceWidget::OrbLost()
+{
+	LostOrbCount++;
+	HealthGrid[LostOrbCount - 1]->SetState(Lost);
+}
+
 void UPlayerResourceWidget::AddHealthOrbWidgets(uint32 HealthOrbCount)
 {
 	// Check if all references are valid
@@ -47,8 +67,8 @@ void UPlayerResourceWidget::AddHealthOrbWidgets(uint32 HealthOrbCount)
 		const uint32 Row = i / GridColumns;
 		
 		UHealthOrbWidget* NewHealthWidget = CreateWidget<UHealthOrbWidget>(GetWorld(), HealthOrbBlueprint);
-		NewHealthWidget->SetState(Stored);
-
+		NewHealthWidget->SetState(Taken);
+		
 		// Add widget to grid
 		UGridSlot* GridSlot = HealthGridWidget->AddChildToGrid(NewHealthWidget);
 		GridSlot->SetColumn(Column);
@@ -56,8 +76,10 @@ void UPlayerResourceWidget::AddHealthOrbWidgets(uint32 HealthOrbCount)
 		GridSlot->SetPadding(GridPadding);
 		// TODO: Add nudging by half the heath widgets size
 
-		HealthGrid.Add(NewHealthWidget);
+		// TODO: Fix issue with pointers not working in array or when assigned to other pointer
+		HealthGrid.Push(NewHealthWidget);
 	}
+	
 }
 
 void UPlayerResourceWidget::AddHealthOrbWidget()
@@ -68,4 +90,28 @@ void UPlayerResourceWidget::ClearOrbWidgets()
 {
 	HealthGridWidget->ClearChildren();
 	HealthGrid.Empty();
+}
+
+void UPlayerResourceWidget::ChangeOrbState(const EHealthOrbState OrbState)
+{
+	// TODO:
+	if (HealthGrid.Num() == 0) return;
+	// UHealthOrbWidget* HealthOrbWidget = StoredOrbs.Pop();
+
+
+	switch (OrbState)
+	{
+	case Stored:
+		UE_LOG(LogTemp, Warning, TEXT("Stored"));
+		OrbStored();
+		break;
+	case Taken:
+		UE_LOG(LogTemp, Warning, TEXT("Taken"));
+		OrbTaken();
+		break;
+	case Lost:
+		UE_LOG(LogTemp, Warning, TEXT("Lost"));
+		OrbLost();
+		break;
+	}
 }

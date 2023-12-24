@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Health/HealthOrbState.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTowerDefenceHudWidget;
@@ -38,6 +39,9 @@ private:
 	void Select();
 
 	void SetupUi();
+
+	UFUNCTION()
+	void OnOrbStateChanged(EHealthOrbState OrbState);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)

@@ -60,10 +60,13 @@ void AHealthPoint::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (!OrbSocket || HealthOrbs.Num() == 0) return;
 	if (OrbSocket->HasOrb()) return;
 
+	// Keep track of where the empty space
 	const FOrbLocation* OrbLocation = HealthOrbs.Pop();
 	UnusedOrbLocations.Add(OrbLocation->OrbPosition);
 	
 	OrbSocket->AssignHealthOrb(OrbLocation->HealthOrb);
+	
+	OrbStateChangedEvent.Broadcast(Taken);
 }
 
 // Called every frame
@@ -96,10 +99,13 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
  bool AHealthPoint::AddOrb(FHealthOrbContainer& OrbContainer)
  {
 	if (UnusedOrbLocations.Num() == 0) return false;
-	
+
+	// Set the orb in a free position
 	FVector OrbLocation = UnusedOrbLocations.Pop();
 	FOrbLocation(OrbContainer, OrbLocation);
 	SetOrbsPosition(OrbContainer.GetHealthOrb(), OrbLocation);
+	
+	OrbStateChangedEvent.Broadcast(Stored);
 	
 	return true;
  }
@@ -107,4 +113,15 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
  uint32 AHealthPoint::GetOrbCount() const
  {
 	return HealthOrbs.Num();
+ }
+
+ TArray<TWeakPtr<const FHealthOrbContainer>> AHealthPoint::GetHealthOrbs() const
+ {
+	TArray<TWeakPtr<const FHealthOrbContainer>> Orbs;
+	for (const FOrbLocation* Orb : HealthOrbs)
+	{
+		Orbs.Add(MakeShared<FHealthOrbContainer>(Orb->HealthOrb));
+	}
+
+	return Orbs;
  }

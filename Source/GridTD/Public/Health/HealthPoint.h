@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Health/HealthOrbState.h"
 #include "HealthPoint.generated.h"
 
 class FHealthOrbContainer;
@@ -11,7 +12,7 @@ class AHealthOrb;
 class ATowerDefencePlayer;
 class UBoxComponent;
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrbStateChagedSignature, int32, asdf, a, qwe)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrbStateChangedSignature, EHealthOrbState, OrbSate);
 
 UCLASS()
 class GRIDTD_API AHealthPoint : public AActor
@@ -74,6 +75,8 @@ private:
 	void SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const;
 	
 public:
+	FOnOrbStateChangedSignature OrbStateChangedEvent;
+	
 	/**
 	 * Attempts to add the orb to an empty space
 	 * @param OrbContainer The orb to be added
@@ -81,5 +84,7 @@ public:
 	 */
 	bool AddOrb(FHealthOrbContainer& OrbContainer);
 
-	 uint32 GetOrbCount() const;
+	uint32 GetOrbCount() const;
+
+	TArray<TWeakPtr<const FHealthOrbContainer>> GetHealthOrbs() const;
 };

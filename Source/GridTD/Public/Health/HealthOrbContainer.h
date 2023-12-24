@@ -6,6 +6,7 @@
 
 class AHealthPoint;
 class AHealthOrb;
+
 /**
  * 
  */
@@ -17,7 +18,6 @@ public:
 
 	AHealthOrb& GetHealthOrb() const;
 	AHealthPoint& GetOrbOrigin() const;
-
 private:
 	AHealthOrb& HealthOrb;
 	AHealthPoint& OrbOriginPoint;

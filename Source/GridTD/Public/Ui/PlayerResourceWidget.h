@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Health/HealthOrbState.h"
 #include "PlayerResourceWidget.generated.h"
 
 class UTextBlock;
@@ -21,7 +22,15 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
+	UPROPERTY()
 	TArray<UHealthOrbWidget*> HealthGrid;
+
+	int32 TakenOrbCount = 0;
+	int32 LostOrbCount = 0;
+
+	void OrbStored();
+	void OrbTaken();
+	void OrbLost();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
@@ -52,4 +61,6 @@ public:
 	void AddHealthOrbWidget();
 
 	void ClearOrbWidgets();
+
+	void ChangeOrbState(EHealthOrbState OrbState);
 };

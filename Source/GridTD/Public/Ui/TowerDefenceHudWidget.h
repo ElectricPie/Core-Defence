@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Health/HealthOrbState.h"
 #include "TowerDefenceHudWidget.generated.h"
 
 class UPlayerResourceWidget;
@@ -74,4 +75,6 @@ public:
 	// Resource widget
 	void ClearHealth() const;
 	void AddHealth(uint32 HealthOrbCount) const;
+
+	void ChangeOrbState(EHealthOrbState OrbState);
 };

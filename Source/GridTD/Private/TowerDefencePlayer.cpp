@@ -20,13 +20,22 @@ void ATowerDefencePlayer::BeginPlay()
 	// Get all health points and update the Hud
 	UWorld* World = GetWorld();
 	if (!World) return;
-	for (const AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
+	for (AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
 	{
 		const uint32 AdditionalHealth = HealthPoint->GetOrbCount();
 		HudWidget->AddHealth(AdditionalHealth);
 		
 		MaxHealth += AdditionalHealth;
 		Health += AdditionalHealth;
+
+		HealthPoint->OrbStateChangedEvent.AddDynamic(this, &ATowerDefencePlayer::OnOrbStateChanged);
+		
+		// TArray<TWeakPtr<const FHealthOrbContainer>> HealthOrbs = HealthPoint->GetHealthOrbs();
+		// for (const TWeakPtr<const FHealthOrbContainer>  Orbs : HealthOrbs)
+		// {
+		// 	if (!Orbs.IsValid()) continue;
+		// 	
+		// }
 	}
 }
 
@@ -74,6 +83,12 @@ void ATowerDefencePlayer::SetupUi()
 	if (!HudWidgetBlueprint) return;
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
+}
+
+void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OrbState"));
+	HudWidget->ChangeOrbState(OrbState);
 }
 
 bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const

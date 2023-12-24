@@ -29,6 +29,6 @@ protected:
 	FLinearColor LostColor = FLinearColor::Black;
 	
 public:
-	UFUNCTION(BlueprintCallable)
-	void SetState(const EHealthOrbState State) const;
+	UFUNCTION()
+	void SetState(const EHealthOrbState State);
 };

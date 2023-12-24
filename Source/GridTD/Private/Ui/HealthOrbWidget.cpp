@@ -5,14 +5,14 @@
 #include "Components/Image.h"
 #include "Health/HealthOrbState.h"
 
-void UHealthOrbWidget::SetState(const EHealthOrbState State) const
+void UHealthOrbWidget::SetState(const EHealthOrbState State)
 {
 	if (!OrbImage)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UHealthOrbWidget is missing referance to OrbImage"))
+		UE_LOG(LogTemp, Error, TEXT("UHealthOrbWidget is missing referance to OrbImage"));
 		return;
 	}
-
+	
 	FLinearColor OrbColor;
 	switch (State)
 	{
