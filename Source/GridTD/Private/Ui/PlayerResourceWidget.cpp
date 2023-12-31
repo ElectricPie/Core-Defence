@@ -5,6 +5,7 @@
 
 #include "Components/GridPanel.h"
 #include "Components/GridSlot.h"
+#include "Components/TextBlock.h"
 #include "Ui/HealthOrbWidget.h"
 
 // TODO: Remove after testing
@@ -97,8 +98,7 @@ void UPlayerResourceWidget::ChangeOrbState(const EHealthOrbState OrbState)
 	// TODO:
 	if (HealthGrid.Num() == 0) return;
 	// UHealthOrbWidget* HealthOrbWidget = StoredOrbs.Pop();
-
-
+	
 	switch (OrbState)
 	{
 	case Stored:
@@ -114,4 +114,15 @@ void UPlayerResourceWidget::ChangeOrbState(const EHealthOrbState OrbState)
 		OrbLost();
 		break;
 	}
+}
+
+void UPlayerResourceWidget::UpdateResourceValue(const int32 Value) const
+{
+	if (!ResourcesValueWidget)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerResource Widget is missing referance to 'ResourcesValueWidget'") );
+		return;
+	}
+
+	ResourcesValueWidget->SetText(FText::FromString(FString::Printf(TEXT("%d"), Value)));
 }

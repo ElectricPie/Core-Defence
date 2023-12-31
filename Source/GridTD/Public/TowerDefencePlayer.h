@@ -35,6 +35,9 @@ private:
 	UPROPERTY()
 	UTowerDefenceHudWidget* HudWidget;
 	
+	UPROPERTY(VisibleAnywhere, Category="Resources")
+	int32 Resources = 100;
+	
 	UFUNCTION()
 	void Select();
 
@@ -66,9 +69,6 @@ protected:
 	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Resources")
-	int32 Resources;
-	
 	/**
 	 * Reduces the players health by 1
 	 */

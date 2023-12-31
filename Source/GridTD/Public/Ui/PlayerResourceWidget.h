@@ -63,4 +63,6 @@ public:
 	void ClearOrbWidgets();
 
 	void ChangeOrbState(EHealthOrbState OrbState);
+
+	void UpdateResourceValue(int32 Value) const;
 };

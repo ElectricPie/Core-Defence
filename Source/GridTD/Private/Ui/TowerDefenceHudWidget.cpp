@@ -10,7 +10,11 @@
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 
-
+#define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
+{ \
+UE_LOG(LogTemp, Warning, TEXT(ErrorMessage)); \
+return; \
+} \
 
 void UTowerDefenceHudWidget::NativeConstruct()
 {
@@ -86,27 +90,30 @@ void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
 
 void UTowerDefenceHudWidget::ClearHealth() const
 {
-	if (ResourceWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TowerDefenceHud is missing referance to ResourceWidget"));
-		return;
-	}
-
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+	
 	ResourceWidget->ClearOrbWidgets();
 }
 
 void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
 {
-	if (!ResourceWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TowerDefenceHud is missing referance to ResourceWidget"));
-		return;
-	}
+	
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
 	
 	ResourceWidget->AddHealthOrbWidgets(HealthOrbCount);
 }
 
 void UTowerDefenceHudWidget::ChangeOrbState(const EHealthOrbState OrbState)
 {
+	
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+	
 	ResourceWidget->ChangeOrbState(OrbState);
+}
+
+void UTowerDefenceHudWidget::UpdateResources(const int32 Value) const
+{
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+
+	ResourceWidget->UpdateResourceValue(Value);
 }

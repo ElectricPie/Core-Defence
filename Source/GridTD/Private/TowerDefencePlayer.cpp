@@ -6,6 +6,8 @@
 #include "EngineUtils.h"
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
+#include "Kismet/GameplayStatics.h"
+#include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
 
 
@@ -15,11 +17,23 @@ void ATowerDefencePlayer::BeginPlay()
 
 	bShowMouseCursor = true;
 	
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	// Get Settings from settings actor
+	const ALevelSettings* LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
+	if (LevelSettings)
+	{
+		Resources = LevelSettings->GetPlayerStartingResources();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No LevelSettings actor found in the world, using default values"));
+	}
+
 	SetupUi();
 
 	// Get all health points and update the Hud
-	UWorld* World = GetWorld();
-	if (!World) return;
 	for (AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
 	{
 		const uint32 AdditionalHealth = HealthPoint->GetOrbCount();
@@ -83,6 +97,7 @@ void ATowerDefencePlayer::SetupUi()
 	if (!HudWidgetBlueprint) return;
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
+	HudWidget->UpdateResources(Resources);
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)

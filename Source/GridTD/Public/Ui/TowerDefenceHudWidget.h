@@ -77,4 +77,6 @@ public:
 	void AddHealth(uint32 HealthOrbCount) const;
 
 	void ChangeOrbState(EHealthOrbState OrbState);
+
+	void UpdateResources(int32 Value) const;
 };
