@@ -82,5 +82,5 @@ public:
 	void UpdateResources(int32 Value) const;
 
 	void DisplayError(const FText& ErrorMessage);
-	void HideErrorMessage();
+	void HideErrorMessage() const;
 };

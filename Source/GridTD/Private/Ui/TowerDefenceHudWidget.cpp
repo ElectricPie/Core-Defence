@@ -140,11 +140,16 @@ void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage)
 	
 	ErrorDisplayWidget->SetErrorText(ErrorMessage);
 	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Visible);
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(ErrorDisplayTimerHandle))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ErrorDisplayTimerHandle);
+	}
 	
 	GetWorld()->GetTimerManager().SetTimer(ErrorDisplayTimerHandle, this, &UTowerDefenceHudWidget::HideErrorMessage, ErrorMessageDisplayTime, false);
 }
 
-void UTowerDefenceHudWidget::HideErrorMessage()
+void UTowerDefenceHudWidget::HideErrorMessage() const
 {
 	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
 	
