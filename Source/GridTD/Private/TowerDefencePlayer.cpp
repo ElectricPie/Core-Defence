@@ -176,3 +176,14 @@ void ATowerDefencePlayer::ReduceHealth()
 	if (Health > 0) return;
 	GameOver();
 }
+
+bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
+{
+	// Prevent negative resources
+	if (Resources < Amount) return false;
+	
+	Resources -= Amount;
+	HudWidget->UpdateResources(Resources);
+	
+	return true;
+}

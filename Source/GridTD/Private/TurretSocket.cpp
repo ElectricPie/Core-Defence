@@ -57,6 +57,7 @@ void ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerD
 	
 	// TODO: Handle not enough resources on UI
 	if (OwningPlayer->GetResources() < TurretDataAsset->GetCost()) { return; }
+	OwningPlayer->RemoveResources(TurretDataAsset->GetCost());
 	
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
 		TurretDataAsset->GetTurretClass(),
