@@ -28,7 +28,12 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
+	UPROPERTY(EditAnywhere, Category="Error Message")
+	float ErrorMessageDisplayTime = 3.f;
+	
 	FTurretButtonClickedSignature TurretButtonClickedEvent;
+
+	FTimerHandle ErrorDisplayTimerHandle;
 	
 	void SetUpWidgets() const;
 	
@@ -76,5 +81,6 @@ public:
 
 	void UpdateResources(int32 Value) const;
 
-	void DisplayError(const FText& ErrorMessage, float Duration = 3.f) const;
+	void DisplayError(const FText& ErrorMessage);
+	void HideErrorMessage();
 };

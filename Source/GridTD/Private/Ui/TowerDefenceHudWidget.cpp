@@ -9,6 +9,7 @@
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 #include "Ui/ErrorDisplayWidget.h"
+#include "Engine/EngineTypes.h"
 
 #define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
 { \
@@ -133,10 +134,19 @@ void UTowerDefenceHudWidget::UpdateResources(const int32 Value) const
 	ResourceWidget->UpdateResourceValue(Value);
 }
 
-void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage, float Duration) const
+void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage)
 {
 	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
 	
 	ErrorDisplayWidget->SetErrorText(ErrorMessage);
 	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Visible);
+	
+	GetWorld()->GetTimerManager().SetTimer(ErrorDisplayTimerHandle, this, &UTowerDefenceHudWidget::HideErrorMessage, ErrorMessageDisplayTime, false);
+}
+
+void UTowerDefenceHudWidget::HideErrorMessage()
+{
+	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
+	
+	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
