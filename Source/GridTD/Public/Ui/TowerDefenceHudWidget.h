@@ -9,6 +9,7 @@
 #include "TowerDefenceHudWidget.generated.h"
 
 
+class UErrorDisplayWidget;
 class UPlayerResourceWidget;
 class ATurretSocket;
 class URadialSelectionWidget;
@@ -50,6 +51,8 @@ protected:
 	URadialSelectionWidget* TurretSelectionWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	UErrorDisplayWidget* ErrorDisplayWidget;
 	
 public:
 	UPROPERTY()
@@ -72,4 +75,6 @@ public:
 	void ChangeOrbState(EHealthOrbState OrbState);
 
 	void UpdateResources(int32 Value) const;
+
+	void DisplayError(const FText& ErrorMessage, float Duration = 3.f) const;
 };

@@ -8,6 +8,7 @@
 #include "Components/Image.h"
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
+#include "Ui/ErrorDisplayWidget.h"
 
 #define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
 { \
@@ -125,4 +126,12 @@ void UTowerDefenceHudWidget::UpdateResources(const int32 Value) const
 	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
 
 	ResourceWidget->UpdateResourceValue(Value);
+}
+
+void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage, float Duration) const
+{
+	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
+	
+	ErrorDisplayWidget->SetErrorText(ErrorMessage);
+	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Visible);
 }

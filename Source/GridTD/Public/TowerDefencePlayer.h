@@ -35,6 +35,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UTowerDefenceHudWidget> HudWidgetBlueprint;
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	FText InsufficientResourcesText;
 	UPROPERTY()
 	UTowerDefenceHudWidget* HudWidget;
 	

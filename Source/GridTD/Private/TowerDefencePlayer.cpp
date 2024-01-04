@@ -133,16 +133,22 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 	switch (BuildError)
 	{
 		case SocketOccupied:
-			UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret to occupied turret socket"));
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret to occupied turret socket"));
 			break;
 		case NotEnoughResources:
 			// TODO: Handle not enough resources on UI
+			if (!HudWidget)
+			{
+				UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Has no HudWidget"));
+				break;
+			}
+			HudWidget->DisplayError(InsufficientResourcesText);
 			break;
 		case NullDataAsset:
-			UE_LOG(LogTemp, Error, TEXT("Attempted to build turret with null data asset"));
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with null data asset"));
 			break;
 		case NullPlayerReference:
-			UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret with null player"));
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret with null player"));
 			break;
 		case Success:
 			break;
