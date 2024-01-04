@@ -37,6 +37,11 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretSelectionWidget->BottomLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildSlowTurret);
 		TurretSelectionWidget->BottomRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildBuffTurret);
 	}
+
+	if (ErrorDisplayWidget)
+	{
+		ErrorDisplayWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
 
 void UTowerDefenceHudWidget::BuildGunTurret()
