@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Enums/ETurretBuildErrors.h"
 #include "TurretSocket.generated.h"
 
 class ATurret;
 class ATowerDefencePlayer;
+
 
 UCLASS()
 class GRIDTD_API ATurretSocket : public AActor
@@ -27,7 +29,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer*  OwningPlayer);
+	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer);
 
 	/**
 	 * Checks if the socket contains a turret

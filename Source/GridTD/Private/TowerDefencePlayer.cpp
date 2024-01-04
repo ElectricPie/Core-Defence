@@ -10,7 +10,7 @@
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
 #include "Enums/ETurretType.h"
-
+#include "Enums/ETurretBuildErrors.h"
 
 void ATowerDefencePlayer::BeginPlay()
 {
@@ -102,26 +102,49 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 	if (!SelectedTurretSocket) return;
 	if (SelectedTurretSocket->HasTurret()) return;
 
+	ETurretBuildErrors BuildError = Success;
+	
 	// Build the corresponding turret
 	switch (TurretType)
 	{
 		case Gun:
-			SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
 			break;
 		case Cannon:
-			SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
 			break;
 		case Rocket:
-			SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
 			break;
 		case Piercing:
-			SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
 			break;
 		case Slow:
-			SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
 			break;
 		case Buff:
-			SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
+			break;
+		default:
+			break;
+	}
+
+	// Handle turret build errors
+	switch (BuildError)
+	{
+		case SocketOccupied:
+			UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret to occupied turret socket"));
+			break;
+		case NotEnoughResources:
+			// TODO: Handle not enough resources on UI
+			break;
+		case NullDataAsset:
+			UE_LOG(LogTemp, Error, TEXT("Attempted to build turret with null data asset"));
+			break;
+		case NullPlayerReference:
+			UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret with null player"));
+			break;
+		case Success:
 			break;
 		default:
 			break;
