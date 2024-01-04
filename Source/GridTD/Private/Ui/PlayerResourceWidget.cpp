@@ -8,12 +8,6 @@
 #include "Components/TextBlock.h"
 #include "Ui/HealthOrbWidget.h"
 
-// TODO: Remove after testing
-void UPlayerResourceWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
-}
-
 void UPlayerResourceWidget::OrbStored()
 {
 }

@@ -136,7 +136,6 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret to occupied turret socket"));
 			break;
 		case NotEnoughResources:
-			// TODO: Handle not enough resources on UI
 			if (!HudWidget)
 			{
 				UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Has no HudWidget"));

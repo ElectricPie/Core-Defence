@@ -35,7 +35,6 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-// TODO: Handle not enough resources on UI by returning false
 ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset,
                                               ATowerDefencePlayer* OwningPlayer)
 {

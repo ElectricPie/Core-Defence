@@ -145,7 +145,7 @@ void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(ErrorDisplayTimerHandle);
 	}
-	
+
 	GetWorld()->GetTimerManager().SetTimer(ErrorDisplayTimerHandle, this, &UTowerDefenceHudWidget::HideErrorMessage, ErrorMessageDisplayTime, false);
 }
 

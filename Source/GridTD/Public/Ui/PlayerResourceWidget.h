@@ -18,9 +18,6 @@ class GRIDTD_API UPlayerResourceWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void NativeConstruct() override;
-
 private:
 	UPROPERTY()
 	TArray<UHealthOrbWidget*> HealthGrid;
