@@ -3,11 +3,9 @@
 
 #include "Ui/TowerDefenceHudWidget.h"
 
-#include "Turret.h"
 #include "TurretSocket.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
-#include "DataAssets/TurretDataAsset.h"
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 
@@ -45,38 +43,32 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
-	SelectedTurretSocket->AddTurret(GunTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Gun);
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
-	if (!TurretSelectionWidget || !CannonTurretBlueprint || !SelectedTurretSocket || !OwningPlayer)  return;
-	SelectedTurretSocket->AddTurret(CannonTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Cannon);
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
-	if (!TurretSelectionWidget || !RocketTurretBlueprint || !SelectedTurretSocket || !OwningPlayer)  return;
-	SelectedTurretSocket->AddTurret(RocketTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Rocket);
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
-	if (!TurretSelectionWidget || !PiercingTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
-	SelectedTurretSocket->AddTurret(PiercingTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Piercing);
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
-	if (!TurretSelectionWidget || !SlowTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
-	SelectedTurretSocket->AddTurret(SlowTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Slow);
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
-	if (!TurretSelectionWidget || !BuffTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
-	SelectedTurretSocket->AddTurret(BuffTurretBlueprint, OwningPlayer);
+	TurretButtonClickedEvent.Broadcast(Buff);
 }
 
 void UTowerDefenceHudWidget::SelectTurretSocket(ATurretSocket* TurretSocket)

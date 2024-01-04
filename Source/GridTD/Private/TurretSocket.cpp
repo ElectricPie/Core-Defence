@@ -34,7 +34,7 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-// TOOD: Handle not enough resources on UI by returning false
+// TODO: Handle not enough resources on UI by returning false
 void ATurretSocket::AddTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer)
 {
 	if (TurretInSocket)

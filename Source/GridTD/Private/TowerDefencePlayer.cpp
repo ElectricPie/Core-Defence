@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
+#include "Enums/ETurretType.h"
 
 
 void ATowerDefencePlayer::BeginPlay()
@@ -43,13 +44,6 @@ void ATowerDefencePlayer::BeginPlay()
 		Health += AdditionalHealth;
 
 		HealthPoint->OrbStateChangedEvent.AddDynamic(this, &ATowerDefencePlayer::OnOrbStateChanged);
-		
-		// TArray<TWeakPtr<const FHealthOrbContainer>> HealthOrbs = HealthPoint->GetHealthOrbs();
-		// for (const TWeakPtr<const FHealthOrbContainer>  Orbs : HealthOrbs)
-		// {
-		// 	if (!Orbs.IsValid()) continue;
-		// 	
-		// }
 	}
 }
 
@@ -79,16 +73,16 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
-	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
-	if (!TurretSocket) return;
-	
-	if (TurretSocket->HasTurret())
+	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
+	if (!SelectedTurretSocket) return;
+
+	if (SelectedTurretSocket->HasTurret())
 	{
 		// TODO: Handle turret upgrades and displays
 	}
 	else
 	{
-		HudWidget->SelectTurretSocket(TurretSocket);
+		HudWidget->SelectTurretSocket(SelectedTurretSocket);
 	}
 }
 
@@ -98,12 +92,40 @@ void ATowerDefencePlayer::SetupUi()
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
 	HudWidget->UpdateResources(Resources);
+	HudWidget->TurretButtonClickedEvent.AddDynamic(this, &ATowerDefencePlayer::OnTurretToBuildSelected);
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OrbState"));
 	HudWidget->ChangeOrbState(OrbState);
+}
+
+void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
+{
+	switch (TurretType)
+	{
+		case Gun:
+			UE_LOG(LogTemp, Warning, TEXT("Gun"));
+			break;
+		case Cannon:
+			UE_LOG(LogTemp, Warning, TEXT("Canon"));
+			break;
+		case Rocket:
+			UE_LOG(LogTemp, Warning, TEXT("Rocket"));
+			break;
+		case Piercing:
+			UE_LOG(LogTemp, Warning, TEXT("Piercing"));
+			break;
+		case Slow:
+			UE_LOG(LogTemp, Warning, TEXT("Slow"));
+			break;
+		case Buff:
+			UE_LOG(LogTemp, Warning, TEXT("Buff"));
+			break;
+		default:
+			break;
+	}
 }
 
 bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const

@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Health/HealthOrbState.h"
+#include "Enums/ETurretType.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTowerDefenceHudWidget;
+class ATurretSocket;
 /**
  * 
  */
@@ -37,6 +39,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category="Resources")
 	int32 Resources = 100;
+
+	UPROPERTY()
+	ATurretSocket* SelectedTurretSocket;
 	
 	UFUNCTION()
 	void Select();
@@ -45,6 +50,9 @@ private:
 
 	UFUNCTION()
 	void OnOrbStateChanged(EHealthOrbState OrbState);
+
+	UFUNCTION()
+	void OnTurretToBuildSelected(ETurretType TurretType);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)

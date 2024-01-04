@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Health/HealthOrbState.h"
+#include "Enums/ETurretType.h"
 #include "TowerDefenceHudWidget.generated.h"
+
 
 class UTurretDataAsset;
 class ATowerDefencePlayer;
@@ -13,6 +15,9 @@ class UPlayerResourceWidget;
 class ATurretSocket;
 class ATurret;
 class URadialSelectionWidget;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurretButtonClickedSignature, ETurretType, TurretType);
+
 /**
  * 
  */
@@ -43,6 +48,7 @@ private:
 	UFUNCTION()
 	void BuildBuffTurret();
 
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	URadialSelectionWidget* TurretSelectionWidget;
@@ -68,6 +74,9 @@ protected:
 public:
 	UPROPERTY()
 	UPanelSlot* Panel;
+
+	// TODO: Move to private and add function for setting up
+	FTurretButtonClickedSignature TurretButtonClickedEvent;
 
 	UFUNCTION()
 	void SelectTurretSocket(ATurretSocket* TurretSocket);
