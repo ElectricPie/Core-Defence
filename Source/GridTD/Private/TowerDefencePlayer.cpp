@@ -76,6 +76,7 @@ void ATowerDefencePlayer::Select()
 	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!SelectedTurretSocket) return;
 
+	// TODO: Let the hund handle which UI elements to show when selecting turrets
 	if (SelectedTurretSocket->HasTurret())
 	{
 		// TODO: Handle turret upgrades and displays
@@ -103,29 +104,36 @@ void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 
 void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 {
+	if (!SelectedTurretSocket) return;
+	if (SelectedTurretSocket->HasTurret()) return;
+
+	// Build the corresponding turret
 	switch (TurretType)
 	{
 		case Gun:
-			UE_LOG(LogTemp, Warning, TEXT("Gun"));
+			SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
 			break;
 		case Cannon:
-			UE_LOG(LogTemp, Warning, TEXT("Canon"));
+			SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
 			break;
 		case Rocket:
-			UE_LOG(LogTemp, Warning, TEXT("Rocket"));
+			SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
 			break;
 		case Piercing:
-			UE_LOG(LogTemp, Warning, TEXT("Piercing"));
+			SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
 			break;
 		case Slow:
-			UE_LOG(LogTemp, Warning, TEXT("Slow"));
+			SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
 			break;
 		case Buff:
-			UE_LOG(LogTemp, Warning, TEXT("Buff"));
+			SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
 			break;
 		default:
 			break;
 	}
+
+	// Clear the selected turret socket
+	SelectedTurretSocket = nullptr;
 }
 
 bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const

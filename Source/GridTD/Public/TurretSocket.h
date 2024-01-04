@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer*  OwningPlayer);
+	void BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer*  OwningPlayer);
 
 	/**
 	 * Checks if the socket contains a turret

@@ -9,11 +9,8 @@
 #include "TowerDefenceHudWidget.generated.h"
 
 
-class UTurretDataAsset;
-class ATowerDefencePlayer;
 class UPlayerResourceWidget;
 class ATurretSocket;
-class ATurret;
 class URadialSelectionWidget;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurretButtonClickedSignature, ETurretType, TurretType);
@@ -30,9 +27,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	UPROPERTY()
-	ATowerDefencePlayer* OwningPlayer;
-	
 	void SetUpWidgets() const;
 	
 	UFUNCTION()
@@ -55,19 +49,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* GunTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* CannonTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* RocketTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* PiercingTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* SlowTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	UTurretDataAsset* BuffTurretBlueprint;
-
 	UPROPERTY(BlueprintReadOnly)
 	ATurretSocket* SelectedTurretSocket;
 	
@@ -78,6 +59,7 @@ public:
 	// TODO: Move to private and add function for setting up
 	FTurretButtonClickedSignature TurretButtonClickedEvent;
 
+	// TODO: Only require position and combine with SelectTurretEvent
 	UFUNCTION()
 	void SelectTurretSocket(ATurretSocket* TurretSocket);
 

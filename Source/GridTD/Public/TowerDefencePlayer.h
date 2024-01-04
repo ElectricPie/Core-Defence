@@ -10,6 +10,7 @@
 
 class UTowerDefenceHudWidget;
 class ATurretSocket;
+class UTurretDataAsset;
 /**
  * 
  */
@@ -39,6 +40,20 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category="Resources")
 	int32 Resources = 100;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* GunTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* CannonTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* RocketTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* PiercingTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* SlowTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* BuffTurretBlueprint;
+
 
 	UPROPERTY()
 	ATurretSocket* SelectedTurretSocket;

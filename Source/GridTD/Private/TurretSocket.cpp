@@ -35,11 +35,17 @@ void ATurretSocket::Tick(float DeltaTime)
 }
 
 // TODO: Handle not enough resources on UI by returning false
-void ATurretSocket::AddTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer)
+void ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer)
 {
 	if (TurretInSocket)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Attempted to assigne turret to occupied turret socket"));
+		UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret to occupied turret socket"));
+		return;
+	}
+	
+	if (!TurretDataAsset)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Attempted to build turret with null data asset"));
 		return;
 	}
 
