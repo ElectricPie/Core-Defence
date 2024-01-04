@@ -3,7 +3,10 @@
 
 #include "TurretSocket.h"
 
+#include "TowerDefencePlayer.h"
 #include "Turret.h"
+#include "DataAssets/TurretDataAsset.h"
+#include "Enums/ETurretBuildErrors.h"
 
 // Sets default values
 ATurretSocket::ATurretSocket()
@@ -32,27 +35,27 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-void ATurretSocket::AddTurret(TSubclassOf<ATurret> TurretBlueprint)
+ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset,
+                                              ATowerDefencePlayer* OwningPlayer)
 {
-	if (TurretInSocket)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Attempted to assigne turret to occupied turret socket"));
-		return;
-	}
+	if (TurretInSocket) { return SocketOccupied; }
+	if (!TurretDataAsset) { return NullDataAsset; }
+	if (!OwningPlayer) { return NullPlayerReference; }
 	
-	if (!TurretBlueprint)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Attempted to assign turret with null value"));
-		return;
-	}
+	if (OwningPlayer->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
 	
+	OwningPlayer->RemoveResources(TurretDataAsset->GetCost());
+
+	// Create the turret in the world
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
-		TurretBlueprint,
+		TurretDataAsset->GetTurretClass(),
 		Socket->GetComponentLocation(),
 		Socket->GetComponentRotation()
 	);
 	
 	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
+
+	return Success;
 }
 
 bool ATurretSocket::HasTurret() const

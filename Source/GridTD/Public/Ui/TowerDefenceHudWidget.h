@@ -5,12 +5,17 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Health/HealthOrbState.h"
+#include "Enums/ETurretType.h"
 #include "TowerDefenceHudWidget.generated.h"
 
+
+class UErrorDisplayWidget;
 class UPlayerResourceWidget;
 class ATurretSocket;
-class ATurret;
 class URadialSelectionWidget;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurretButtonClickedSignature, ETurretType, TurretType);
+
 /**
  * 
  */
@@ -23,6 +28,13 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
+	UPROPERTY(EditAnywhere, Category="Error Message")
+	float ErrorMessageDisplayTime = 3.f;
+	
+	FTurretButtonClickedSignature TurretButtonClickedEvent;
+
+	FTimerHandle ErrorDisplayTimerHandle;
+	
 	void SetUpWidgets() const;
 	
 	UFUNCTION()
@@ -38,37 +50,26 @@ private:
 	UFUNCTION()
 	void BuildBuffTurret();
 
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	URadialSelectionWidget* TurretSelectionWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> GunTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> CannonTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> RocketTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> PiercingTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> SlowTurretBlueprint;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> BuffTurretBlueprint;
-
-	UPROPERTY(BlueprintReadOnly)
-	ATurretSocket* SelectedTurretSocket;
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	UErrorDisplayWidget* ErrorDisplayWidget;
 	
 public:
 	UPROPERTY()
 	UPanelSlot* Panel;
 
+	void AddTurretButtonClickedEvent(const FScriptDelegate& Delegate);
+	
 	UFUNCTION()
-	void SelectTurretSocket(ATurretSocket* TurretSocket);
+	void SelectTurretSocket(const ATurretSocket* TurretSocket);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SelectedTurretEvent();
+	void OpenTurretSelectionMenuEvent();
 	
 	void CloseTurretSelectionWidget() const;
 
@@ -77,4 +78,9 @@ public:
 	void AddHealth(uint32 HealthOrbCount) const;
 
 	void ChangeOrbState(EHealthOrbState OrbState);
+
+	void UpdateResources(int32 Value) const;
+
+	void DisplayError(const FText& ErrorMessage);
+	void HideErrorMessage() const;
 };

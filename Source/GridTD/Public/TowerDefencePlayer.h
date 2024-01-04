@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Health/HealthOrbState.h"
+#include "Enums/ETurretType.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTowerDefenceHudWidget;
+class ATurretSocket;
+class UTurretDataAsset;
 /**
  * 
  */
@@ -32,8 +35,29 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category="UI")
 	TSubclassOf<UTowerDefenceHudWidget> HudWidgetBlueprint;
+	UPROPERTY(EditDefaultsOnly, Category="UI")
+	FText InsufficientResourcesText;
 	UPROPERTY()
 	UTowerDefenceHudWidget* HudWidget;
+	
+	UPROPERTY(VisibleAnywhere, Category="Resources")
+	int32 Resources = 100;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* GunTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* CannonTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* RocketTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* PiercingTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* SlowTurretBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
+	UTurretDataAsset* BuffTurretBlueprint;
+	
+	UPROPERTY()
+	ATurretSocket* SelectedTurretSocket;
 	
 	UFUNCTION()
 	void Select();
@@ -42,6 +66,9 @@ private:
 
 	UFUNCTION()
 	void OnOrbStateChanged(EHealthOrbState OrbState);
+
+	UFUNCTION()
+	void OnTurretToBuildSelected(ETurretType TurretType);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)
@@ -65,10 +92,20 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool RaycastToMouse(const FVector2D& MouseScreenPos, FVector& HitLocation, AActor*& HitActor) const;
 
-public:	
+public:
 	/**
 	 * Reduces the players health by 1
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Resources")
 	void ReduceHealth();
+
+	UFUNCTION(BlueprintPure, Category="Resources")
+	int32 GetResources() const { return Resources; }
+
+	/**
+	 * @brief Attempts to remove the given amount of resources from the player
+	 * @param Amount The amount of resources to remove
+	 * @return True if the player has enough resources to remove
+	 */
+	bool RemoveResources(const int32 Amount);
 };

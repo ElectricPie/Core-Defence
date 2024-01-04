@@ -6,8 +6,11 @@
 #include "EngineUtils.h"
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
+#include "Kismet/GameplayStatics.h"
+#include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
-
+#include "Enums/ETurretType.h"
+#include "Enums/ETurretBuildErrors.h"
 
 void ATowerDefencePlayer::BeginPlay()
 {
@@ -15,11 +18,23 @@ void ATowerDefencePlayer::BeginPlay()
 
 	bShowMouseCursor = true;
 	
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	// Get Settings from settings actor
+	const ALevelSettings* LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
+	if (LevelSettings)
+	{
+		Resources = LevelSettings->GetPlayerStartingResources();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No LevelSettings actor found in the world, using default values"));
+	}
+
 	SetupUi();
 
 	// Get all health points and update the Hud
-	UWorld* World = GetWorld();
-	if (!World) return;
 	for (AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
 	{
 		const uint32 AdditionalHealth = HealthPoint->GetOrbCount();
@@ -29,13 +44,6 @@ void ATowerDefencePlayer::BeginPlay()
 		Health += AdditionalHealth;
 
 		HealthPoint->OrbStateChangedEvent.AddDynamic(this, &ATowerDefencePlayer::OnOrbStateChanged);
-		
-		// TArray<TWeakPtr<const FHealthOrbContainer>> HealthOrbs = HealthPoint->GetHealthOrbs();
-		// for (const TWeakPtr<const FHealthOrbContainer>  Orbs : HealthOrbs)
-		// {
-		// 	if (!Orbs.IsValid()) continue;
-		// 	
-		// }
 	}
 }
 
@@ -65,17 +73,10 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
-	ATurretSocket* TurretSocket = Cast<ATurretSocket>(HitActor);
-	if (!TurretSocket) return;
+	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
+	if (!SelectedTurretSocket) return;
 	
-	if (TurretSocket->HasTurret())
-	{
-		// TODO: Handle turret upgrades and displays
-	}
-	else
-	{
-		HudWidget->SelectTurretSocket(TurretSocket);
-	}
+	HudWidget->SelectTurretSocket(SelectedTurretSocket);
 }
 
 void ATowerDefencePlayer::SetupUi()
@@ -83,12 +84,79 @@ void ATowerDefencePlayer::SetupUi()
 	if (!HudWidgetBlueprint) return;
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
+	HudWidget->UpdateResources(Resources);
+
+	FScriptDelegate TurretBuildDelegate;
+	TurretBuildDelegate.BindUFunction(this, FName("OnTurretToBuildSelected"));
+	HudWidget->AddTurretButtonClickedEvent(TurretBuildDelegate);
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OrbState"));
 	HudWidget->ChangeOrbState(OrbState);
+}
+
+void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
+{
+	if (!SelectedTurretSocket) return;
+	if (SelectedTurretSocket->HasTurret()) return;
+
+	ETurretBuildErrors BuildError = Success;
+	
+	// Build the corresponding turret
+	switch (TurretType)
+	{
+		case Gun:
+			BuildError = SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
+			break;
+		case Cannon:
+			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
+			break;
+		case Rocket:
+			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
+			break;
+		case Piercing:
+			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
+			break;
+		case Slow:
+			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
+			break;
+		case Buff:
+			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
+			break;
+		default:
+			break;
+	}
+
+	// Handle turret build errors
+	switch (BuildError)
+	{
+		case SocketOccupied:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret to occupied turret socket"));
+			break;
+		case NotEnoughResources:
+			if (!HudWidget)
+			{
+				UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Has no HudWidget"));
+				break;
+			}
+			HudWidget->DisplayError(InsufficientResourcesText);
+			break;
+		case NullDataAsset:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with null data asset"));
+			break;
+		case NullPlayerReference:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret with null player"));
+			break;
+		case Success:
+			break;
+		default:
+			break;
+	}
+
+	// Clear the selected turret socket
+	SelectedTurretSocket = nullptr;
 }
 
 bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const
@@ -130,4 +198,15 @@ void ATowerDefencePlayer::ReduceHealth()
 
 	if (Health > 0) return;
 	GameOver();
+}
+
+bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
+{
+	// Prevent negative resources
+	if (Resources < Amount) return false;
+	
+	Resources -= Amount;
+	HudWidget->UpdateResources(Resources);
+	
+	return true;
 }

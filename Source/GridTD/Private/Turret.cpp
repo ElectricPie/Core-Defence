@@ -79,7 +79,6 @@ void ATurret::Tick(float DeltaTime)
 	const FVector TargetPos = Target.Get()->GetOwner()->GetActorLocation();
 	RotateToPosition(TargetPos, DeltaTime);
 	
-	// TODO: Only fire when facing enemy
 	Fire(*Target.Get());
 }
 

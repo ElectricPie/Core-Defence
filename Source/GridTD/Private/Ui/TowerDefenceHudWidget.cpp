@@ -3,14 +3,19 @@
 
 #include "Ui/TowerDefenceHudWidget.h"
 
-#include "Turret.h"
 #include "TurretSocket.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
+#include "Ui/ErrorDisplayWidget.h"
+#include "Engine/EngineTypes.h"
 
-
+#define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
+{ \
+UE_LOG(LogTemp, Warning, TEXT(ErrorMessage)); \
+return; \
+}
 
 void UTowerDefenceHudWidget::NativeConstruct()
 {
@@ -25,8 +30,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 	{
 		TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use
-		//   lambda
+		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use lambda
 		TurretSelectionWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
 		TurretSelectionWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
 		TurretSelectionWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildRocketTurret);
@@ -34,48 +38,66 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretSelectionWidget->BottomLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildSlowTurret);
 		TurretSelectionWidget->BottomRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildBuffTurret);
 	}
+
+	if (ErrorDisplayWidget)
+	{
+		ErrorDisplayWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
 
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket) return;
-	SelectedTurretSocket->AddTurret(GunTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Gun);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(CannonTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Cannon);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(RocketTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Rocket);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket) return;
-	SelectedTurretSocket->AddTurret(PiercingTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Piercing);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(SlowTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Slow);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(BuffTurretBlueprint);
+	TurretButtonClickedEvent.Broadcast(Buff);
+	CloseTurretSelectionWidget();
 }
 
-void UTowerDefenceHudWidget::SelectTurretSocket(ATurretSocket* TurretSocket)
+void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& Delegate)
 {
-	SelectedTurretSocket = TurretSocket;
-	SelectedTurretEvent();
+	TurretButtonClickedEvent.Add(Delegate);
+}
+
+void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocket)
+{
+	if (!TurretSocket) return;
+	
+	if (TurretSocket->HasTurret())
+	{
+		// TODO: Handle turret upgrades and displays
+	}
+	else
+	{
+		OpenTurretSelectionMenuEvent();
+	}
 }
 
 void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
@@ -86,27 +108,50 @@ void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
 
 void UTowerDefenceHudWidget::ClearHealth() const
 {
-	if (ResourceWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TowerDefenceHud is missing referance to ResourceWidget"));
-		return;
-	}
-
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+	
 	ResourceWidget->ClearOrbWidgets();
 }
 
 void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
 {
-	if (!ResourceWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TowerDefenceHud is missing referance to ResourceWidget"));
-		return;
-	}
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
 	
 	ResourceWidget->AddHealthOrbWidgets(HealthOrbCount);
 }
 
 void UTowerDefenceHudWidget::ChangeOrbState(const EHealthOrbState OrbState)
 {
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+	
 	ResourceWidget->ChangeOrbState(OrbState);
+}
+
+void UTowerDefenceHudWidget::UpdateResources(const int32 Value) const
+{
+	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
+
+	ResourceWidget->UpdateResourceValue(Value);
+}
+
+void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage)
+{
+	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
+	
+	ErrorDisplayWidget->SetErrorText(ErrorMessage);
+	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Visible);
+
+	if (GetWorld()->GetTimerManager().IsTimerActive(ErrorDisplayTimerHandle))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ErrorDisplayTimerHandle);
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(ErrorDisplayTimerHandle, this, &UTowerDefenceHudWidget::HideErrorMessage, ErrorMessageDisplayTime, false);
+}
+
+void UTowerDefenceHudWidget::HideErrorMessage() const
+{
+	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");
+	
+	ErrorDisplayWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
