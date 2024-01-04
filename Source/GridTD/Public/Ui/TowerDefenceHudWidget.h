@@ -51,21 +51,17 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
 	
-	UPROPERTY(BlueprintReadOnly)
-	ATurretSocket* SelectedTurretSocket;
-	
 public:
 	UPROPERTY()
 	UPanelSlot* Panel;
 
 	void AddTurretButtonClickedEvent(const FScriptDelegate& Delegate);
-
-	// TODO: Only require position and combine with SelectTurretEvent
+	
 	UFUNCTION()
-	void SelectTurretSocket(ATurretSocket* TurretSocket);
+	void SelectTurretSocket(const ATurretSocket* TurretSocket);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SelectedTurretEvent();
+	void OpenTurretSelectionMenuEvent();
 	
 	void CloseTurretSelectionWidget() const;
 

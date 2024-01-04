@@ -41,31 +41,37 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Gun);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Cannon);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Rocket);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Piercing);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Slow);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Buff);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& Delegate)
@@ -73,10 +79,18 @@ void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& 
 	TurretButtonClickedEvent.Add(Delegate);
 }
 
-void UTowerDefenceHudWidget::SelectTurretSocket(ATurretSocket* TurretSocket)
+void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocket)
 {
-	SelectedTurretSocket = TurretSocket;
-	SelectedTurretEvent();
+	if (!TurretSocket) return;
+	
+	if (TurretSocket->HasTurret())
+	{
+		// TODO: Handle turret upgrades and displays
+	}
+	else
+	{
+		OpenTurretSelectionMenuEvent();
+	}
 }
 
 void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const

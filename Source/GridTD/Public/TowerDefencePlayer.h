@@ -53,8 +53,7 @@ private:
 	UTurretDataAsset* SlowTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
 	UTurretDataAsset* BuffTurretBlueprint;
-
-
+	
 	UPROPERTY()
 	ATurretSocket* SelectedTurretSocket;
 	

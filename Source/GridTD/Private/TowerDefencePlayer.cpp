@@ -75,16 +75,8 @@ void ATowerDefencePlayer::Select()
 
 	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!SelectedTurretSocket) return;
-
-	// TODO: Let the hund handle which UI elements to show when selecting turrets
-	if (SelectedTurretSocket->HasTurret())
-	{
-		// TODO: Handle turret upgrades and displays
-	}
-	else
-	{
-		HudWidget->SelectTurretSocket(SelectedTurretSocket);
-	}
+	
+	HudWidget->SelectTurretSocket(SelectedTurretSocket);
 }
 
 void ATowerDefencePlayer::SetupUi()
