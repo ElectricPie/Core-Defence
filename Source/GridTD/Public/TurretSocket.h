@@ -7,6 +7,7 @@
 #include "TurretSocket.generated.h"
 
 class ATurret;
+class ATowerDefencePlayer;
 
 UCLASS()
 class GRIDTD_API ATurretSocket : public AActor
@@ -26,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddTurret(TSubclassOf<ATurret> TurretBlueprint);
+	void AddTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer*  OwningPlayer);
 
 	/**
 	 * Checks if the socket contains a turret

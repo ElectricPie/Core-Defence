@@ -7,6 +7,7 @@
 #include "TurretSocket.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "DataAssets/TurretDataAsset.h"
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 
@@ -14,7 +15,7 @@
 { \
 UE_LOG(LogTemp, Warning, TEXT(ErrorMessage)); \
 return; \
-} \
+}
 
 void UTowerDefenceHudWidget::NativeConstruct()
 {
@@ -23,13 +24,15 @@ void UTowerDefenceHudWidget::NativeConstruct()
 	SetUpWidgets();
 }
 
+// TODO: Think I need to move this to the player controller as it need to update resources. Might be an idea to use
+// TODO: enums for the different states of the turret selection widget.
 void UTowerDefenceHudWidget::SetUpWidgets() const
 {
 	if (TurretSelectionWidget)
 	{
 		TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use
+		// TODO: I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use
 		//   lambda
 		TurretSelectionWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
 		TurretSelectionWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
@@ -42,38 +45,38 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket) return;
-	SelectedTurretSocket->AddTurret(GunTurretBlueprint);
+	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
+	SelectedTurretSocket->AddTurret(GunTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(CannonTurretBlueprint);
+	if (!TurretSelectionWidget || !CannonTurretBlueprint || !SelectedTurretSocket || !OwningPlayer)  return;
+	SelectedTurretSocket->AddTurret(CannonTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(RocketTurretBlueprint);
+	if (!TurretSelectionWidget || !RocketTurretBlueprint || !SelectedTurretSocket || !OwningPlayer)  return;
+	SelectedTurretSocket->AddTurret(RocketTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket) return;
-	SelectedTurretSocket->AddTurret(PiercingTurretBlueprint);
+	if (!TurretSelectionWidget || !PiercingTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
+	SelectedTurretSocket->AddTurret(PiercingTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(SlowTurretBlueprint);
+	if (!TurretSelectionWidget || !SlowTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
+	SelectedTurretSocket->AddTurret(SlowTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
-	if (!TurretSelectionWidget || !GunTurretBlueprint || !SelectedTurretSocket)  return;
-	SelectedTurretSocket->AddTurret(BuffTurretBlueprint);
+	if (!TurretSelectionWidget || !BuffTurretBlueprint || !SelectedTurretSocket || !OwningPlayer) return;
+	SelectedTurretSocket->AddTurret(BuffTurretBlueprint, OwningPlayer);
 }
 
 void UTowerDefenceHudWidget::SelectTurretSocket(ATurretSocket* TurretSocket)

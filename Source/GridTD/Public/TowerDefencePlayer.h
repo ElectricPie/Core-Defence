@@ -72,6 +72,9 @@ public:
 	/**
 	 * Reduces the players health by 1
 	 */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category="Resources")
 	void ReduceHealth();
+
+	UFUNCTION(BlueprintPure, Category="Resources")
+	int32 GetResources() const { return Resources; }
 };

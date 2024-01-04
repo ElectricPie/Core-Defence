@@ -7,6 +7,8 @@
 #include "Health/HealthOrbState.h"
 #include "TowerDefenceHudWidget.generated.h"
 
+class UTurretDataAsset;
+class ATowerDefencePlayer;
 class UPlayerResourceWidget;
 class ATurretSocket;
 class ATurret;
@@ -23,6 +25,9 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
+	UPROPERTY()
+	ATowerDefencePlayer* OwningPlayer;
+	
 	void SetUpWidgets() const;
 	
 	UFUNCTION()
@@ -45,17 +50,17 @@ protected:
 	UPlayerResourceWidget* ResourceWidget;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> GunTurretBlueprint;
+	UTurretDataAsset* GunTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> CannonTurretBlueprint;
+	UTurretDataAsset* CannonTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> RocketTurretBlueprint;
+	UTurretDataAsset* RocketTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> PiercingTurretBlueprint;
+	UTurretDataAsset* PiercingTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> SlowTurretBlueprint;
+	UTurretDataAsset* SlowTurretBlueprint;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets")
-	TSubclassOf<ATurret> BuffTurretBlueprint;
+	UTurretDataAsset* BuffTurretBlueprint;
 
 	UPROPERTY(BlueprintReadOnly)
 	ATurretSocket* SelectedTurretSocket;
