@@ -27,6 +27,8 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
+	FTurretButtonClickedSignature TurretButtonClickedEvent;
+	
 	void SetUpWidgets() const;
 	
 	UFUNCTION()
@@ -56,8 +58,7 @@ public:
 	UPROPERTY()
 	UPanelSlot* Panel;
 
-	// TODO: Move to private and add function for setting up
-	FTurretButtonClickedSignature TurretButtonClickedEvent;
+	void AddTurretButtonClickedEvent(const FScriptDelegate& Delegate);
 
 	// TODO: Only require position and combine with SelectTurretEvent
 	UFUNCTION()

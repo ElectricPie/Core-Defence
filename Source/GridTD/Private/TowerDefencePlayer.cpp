@@ -93,7 +93,10 @@ void ATowerDefencePlayer::SetupUi()
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
 	HudWidget->UpdateResources(Resources);
-	HudWidget->TurretButtonClickedEvent.AddDynamic(this, &ATowerDefencePlayer::OnTurretToBuildSelected);
+
+	FScriptDelegate TurretBuildDelegate;
+	TurretBuildDelegate.BindUFunction(this, FName("OnTurretToBuildSelected"));
+	HudWidget->AddTurretButtonClickedEvent(TurretBuildDelegate);
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)

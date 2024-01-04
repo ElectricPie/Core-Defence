@@ -22,16 +22,13 @@ void UTowerDefenceHudWidget::NativeConstruct()
 	SetUpWidgets();
 }
 
-// TODO: Think I need to move this to the player controller as it need to update resources. Might be an idea to use
-// TODO: enums for the different states of the turret selection widget.
 void UTowerDefenceHudWidget::SetUpWidgets() const
 {
 	if (TurretSelectionWidget)
 	{
 		TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		// TODO: I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use
-		//   lambda
+		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use lambda
 		TurretSelectionWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
 		TurretSelectionWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
 		TurretSelectionWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildRocketTurret);
@@ -71,6 +68,11 @@ void UTowerDefenceHudWidget::BuildBuffTurret()
 	TurretButtonClickedEvent.Broadcast(Buff);
 }
 
+void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& Delegate)
+{
+	TurretButtonClickedEvent.Add(Delegate);
+}
+
 void UTowerDefenceHudWidget::SelectTurretSocket(ATurretSocket* TurretSocket)
 {
 	SelectedTurretSocket = TurretSocket;
@@ -92,7 +94,6 @@ void UTowerDefenceHudWidget::ClearHealth() const
 
 void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
 {
-	
 	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
 	
 	ResourceWidget->AddHealthOrbWidgets(HealthOrbCount);
@@ -100,7 +101,6 @@ void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
 
 void UTowerDefenceHudWidget::ChangeOrbState(const EHealthOrbState OrbState)
 {
-	
 	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
 	
 	ResourceWidget->ChangeOrbState(OrbState);
