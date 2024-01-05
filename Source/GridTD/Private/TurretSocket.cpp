@@ -7,6 +7,7 @@
 #include "Turret.h"
 #include "DataAssets/TurretDataAsset.h"
 #include "Enums/ETurretBuildErrors.h"
+#include "TurretSocketRefComponent.h"
 
 // Sets default values
 ATurretSocket::ATurretSocket()
@@ -35,17 +36,21 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset,
-                                              ATowerDefencePlayer* OwningPlayer)
+ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner)
 {
 	if (TurretInSocket) { return SocketOccupied; }
 	if (!TurretDataAsset) { return NullDataAsset; }
-	if (!OwningPlayer) { return NullPlayerReference; }
-	
-	if (OwningPlayer->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
-	
+	if (!NewOwner) { return NullPlayerReference; }
+
+	if (NewOwner->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
+
+	// Keep a reference to the player and remove the cost of the turret
+	OwningPlayer = NewOwner;
 	OwningPlayer->RemoveResources(TurretDataAsset->GetCost());
 
+	// Keep a reference to the turret data asset
+	TurretInSocketDataAsset = TurretDataAsset;
+	
 	// Create the turret in the world
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
 		TurretDataAsset->GetTurretClass(),
@@ -55,7 +60,28 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretData
 	
 	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
 
+	// Set up a reference to this socket in the turret
+	UTurretSocketRefComponent* TurretSocketRef = NewObject<UTurretSocketRefComponent>(TurretInSocket, UTurretSocketRefComponent::StaticClass());
+	TurretSocketRef->RegisterComponent();
+	TurretSocketRef->SetTurretSocket(this);
+
 	return Success;
+}
+
+void ATurretSocket::SellTurret(float RefundPercentage)
+{
+	if (!TurretInSocket) { return; }
+	if (!OwningPlayer) { return; }
+
+	RefundPercentage = FMath::Clamp(RefundPercentage, 0.f, 1.f);
+	
+	// Return the resources to the player
+	OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost() * RefundPercentage);
+	OwningPlayer = nullptr;
+
+	// Destroy the turret
+	TurretInSocket->Destroy();
+	TurretInSocket = nullptr;
 }
 
 bool ATurretSocket::HasTurret() const

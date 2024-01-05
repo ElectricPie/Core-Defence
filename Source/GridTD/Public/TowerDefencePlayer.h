@@ -6,8 +6,10 @@
 #include "GameFramework/PlayerController.h"
 #include "Health/HealthOrbState.h"
 #include "Enums/ETurretType.h"
+#include "Enums/ETurretSelectionOption.h"
 #include "TowerDefencePlayer.generated.h"
 
+class ALevelSettings;
 class UTowerDefenceHudWidget;
 class ATurretSocket;
 class UTurretDataAsset;
@@ -58,6 +60,9 @@ private:
 	
 	UPROPERTY()
 	ATurretSocket* SelectedTurretSocket;
+
+	UPROPERTY()
+	const ALevelSettings* LevelSettings;
 	
 	UFUNCTION()
 	void Select();
@@ -69,6 +74,9 @@ private:
 
 	UFUNCTION()
 	void OnTurretToBuildSelected(ETurretType TurretType);
+
+	UFUNCTION()
+	void OnTurretSelectionOptionSelected(ETurretSelectionOption TurretSelectionOption);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)
@@ -108,4 +116,10 @@ public:
 	 * @return True if the player has enough resources to remove
 	 */
 	bool RemoveResources(const int32 Amount);
+
+	/**
+	 * @brief Adds the given amount of resources to the player
+	 * @param Amount The amount of resources to add
+	 */
+	void AddResources(const int32 Amount);
 };

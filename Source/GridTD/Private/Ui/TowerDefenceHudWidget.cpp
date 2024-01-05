@@ -9,7 +9,6 @@
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 #include "Ui/ErrorDisplayWidget.h"
-#include "Engine/EngineTypes.h"
 
 #define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
 { \
@@ -26,17 +25,25 @@ void UTowerDefenceHudWidget::NativeConstruct()
 
 void UTowerDefenceHudWidget::SetUpWidgets() const
 {
-	if (TurretSelectionWidget)
+	if (TurretBuildWidget)
 	{
-		TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
+		TurretBuildWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use lambda
-		TurretSelectionWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
-		TurretSelectionWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
-		TurretSelectionWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildRocketTurret);
-		TurretSelectionWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildPiercingTurret);
-		TurretSelectionWidget->BottomLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildSlowTurret);
-		TurretSelectionWidget->BottomRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildBuffTurret);
+		TurretBuildWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
+		TurretBuildWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
+		TurretBuildWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildRocketTurret);
+		TurretBuildWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildPiercingTurret);
+		TurretBuildWidget->BottomLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildSlowTurret);
+		TurretBuildWidget->BottomRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildBuffTurret);
+	}
+
+	if (TurretSelectedWidget)
+	{
+		TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+		// TODO: Setup selection buttons
+		TurretSelectedWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::SellTurret);
 	}
 
 	if (ErrorDisplayWidget)
@@ -48,36 +55,42 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Gun);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Cannon);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Rocket);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Piercing);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Slow);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Buff);
+	CloseTurretBuildWidget();
+}
+
+void UTowerDefenceHudWidget::SellTurret()
+{
+	TurretSelectionButtonClickedEvent.Broadcast(Sell);
 	CloseTurretSelectionWidget();
 }
 
@@ -86,24 +99,36 @@ void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& 
 	TurretButtonClickedEvent.Add(Delegate);
 }
 
+void UTowerDefenceHudWidget::AddTurretSelectionButtonClickedEvent(const FScriptDelegate& Delegate)
+{
+	TurretSelectionButtonClickedEvent.Add(Delegate);
+}
+
 void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocket)
 {
 	if (!TurretSocket) return;
-	
+
+	// Open to corresponding menu
 	if (TurretSocket->HasTurret())
-	{
-		// TODO: Handle turret upgrades and displays
-	}
-	else
 	{
 		OpenTurretSelectionMenuEvent();
 	}
+	else
+	{
+		OpenTurretBuildMenuEvent();
+	}
+}
+
+void UTowerDefenceHudWidget::CloseTurretBuildWidget() const
+{
+	if (!TurretBuildWidget) return;
+	TurretBuildWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
 {
-	if (!TurretSelectionWidget) return;
-	TurretSelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
+	if (!TurretSelectedWidget) return;
+	TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UTowerDefenceHudWidget::ClearHealth() const

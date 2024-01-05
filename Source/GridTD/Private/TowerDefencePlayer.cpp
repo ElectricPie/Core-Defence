@@ -6,11 +6,13 @@
 #include "EngineUtils.h"
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
+#include "TurretSocketRefComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
 #include "Enums/ETurretType.h"
 #include "Enums/ETurretBuildErrors.h"
+#include "Enums/ETurretSelectionOption.h"
 
 void ATowerDefencePlayer::BeginPlay()
 {
@@ -22,7 +24,7 @@ void ATowerDefencePlayer::BeginPlay()
 	if (!World) return;
 
 	// Get Settings from settings actor
-	const ALevelSettings* LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
+	LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
 	if (LevelSettings)
 	{
 		Resources = LevelSettings->GetPlayerStartingResources();
@@ -63,7 +65,7 @@ void ATowerDefencePlayer::GameOver_Implementation()
 void ATowerDefencePlayer::Select()
 {
 	if (!HudWidget) return;
-	HudWidget->CloseTurretSelectionWidget();
+	HudWidget->CloseTurretBuildWidget();
 	
 	// Get the screen position of the mouse
 	FVector2D MouseScreenPos;
@@ -73,8 +75,19 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
+	// Get the turret socket
 	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
-	if (!SelectedTurretSocket) return;
+	if (!SelectedTurretSocket)
+	{
+		// Check for socket ref component if we don't get a socket
+		if (const UTurretSocketRefComponent* SocketRef = Cast<UTurretSocketRefComponent>(HitActor->GetComponentByClass(UTurretSocketRefComponent::StaticClass())))
+		{
+			SelectedTurretSocket = SocketRef->GetTurretSocket();
+
+			// If the socket ref component is null, we have a problem
+			if (!SelectedTurretSocket) return;
+		}
+	}
 	
 	HudWidget->SelectTurretSocket(SelectedTurretSocket);
 }
@@ -89,6 +102,11 @@ void ATowerDefencePlayer::SetupUi()
 	FScriptDelegate TurretBuildDelegate;
 	TurretBuildDelegate.BindUFunction(this, FName("OnTurretToBuildSelected"));
 	HudWidget->AddTurretButtonClickedEvent(TurretBuildDelegate);
+
+	FScriptDelegate TurretSelectionDelegate;
+	TurretSelectionDelegate.BindUFunction(this, FName("OnTurretSelectionOptionSelected"));
+	HudWidget->AddTurretSelectionButtonClickedEvent(TurretSelectionDelegate);
+	
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
@@ -97,7 +115,7 @@ void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 	HudWidget->ChangeOrbState(OrbState);
 }
 
-void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
+void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 {
 	if (!SelectedTurretSocket) return;
 	if (SelectedTurretSocket->HasTurret()) return;
@@ -159,6 +177,31 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 	SelectedTurretSocket = nullptr;
 }
 
+void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelectionOption TurretSelectionOption)
+{
+	if (!SelectedTurretSocket) return;
+	if (!SelectedTurretSocket->HasTurret()) return;
+
+	switch (TurretSelectionOption)
+	{
+		case Sell:
+			{
+				float RefundPercent = 1.f;
+				if (LevelSettings)
+				{
+					RefundPercent = LevelSettings->GetTurretSellRefundPercentage();
+				}
+				SelectedTurretSocket->SellTurret(RefundPercent);
+				break;
+			}
+		default:
+			break;
+	}
+
+	// Clear the selected turret socket
+	SelectedTurretSocket = nullptr;
+}
+
 bool ATowerDefencePlayer::GetMouseScreenPos(FVector2D& MouseScreenPos) const
 {
 	int32 ViewportSizeX;
@@ -209,4 +252,10 @@ bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
 	HudWidget->UpdateResources(Resources);
 	
 	return true;
+}
+
+void ATowerDefencePlayer::AddResources(const int32 Amount)
+{
+	Resources += Amount;
+	HudWidget->UpdateResources(Resources);
 }

@@ -28,15 +28,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer);
-
-	/**
-	 * Checks if the socket contains a turret
-	 * @return True if the socket has a turret
-	 */
-	bool HasTurret() const;
-
 private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* MeshComponent;
@@ -44,4 +35,26 @@ private:
 	USceneComponent* Socket;
 	UPROPERTY()
 	ATurret* TurretInSocket;
+	UPROPERTY()
+	const UTurretDataAsset* TurretInSocketDataAsset;
+	UPROPERTY()
+	ATowerDefencePlayer* OwningPlayer;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner);
+
+	
+	/**
+	 * @brief Adds resources to the owning player and destroys the turret, the amount of resources added is the turret cost multiplied by the refund percentage
+	 * @param RefundPercentage Percentage of the turret cost to refund, values between 0 and 1 (Default: 1)
+	 */
+	UFUNCTION(BlueprintCallable)
+	void SellTurret(float RefundPercentage = 1.f);
+
+	/**
+	 * Checks if the socket contains a turret
+	 * @return True if the socket has a turret
+	 */
+	bool HasTurret() const;
 };
