@@ -93,6 +93,7 @@ void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocke
 	if (TurretSocket->HasTurret())
 	{
 		// TODO: Handle turret upgrades and displays
+		UE_LOG(LogTemp, Warning, TEXT("Turret already built in socket"));
 	}
 	else
 	{

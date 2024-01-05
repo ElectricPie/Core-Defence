@@ -75,14 +75,19 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
-	// TODO: Get socket if selected turret
-	if (const UTurretSocketRefComponent* SocketRef = Cast<UTurretSocketRefComponent>(HitActor->GetComponentByClass(UTurretSocketRefComponent::StaticClass())))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SocketRef: %s"), *SocketRef->GetTurretSocket()->GetName());
-	}
-	
+	// Get the turret socket
 	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
-	if (!SelectedTurretSocket) return;
+	if (!SelectedTurretSocket)
+	{
+		// Check for socket ref component if we don't get a socket
+		if (const UTurretSocketRefComponent* SocketRef = Cast<UTurretSocketRefComponent>(HitActor->GetComponentByClass(UTurretSocketRefComponent::StaticClass())))
+		{
+			SelectedTurretSocket = SocketRef->GetTurretSocket();
+
+			// If the socket ref component is null, we have a problem
+			if (!SelectedTurretSocket) return;
+		}
+	}
 	
 	HudWidget->SelectTurretSocket(SelectedTurretSocket);
 }
