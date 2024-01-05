@@ -55,6 +55,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	URadialSelectionWidget* TurretBuildWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
+	URadialSelectionWidget* TurretSelectedWidget;
+	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UErrorDisplayWidget* ErrorDisplayWidget;
@@ -70,6 +72,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OpenTurretBuildMenuEvent();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenTurretSelectionMenuEvent();
 	
 	void CloseTurretSelectionWidget() const;
 
