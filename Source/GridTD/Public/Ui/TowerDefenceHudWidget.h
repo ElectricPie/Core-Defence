@@ -53,7 +53,7 @@ private:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
-	URadialSelectionWidget* TurretSelectionWidget;
+	URadialSelectionWidget* TurretBuildWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
 	UPlayerResourceWidget* ResourceWidget;
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
@@ -69,7 +69,7 @@ public:
 	void SelectTurretSocket(const ATurretSocket* TurretSocket);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OpenTurretSelectionMenuEvent();
+	void OpenTurretBuildMenuEvent();
 	
 	void CloseTurretSelectionWidget() const;
 
