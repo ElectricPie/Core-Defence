@@ -47,7 +47,7 @@ public:
 	
 	/**
 	 * @brief Adds resources to the owning player and destroys the turret, the amount of resources added is the turret cost multiplied by the refund percentage
-	 * @param RefundPercentage Percentage of the turret cost to refund, values between 0 and 1
+	 * @param RefundPercentage Percentage of the turret cost to refund, values between 0 and 1 (Default: 1)
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SellTurret(float RefundPercentage = 1.f);

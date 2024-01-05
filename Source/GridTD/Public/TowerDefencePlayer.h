@@ -9,6 +9,7 @@
 #include "Enums/ETurretSelectionOption.h"
 #include "TowerDefencePlayer.generated.h"
 
+class ALevelSettings;
 class UTowerDefenceHudWidget;
 class ATurretSocket;
 class UTurretDataAsset;
@@ -59,6 +60,9 @@ private:
 	
 	UPROPERTY()
 	ATurretSocket* SelectedTurretSocket;
+
+	UPROPERTY()
+	const ALevelSettings* LevelSettings;
 	
 	UFUNCTION()
 	void Select();

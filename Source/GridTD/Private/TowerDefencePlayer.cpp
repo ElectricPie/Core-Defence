@@ -24,7 +24,7 @@ void ATowerDefencePlayer::BeginPlay()
 	if (!World) return;
 
 	// Get Settings from settings actor
-	const ALevelSettings* LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
+	LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(World, ALevelSettings::StaticClass()));
 	if (LevelSettings)
 	{
 		Resources = LevelSettings->GetPlayerStartingResources();
@@ -185,8 +185,15 @@ void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelection
 	switch (TurretSelectionOption)
 	{
 		case Sell:
-			SelectedTurretSocket->SellTurret();
-			break;
+			{
+				float RefundPercent = 1.f;
+				if (LevelSettings)
+				{
+					RefundPercent = LevelSettings->GetTurretSellRefundPercentage();
+				}
+				SelectedTurretSocket->SellTurret(RefundPercent);
+				break;
+			}
 		default:
 			break;
 	}
