@@ -68,12 +68,18 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretData
 	return Success;
 }
 
-void ATurretSocket::SellTurret()
+void ATurretSocket::SellTurret(float RefundPercentage)
 {
 	if (!TurretInSocket) { return; }
 	if (!OwningPlayer) { return; }
+
+	RefundPercentage = FMath::Clamp(RefundPercentage, 0.f, 1.f);
 	
-	OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost());
+	// Return the resources to the player
+	OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost() * RefundPercentage);
+	OwningPlayer = nullptr;
+
+	// Destroy the turret
 	TurretInSocket->Destroy();
 	TurretInSocket = nullptr;
 }

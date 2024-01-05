@@ -44,8 +44,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner);
 
+	
+	/**
+	 * @brief Adds resources to the owning player and destroys the turret, the amount of resources added is the turret cost multiplied by the refund percentage
+	 * @param RefundPercentage Percentage of the turret cost to refund, values between 0 and 1
+	 */
 	UFUNCTION(BlueprintCallable)
-	void SellTurret();
+	void SellTurret(float RefundPercentage = 1.f);
 
 	/**
 	 * Checks if the socket contains a turret
