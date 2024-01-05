@@ -54,8 +54,9 @@ private:
 	void BuildBuffTurret();
 
 	UFUNCTION()
+	void UpgradeTurret();
+	UFUNCTION()
 	void SellTurret();
-
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))

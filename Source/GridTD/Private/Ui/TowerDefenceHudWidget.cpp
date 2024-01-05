@@ -43,6 +43,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		// TODO: Setup selection buttons
+		TurretSelectedWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::UpgradeTurret);
 		TurretSelectedWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::SellTurret);
 	}
 
@@ -86,6 +87,12 @@ void UTowerDefenceHudWidget::BuildBuffTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Buff);
 	CloseTurretBuildWidget();
+}
+
+void UTowerDefenceHudWidget::UpgradeTurret()
+{
+	TurretSelectionButtonClickedEvent.Broadcast(Upgrade);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::SellTurret()

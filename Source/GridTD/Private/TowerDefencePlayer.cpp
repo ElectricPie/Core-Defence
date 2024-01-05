@@ -184,6 +184,9 @@ void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelection
 
 	switch (TurretSelectionOption)
 	{
+		case Upgrade:
+			UE_LOG(LogTemp, Warning, TEXT("Upgrade"));
+			break;
 		case Sell:
 			{
 				float RefundPercent = 1.f;

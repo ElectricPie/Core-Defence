@@ -3,5 +3,6 @@
 UENUM()
 enum ETurretSelectionOption
 {
+	Upgrade,
 	Sell
 };
