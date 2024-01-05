@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Health/HealthOrbState.h"
 #include "Enums/ETurretType.h"
+#include "Enums/ETurretSelectionOption.h"
 #include "TowerDefenceHudWidget.generated.h"
 
 
@@ -15,6 +16,7 @@ class ATurretSocket;
 class URadialSelectionWidget;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurretButtonClickedSignature, ETurretType, TurretType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurretSeltionButtonClickedSignature, ETurretSelectionOption, TurretSelectionOption);
 
 /**
  * 
@@ -32,6 +34,7 @@ private:
 	float ErrorMessageDisplayTime = 3.f;
 	
 	FTurretButtonClickedSignature TurretButtonClickedEvent;
+	FTurretSeltionButtonClickedSignature TurretSelectionButtonClickedEvent;
 
 	FTimerHandle ErrorDisplayTimerHandle;
 	
@@ -50,6 +53,9 @@ private:
 	UFUNCTION()
 	void BuildBuffTurret();
 
+	UFUNCTION()
+	void SellTurret();
+
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category="Widgets", meta=(BindWidget))
@@ -66,6 +72,7 @@ public:
 	UPanelSlot* Panel;
 
 	void AddTurretButtonClickedEvent(const FScriptDelegate& Delegate);
+	void AddTurretSelectionButtonClickedEvent(const FScriptDelegate& Delegate);
 	
 	UFUNCTION()
 	void SelectTurretSocket(const ATurretSocket* TurretSocket);
@@ -75,6 +82,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OpenTurretSelectionMenuEvent();
 	
+	void CloseTurretBuildWidget() const;
 	void CloseTurretSelectionWidget() const;
 
 	// Resource widget

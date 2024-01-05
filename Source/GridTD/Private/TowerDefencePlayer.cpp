@@ -4,7 +4,6 @@
 #include "TowerDefencePlayer.h"
 
 #include "EngineUtils.h"
-#include "Turret.h"
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
 #include "TurretSocketRefComponent.h"
@@ -13,6 +12,7 @@
 #include "Ui/TowerDefenceHudWidget.h"
 #include "Enums/ETurretType.h"
 #include "Enums/ETurretBuildErrors.h"
+#include "Enums/ETurretSelectionOption.h"
 
 void ATowerDefencePlayer::BeginPlay()
 {
@@ -65,7 +65,7 @@ void ATowerDefencePlayer::GameOver_Implementation()
 void ATowerDefencePlayer::Select()
 {
 	if (!HudWidget) return;
-	HudWidget->CloseTurretSelectionWidget();
+	HudWidget->CloseTurretBuildWidget();
 	
 	// Get the screen position of the mouse
 	FVector2D MouseScreenPos;
@@ -102,6 +102,11 @@ void ATowerDefencePlayer::SetupUi()
 	FScriptDelegate TurretBuildDelegate;
 	TurretBuildDelegate.BindUFunction(this, FName("OnTurretToBuildSelected"));
 	HudWidget->AddTurretButtonClickedEvent(TurretBuildDelegate);
+
+	FScriptDelegate TurretSelectionDelegate;
+	TurretSelectionDelegate.BindUFunction(this, FName("OnTurretSelectionOptionSelected"));
+	HudWidget->AddTurretSelectionButtonClickedEvent(TurretSelectionDelegate);
+	
 }
 
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
@@ -110,7 +115,7 @@ void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 	HudWidget->ChangeOrbState(OrbState);
 }
 
-void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
+void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 {
 	if (!SelectedTurretSocket) return;
 	if (SelectedTurretSocket->HasTurret()) return;
@@ -163,6 +168,26 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(ETurretType TurretType)
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret with null player"));
 			break;
 		case Success:
+			break;
+		default:
+			break;
+	}
+
+	// Clear the selected turret socket
+	SelectedTurretSocket = nullptr;
+}
+
+void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelectionOption TurretSelectionOption)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Sell1"));
+	if (!SelectedTurretSocket) return;
+	if (!SelectedTurretSocket->HasTurret()) return;
+
+	switch (TurretSelectionOption)
+	{
+		case Sell:
+			// SelectedTurretSocket->SellTurret();
+			UE_LOG(LogTemp, Warning, TEXT("Sell"));
 			break;
 		default:
 			break;

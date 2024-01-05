@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Health/HealthOrbState.h"
 #include "Enums/ETurretType.h"
+#include "Enums/ETurretSelectionOption.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTowerDefenceHudWidget;
@@ -69,6 +70,9 @@ private:
 
 	UFUNCTION()
 	void OnTurretToBuildSelected(ETurretType TurretType);
+
+	UFUNCTION()
+	void OnTurretSelectionOptionSelected(ETurretSelectionOption TurretSelectionOption);
 
 protected:
 	UFUNCTION(BlueprintNativeEvent)

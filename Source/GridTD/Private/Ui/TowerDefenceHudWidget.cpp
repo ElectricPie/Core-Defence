@@ -9,7 +9,6 @@
 #include "Ui/PlayerResourceWidget.h"
 #include "Ui/RadialSelectionWidget.h"
 #include "Ui/ErrorDisplayWidget.h"
-#include "Engine/EngineTypes.h"
 
 #define NULLCHECK(Pointer, ErrorMessage) if (!Pointer) \
 { \
@@ -44,6 +43,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		// TODO: Setup selection buttons
+		TurretSelectedWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::SellTurret);
 	}
 
 	if (ErrorDisplayWidget)
@@ -55,36 +55,42 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Gun);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Cannon);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Rocket);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Piercing);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Slow);
-	CloseTurretSelectionWidget();
+	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
 	TurretButtonClickedEvent.Broadcast(Buff);
+	CloseTurretBuildWidget();
+}
+
+void UTowerDefenceHudWidget::SellTurret()
+{
+	TurretSelectionButtonClickedEvent.Broadcast(Sell);
 	CloseTurretSelectionWidget();
 }
 
@@ -93,10 +99,16 @@ void UTowerDefenceHudWidget::AddTurretButtonClickedEvent(const FScriptDelegate& 
 	TurretButtonClickedEvent.Add(Delegate);
 }
 
+void UTowerDefenceHudWidget::AddTurretSelectionButtonClickedEvent(const FScriptDelegate& Delegate)
+{
+	TurretSelectionButtonClickedEvent.Add(Delegate);
+}
+
 void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocket)
 {
 	if (!TurretSocket) return;
-	
+
+	// Open to corresponding menu
 	if (TurretSocket->HasTurret())
 	{
 		OpenTurretSelectionMenuEvent();
@@ -107,10 +119,16 @@ void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocke
 	}
 }
 
-void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
+void UTowerDefenceHudWidget::CloseTurretBuildWidget() const
 {
 	if (!TurretBuildWidget) return;
 	TurretBuildWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
+{
+	if (!TurretSelectedWidget) return;
+	TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UTowerDefenceHudWidget::ClearHealth() const
