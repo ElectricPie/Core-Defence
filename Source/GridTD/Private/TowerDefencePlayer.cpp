@@ -4,8 +4,10 @@
 #include "TowerDefencePlayer.h"
 
 #include "EngineUtils.h"
+#include "Turret.h"
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
+#include "TurretSocketRefComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
@@ -73,6 +75,12 @@ void ATowerDefencePlayer::Select()
 	AActor* HitActor = nullptr;
 	if (!RaycastToMouse(MouseScreenPos, HitLocation, HitActor)) return;
 
+	// TODO: Get socket if selected turret
+	if (const UTurretSocketRefComponent* SocketRef = Cast<UTurretSocketRefComponent>(HitActor->GetComponentByClass(UTurretSocketRefComponent::StaticClass())))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SocketRef: %s"), *SocketRef->GetTurretSocket()->GetName());
+	}
+	
 	SelectedTurretSocket = Cast<ATurretSocket>(HitActor);
 	if (!SelectedTurretSocket) return;
 	

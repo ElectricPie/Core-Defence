@@ -7,6 +7,7 @@
 #include "Turret.h"
 #include "DataAssets/TurretDataAsset.h"
 #include "Enums/ETurretBuildErrors.h"
+#include "TurretSocketRefComponent.h"
 
 // Sets default values
 ATurretSocket::ATurretSocket()
@@ -35,8 +36,7 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset,
-                                              ATowerDefencePlayer* OwningPlayer)
+ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer)
 {
 	if (TurretInSocket) { return SocketOccupied; }
 	if (!TurretDataAsset) { return NullDataAsset; }
@@ -54,6 +54,11 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretData
 	);
 	
 	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
+
+	// Set up a reference to this socket in the turret
+	UTurretSocketRefComponent* TurretSocketRef = NewObject<UTurretSocketRefComponent>(TurretInSocket, UTurretSocketRefComponent::StaticClass());
+	TurretSocketRef->RegisterComponent();
+	TurretSocketRef->SetTurretSocket(this);
 
 	return Success;
 }
