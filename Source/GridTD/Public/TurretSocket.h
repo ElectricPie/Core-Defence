@@ -28,15 +28,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer);
-
-	/**
-	 * Checks if the socket contains a turret
-	 * @return True if the socket has a turret
-	 */
-	bool HasTurret() const;
-
 private:
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* MeshComponent;
@@ -44,4 +35,21 @@ private:
 	USceneComponent* Socket;
 	UPROPERTY()
 	ATurret* TurretInSocket;
+	UPROPERTY()
+	const UTurretDataAsset* TurretInSocketDataAsset;
+	UPROPERTY()
+	ATowerDefencePlayer* OwningPlayer;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner);
+
+	UFUNCTION(BlueprintCallable)
+	void SellTurret();
+
+	/**
+	 * Checks if the socket contains a turret
+	 * @return True if the socket has a turret
+	 */
+	bool HasTurret() const;
 };

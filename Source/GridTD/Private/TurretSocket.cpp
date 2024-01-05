@@ -36,16 +36,21 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* OwningPlayer)
+ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner)
 {
 	if (TurretInSocket) { return SocketOccupied; }
 	if (!TurretDataAsset) { return NullDataAsset; }
-	if (!OwningPlayer) { return NullPlayerReference; }
-	
-	if (OwningPlayer->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
-	
+	if (!NewOwner) { return NullPlayerReference; }
+
+	if (NewOwner->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
+
+	// Keep a reference to the player and remove the cost of the turret
+	OwningPlayer = NewOwner;
 	OwningPlayer->RemoveResources(TurretDataAsset->GetCost());
 
+	// Keep a reference to the turret data asset
+	TurretInSocketDataAsset = TurretDataAsset;
+	
 	// Create the turret in the world
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
 		TurretDataAsset->GetTurretClass(),
@@ -61,6 +66,16 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretData
 	TurretSocketRef->SetTurretSocket(this);
 
 	return Success;
+}
+
+void ATurretSocket::SellTurret()
+{
+	if (!TurretInSocket) { return; }
+	if (!OwningPlayer) { return; }
+	
+	OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost());
+	TurretInSocket->Destroy();
+	TurretInSocket = nullptr;
 }
 
 bool ATurretSocket::HasTurret() const

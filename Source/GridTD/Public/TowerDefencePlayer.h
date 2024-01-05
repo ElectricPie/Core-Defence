@@ -112,4 +112,10 @@ public:
 	 * @return True if the player has enough resources to remove
 	 */
 	bool RemoveResources(const int32 Amount);
+
+	/**
+	 * @brief Adds the given amount of resources to the player
+	 * @param Amount The amount of resources to add
+	 */
+	void AddResources(const int32 Amount);
 };

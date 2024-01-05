@@ -179,15 +179,13 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 
 void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelectionOption TurretSelectionOption)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Sell1"));
 	if (!SelectedTurretSocket) return;
 	if (!SelectedTurretSocket->HasTurret()) return;
 
 	switch (TurretSelectionOption)
 	{
 		case Sell:
-			// SelectedTurretSocket->SellTurret();
-			UE_LOG(LogTemp, Warning, TEXT("Sell"));
+			SelectedTurretSocket->SellTurret();
 			break;
 		default:
 			break;
@@ -247,4 +245,10 @@ bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
 	HudWidget->UpdateResources(Resources);
 	
 	return true;
+}
+
+void ATowerDefencePlayer::AddResources(const int32 Amount)
+{
+	Resources += Amount;
+	HudWidget->UpdateResources(Resources);
 }
