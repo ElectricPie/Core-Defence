@@ -55,49 +55,49 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Gun);
+	TurretButtonClickedEvent.Broadcast(TurretGun);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Cannon);
+	TurretButtonClickedEvent.Broadcast(TurretCannon);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Rocket);
+	TurretButtonClickedEvent.Broadcast(TurretRocket);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Piercing);
+	TurretButtonClickedEvent.Broadcast(TurretPiercing);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Slow);
+	TurretButtonClickedEvent.Broadcast(TurretSlow);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Buff);
+	TurretButtonClickedEvent.Broadcast(TurretBuff);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::UpgradeTurret()
 {
-	TurretSelectionButtonClickedEvent.Broadcast(Upgrade);
+	TurretSelectionButtonClickedEvent.Broadcast(TurretSelectionUpgrade);
 	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::SellTurret()
 {
-	TurretSelectionButtonClickedEvent.Broadcast(Sell);
+	TurretSelectionButtonClickedEvent.Broadcast(TurretSelectionSell);
 	CloseTurretSelectionWidget();
 }
 

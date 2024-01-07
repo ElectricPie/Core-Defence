@@ -38,15 +38,15 @@ void ATurretSocket::Tick(float DeltaTime)
 
 ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset* TurretUpgradeDataAsset, ATowerDefencePlayer* NewOwner)
 {
-	if (TurretInSocket) { return SocketOccupied; }
-	if (!TurretUpgradeDataAsset) { return NullUpgradePath; }
-	if (TurretUpgradeDataAsset->GetUpgradePath().Num() == 0) { return EmptyUpgradePath; }
-	if (!NewOwner) { return NullPlayerReference; }
+	if (TurretInSocket) { return TurretBuildSocketOccupied; }
+	if (!TurretUpgradeDataAsset) { return TurretBuildNullUpgradePath; }
+	if (TurretUpgradeDataAsset->GetUpgradePath().Num() == 0) { return TurretBuildEmptyUpgradePath; }
+	if (!NewOwner) { return TurretBuildNullPlayerReference; }
 
 	const UTurretDataAsset* TurretDataAsset = TurretUpgradeDataAsset->GetUpgradePath()[0];
-	if (!TurretDataAsset) { return NullDataAsset; }
+	if (!TurretDataAsset) { return TurretBuildNullDataAsset; }
 	
-	if (NewOwner->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
+	if (NewOwner->GetResources() < TurretDataAsset->GetCost()) { return TurretBuildNotEnoughResources; }
 	
 	// Keep a reference to the player and remove the cost of the turret
 	OwningPlayer = NewOwner;
@@ -69,7 +69,7 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset*
 	TurretSocketRef->RegisterComponent();
 	TurretSocketRef->SetTurretSocket(this);
 	
-	return Success;
+	return TurretBuildSuccess;
 }
 
 void ATurretSocket::SellTurret(float RefundPercentage)
