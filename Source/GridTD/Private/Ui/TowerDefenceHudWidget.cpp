@@ -118,10 +118,15 @@ void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocke
 	// Open to corresponding menu
 	if (TurretSocket->HasTurret())
 	{
+		// Disable upgrade button if turret is max level
+		TurretSelectedWidget->LeftButton->SetIsEnabled(!TurretSocket->IsTurretMaxLevel());
+
+		// Used to move the selection widget to the correct location
 		OpenTurretSelectionMenuEvent();
 	}
 	else
 	{
+		// Used to move the build widget to the correct location
 		OpenTurretBuildMenuEvent();
 	}
 }

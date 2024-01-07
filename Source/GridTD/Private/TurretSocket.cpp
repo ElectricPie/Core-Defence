@@ -92,7 +92,7 @@ ETurretUpgradeErrors ATurretSocket::UpgradeTurret(ATowerDefencePlayer* Upgrading
 	if (!UpgradingPlayer) { return TurretUpgradeNullPlayerReference; }
 	if (!TurretInSocket) { return TurretUpgradeNoTurretInSocket; }
 	if (!TurretInSocketUpgradeDataAsset) { return TurretUpgradeNullUpgradePath; }
-	if (TurretUpgradeIndex >= TurretInSocketUpgradeDataAsset->GetUpgradePath().Num()) { return TurretUpgradeEndOfUpgradePath; }
+	if (IsTurretMaxLevel()) { return TurretUpgradeEndOfUpgradePath; }
 
 	// Get the next turret upgrade
 	const UTurretDataAsset* TurretUpgradeDataAsset = TurretInSocketUpgradeDataAsset->GetUpgradePath()[TurretUpgradeIndex];
@@ -140,5 +140,10 @@ bool ATurretSocket::HasTurret() const
 	}
 	
 	return false;
+}
+
+bool ATurretSocket::IsTurretMaxLevel() const
+{
+	return TurretUpgradeIndex >= TurretInSocketUpgradeDataAsset->GetUpgradePath().Num();
 }
 

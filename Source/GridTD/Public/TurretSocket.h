@@ -78,4 +78,6 @@ public:
 	 * @return True if the socket has a turret
 	 */
 	bool HasTurret() const;
+
+	bool IsTurretMaxLevel() const;
 };
