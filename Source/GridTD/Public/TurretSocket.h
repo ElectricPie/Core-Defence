@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataAssets/TurretUpgradePathDataAsset.h"
 #include "GameFramework/Actor.h"
 #include "Enums/ETurretBuildErrors.h"
 #include "TurretSocket.generated.h"
@@ -36,13 +37,13 @@ private:
 	UPROPERTY()
 	ATurret* TurretInSocket;
 	UPROPERTY()
-	const UTurretDataAsset* TurretInSocketDataAsset;
+	const UTurretUpgradePathDataAsset* TurretInSocketUpgradeDataAsset;
 	UPROPERTY()
 	ATowerDefencePlayer* OwningPlayer;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner);
+	ETurretBuildErrors BuildTurret(const UTurretUpgradePathDataAsset* TurretUpgradeDataAsset, ATowerDefencePlayer* NewOwner);
 
 	
 	/**

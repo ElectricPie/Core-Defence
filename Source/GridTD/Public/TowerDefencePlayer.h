@@ -9,6 +9,7 @@
 #include "Enums/ETurretSelectionOption.h"
 #include "TowerDefencePlayer.generated.h"
 
+class UTurretUpgradePathDataAsset;
 class ALevelSettings;
 class UTowerDefenceHudWidget;
 class ATurretSocket;
@@ -46,17 +47,17 @@ private:
 	int32 Resources = 100;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* GunTurretBlueprint;
+	UTurretUpgradePathDataAsset* GunTurretUpgradeDataAsset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* CannonTurretBlueprint;
+	UTurretUpgradePathDataAsset* CannonTurretUpgradeDataAsset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* RocketTurretBlueprint;
+	UTurretUpgradePathDataAsset* RocketTurretUpgradeDataAsset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* PiercingTurretBlueprint;
+	UTurretUpgradePathDataAsset* PiercingTurretUpgradeDataAsset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* SlowTurretBlueprint;
+	UTurretUpgradePathDataAsset* SlowTurretUpgradeDataAsset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Turrets", meta=(AllowPrivateAccess="true"))
-	UTurretDataAsset* BuffTurretBlueprint;
+	UTurretUpgradePathDataAsset* BuffTurretUpgradeDataAsset;
 	
 	UPROPERTY()
 	ATurretSocket* SelectedTurretSocket;

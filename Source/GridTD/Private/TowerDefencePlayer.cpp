@@ -7,6 +7,7 @@
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
 #include "TurretSocketRefComponent.h"
+#include "DataAssets/TurretUpgradePathDataAsset.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
@@ -126,22 +127,22 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 	switch (TurretType)
 	{
 		case Gun:
-			BuildError = SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(GunTurretUpgradeDataAsset, this);
 			break;
 		case Cannon:
-			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretUpgradeDataAsset, this);
 			break;
 		case Rocket:
-			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretUpgradeDataAsset, this);
 			break;
 		case Piercing:
-			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretUpgradeDataAsset, this);
 			break;
 		case Slow:
-			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretUpgradeDataAsset, this);
 			break;
 		case Buff:
-			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
+			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretUpgradeDataAsset, this);
 			break;
 		default:
 			break;
@@ -169,6 +170,12 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 			break;
 		case Success:
 			break;
+		case NullUpgradePath: 
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with null upgrade path"));
+			break;
+		case EmptyUpgradePath:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with empty upgrade path"));
+			break;
 		default:
 			break;
 	}
@@ -186,6 +193,7 @@ void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelection
 	{
 		case Upgrade:
 			UE_LOG(LogTemp, Warning, TEXT("Upgrade"));
+			// SelectedTurretSocket->UpgradeTurret();
 			break;
 		case Sell:
 			{

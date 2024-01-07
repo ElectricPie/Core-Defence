@@ -36,20 +36,24 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
-ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner)
+ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset* TurretUpgradeDataAsset, ATowerDefencePlayer* NewOwner)
 {
 	if (TurretInSocket) { return SocketOccupied; }
-	if (!TurretDataAsset) { return NullDataAsset; }
+	if (!TurretUpgradeDataAsset) { return NullUpgradePath; }
+	if (TurretUpgradeDataAsset->GetUpgradePath().Num() == 0) { return EmptyUpgradePath; }
 	if (!NewOwner) { return NullPlayerReference; }
 
+	const UTurretDataAsset* TurretDataAsset = TurretUpgradeDataAsset->GetUpgradePath()[0];
+	if (!TurretDataAsset) { return NullDataAsset; }
+	
 	if (NewOwner->GetResources() < TurretDataAsset->GetCost()) { return NotEnoughResources; }
-
+	
 	// Keep a reference to the player and remove the cost of the turret
 	OwningPlayer = NewOwner;
 	OwningPlayer->RemoveResources(TurretDataAsset->GetCost());
-
+	
 	// Keep a reference to the turret data asset
-	TurretInSocketDataAsset = TurretDataAsset;
+	TurretInSocketUpgradeDataAsset = TurretUpgradeDataAsset;
 	
 	// Create the turret in the world
 	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
@@ -59,12 +63,12 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretDataAsset* TurretData
 	);
 	
 	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
-
+	
 	// Set up a reference to this socket in the turret
 	UTurretSocketRefComponent* TurretSocketRef = NewObject<UTurretSocketRefComponent>(TurretInSocket, UTurretSocketRefComponent::StaticClass());
 	TurretSocketRef->RegisterComponent();
 	TurretSocketRef->SetTurretSocket(this);
-
+	
 	return Success;
 }
 
@@ -76,7 +80,8 @@ void ATurretSocket::SellTurret(float RefundPercentage)
 	RefundPercentage = FMath::Clamp(RefundPercentage, 0.f, 1.f);
 	
 	// Return the resources to the player
-	OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost() * RefundPercentage);
+	// TODO: Handle refund including upgrades
+	// OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost() * RefundPercentage);
 	OwningPlayer = nullptr;
 
 	// Destroy the turret
