@@ -103,6 +103,7 @@ ETurretUpgradeErrors ATurretSocket::UpgradeTurret(ATowerDefencePlayer* Upgrading
 	OwningPlayer->RemoveResources(TurretUpgradeDataAsset->GetCost());
 
 	CreateTurret(TurretUpgradeDataAsset->GetTurretClass());
+	TurretUpgradeIndex++;
 
 	return TurretUpgradeSuccess;
 }
@@ -116,7 +117,13 @@ void ATurretSocket::SellTurret(float RefundPercentage)
 	
 	// Return the resources to the player
 	// TODO: Handle refund including upgrades
-	// OwningPlayer->AddResources(TurretInSocketDataAsset->GetCost() * RefundPercentage);
+	float TotalResources = 0;
+	for (int32 i = 0; i < TurretUpgradeIndex; i++)
+	{
+		TotalResources += TurretInSocketUpgradeDataAsset->GetUpgradePath()[i]->GetCost();
+	}
+
+	OwningPlayer->AddResources(TotalResources * RefundPercentage);
 	OwningPlayer = nullptr;
 
 	// Destroy the turret
