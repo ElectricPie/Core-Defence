@@ -7,6 +7,7 @@
 #include "Health/HealthOrbState.h"
 #include "Enums/ETurretType.h"
 #include "Enums/ETurretSelectionOption.h"
+#include "Enums/ETurretUpgradeErrors.h"
 #include "TowerDefencePlayer.generated.h"
 
 class UTurretUpgradePathDataAsset;
@@ -75,6 +76,7 @@ private:
 
 	UFUNCTION()
 	void OnTurretToBuildSelected(ETurretType TurretType);
+	void HandleUpgradeError(ETurretUpgradeErrors UpgradeError);
 
 	UFUNCTION()
 	void OnTurretSelectionOptionSelected(ETurretSelectionOption TurretSelectionOption);

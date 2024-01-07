@@ -7,7 +7,6 @@
 #include "Health/HealthPoint.h"
 #include "TurretSocket.h"
 #include "TurretSocketRefComponent.h"
-#include "DataAssets/TurretUpgradePathDataAsset.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
@@ -184,6 +183,36 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 	SelectedTurretSocket = nullptr;
 }
 
+void ATowerDefencePlayer::HandleUpgradeError(const ETurretUpgradeErrors UpgradeError)
+{
+	switch (UpgradeError) {
+		case TurretUpgradeNotEnoughResources:
+			// TODO: Display error message
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Not enough resources to upgrade turret"));
+			break;
+		case TurretUpgradeEndOfUpgradePath:
+			// TODO: Disable the upgrade button if the turret is at the end of the upgrade path
+			// This should not happen as the upgrade button should be disabled
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret at end of upgrade path"));
+			break;
+		case TurretUpgradeNoTurretInSocket:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret in socket with no turret"));
+			break;
+		case TurretUpgradeNullUpgradePath:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null upgrade path"));
+			break;
+		case TurretUpgradeNullPlayerReference:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null player"));
+			break;
+		case TurretUpgradeNullDataAsset:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null data asset"));
+			break;
+		case TurretUpgradeSuccess:
+			break;
+		default: ;
+	}
+}
+
 void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelectionOption TurretSelectionOption)
 {
 	if (!SelectedTurretSocket) return;
@@ -192,9 +221,11 @@ void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelection
 	switch (TurretSelectionOption)
 	{
 		case TurretSelectionUpgrade:
-			UE_LOG(LogTemp, Warning, TEXT("Upgrade"));
-			// SelectedTurretSocket->UpgradeTurret();
-			break;
+			{
+				const ETurretUpgradeErrors UpgradeError = SelectedTurretSocket->UpgradeTurret(this);
+				HandleUpgradeError(UpgradeError);
+				break;
+			}
 		case TurretSelectionSell:
 			{
 				float RefundPercent = 1.f;

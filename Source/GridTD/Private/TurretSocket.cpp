@@ -8,6 +8,7 @@
 #include "DataAssets/TurretDataAsset.h"
 #include "Enums/ETurretBuildErrors.h"
 #include "TurretSocketRefComponent.h"
+#include "Enums/ETurretUpgradeErrors.h"
 
 // Sets default values
 ATurretSocket::ATurretSocket()
@@ -36,6 +37,29 @@ void ATurretSocket::Tick(float DeltaTime)
 
 }
 
+void ATurretSocket::CreateTurret(const TSubclassOf<ATurret> TurretDataAsset)
+{
+	// Clear the turret in the socket if there is one
+	if (TurretInSocket)
+	{
+		TurretInSocket->Destroy();
+	}
+	
+	// Create the turret in the world
+	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
+		TurretDataAsset,
+		Socket->GetComponentLocation(),
+		Socket->GetComponentRotation()
+	);
+	
+	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
+	
+	// Set up a reference to this socket in the turret
+	UTurretSocketRefComponent* TurretSocketRef = NewObject<UTurretSocketRefComponent>(TurretInSocket, UTurretSocketRefComponent::StaticClass());
+	TurretSocketRef->RegisterComponent();
+	TurretSocketRef->SetTurretSocket(this);
+}
+
 ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset* TurretUpgradeDataAsset, ATowerDefencePlayer* NewOwner)
 {
 	if (TurretInSocket) { return TurretBuildSocketOccupied; }
@@ -55,21 +79,32 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset*
 	// Keep a reference to the turret data asset
 	TurretInSocketUpgradeDataAsset = TurretUpgradeDataAsset;
 	
-	// Create the turret in the world
-	TurretInSocket = GetWorld()->SpawnActor<ATurret>(
-		TurretDataAsset->GetTurretClass(),
-		Socket->GetComponentLocation(),
-		Socket->GetComponentRotation()
-	);
-	
-	TurretInSocket->AttachToComponent(Socket, FAttachmentTransformRules::KeepWorldTransform);
-	
-	// Set up a reference to this socket in the turret
-	UTurretSocketRefComponent* TurretSocketRef = NewObject<UTurretSocketRefComponent>(TurretInSocket, UTurretSocketRefComponent::StaticClass());
-	TurretSocketRef->RegisterComponent();
-	TurretSocketRef->SetTurretSocket(this);
+	CreateTurret(TurretDataAsset->GetTurretClass());
+
+	// Reset the turret upgrade index to the next upgrade
+	TurretUpgradeIndex = 1;
 	
 	return TurretBuildSuccess;
+}
+
+ETurretUpgradeErrors ATurretSocket::UpgradeTurret(ATowerDefencePlayer* UpgradingPlayer)
+{
+	if (!UpgradingPlayer) { return TurretUpgradeNullPlayerReference; }
+	if (!TurretInSocket) { return TurretUpgradeNoTurretInSocket; }
+	if (!TurretInSocketUpgradeDataAsset) { return TurretUpgradeNullUpgradePath; }
+	if (TurretUpgradeIndex >= TurretInSocketUpgradeDataAsset->GetUpgradePath().Num()) { return TurretUpgradeEndOfUpgradePath; }
+
+	// Get the next turret upgrade
+	const UTurretDataAsset* TurretUpgradeDataAsset = TurretInSocketUpgradeDataAsset->GetUpgradePath()[TurretUpgradeIndex];
+	if (!TurretUpgradeDataAsset) { return TurretUpgradeNullDataAsset; }
+
+	// Check if the upgrading player has enough resources and remove the cost if they do
+	if (OwningPlayer->GetResources() < TurretUpgradeDataAsset->GetCost()) { return TurretUpgradeNotEnoughResources; }
+	OwningPlayer->RemoveResources(TurretUpgradeDataAsset->GetCost());
+
+	CreateTurret(TurretUpgradeDataAsset->GetTurretClass());
+
+	return TurretUpgradeSuccess;
 }
 
 void ATurretSocket::SellTurret(float RefundPercentage)
@@ -87,6 +122,7 @@ void ATurretSocket::SellTurret(float RefundPercentage)
 	// Destroy the turret
 	TurretInSocket->Destroy();
 	TurretInSocket = nullptr;
+	TurretInSocketUpgradeDataAsset = nullptr;
 }
 
 bool ATurretSocket::HasTurret() const
