@@ -120,28 +120,28 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 	if (!SelectedTurretSocket) return;
 	if (SelectedTurretSocket->HasTurret()) return;
 
-	ETurretBuildErrors BuildError = Success;
+	ETurretBuildErrors BuildError = TurretBuildSuccess;
 	
 	// Build the corresponding turret
 	switch (TurretType)
 	{
-		case Gun:
-			BuildError = SelectedTurretSocket->BuildTurret(GunTurretBlueprint, this);
+		case TurretGun:
+			BuildError = SelectedTurretSocket->BuildTurret(GunTurretUpgradeDataAsset, this);
 			break;
-		case Cannon:
-			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretBlueprint, this);
+		case TurretCannon:
+			BuildError = SelectedTurretSocket->BuildTurret(CannonTurretUpgradeDataAsset, this);
 			break;
-		case Rocket:
-			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretBlueprint, this);
+		case TurretRocket:
+			BuildError = SelectedTurretSocket->BuildTurret(RocketTurretUpgradeDataAsset, this);
 			break;
-		case Piercing:
-			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretBlueprint, this);
+		case TurretPiercing:
+			BuildError = SelectedTurretSocket->BuildTurret(PiercingTurretUpgradeDataAsset, this);
 			break;
-		case Slow:
-			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretBlueprint, this);
+		case TurretSlow:
+			BuildError = SelectedTurretSocket->BuildTurret(SlowTurretUpgradeDataAsset, this);
 			break;
-		case Buff:
-			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretBlueprint, this);
+		case TurretBuff:
+			BuildError = SelectedTurretSocket->BuildTurret(BuffTurretUpgradeDataAsset, this);
 			break;
 		default:
 			break;
@@ -150,10 +150,10 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 	// Handle turret build errors
 	switch (BuildError)
 	{
-		case SocketOccupied:
+		case TurretBuildSocketOccupied:
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret to occupied turret socket"));
 			break;
-		case NotEnoughResources:
+		case TurretBuildNotEnoughResources:
 			if (!HudWidget)
 			{
 				UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Has no HudWidget"));
@@ -161,13 +161,19 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 			}
 			HudWidget->DisplayError(InsufficientResourcesText);
 			break;
-		case NullDataAsset:
+		case TurretBuildNullDataAsset:
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with null data asset"));
 			break;
-		case NullPlayerReference:
+		case TurretBuildNullPlayerReference:
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to assign turret with null player"));
 			break;
-		case Success:
+		case TurretBuildSuccess:
+			break;
+		case TurretBuildNullUpgradePath: 
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with null upgrade path"));
+			break;
+		case TurretBuildEmptyUpgradePath:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to build turret with empty upgrade path"));
 			break;
 		default:
 			break;
@@ -177,6 +183,36 @@ void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
 	SelectedTurretSocket = nullptr;
 }
 
+void ATowerDefencePlayer::HandleUpgradeError(const ETurretUpgradeErrors UpgradeError)
+{
+	switch (UpgradeError) {
+		case TurretUpgradeNotEnoughResources:
+			// TODO: Display error message
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Not enough resources to upgrade turret"));
+			break;
+		case TurretUpgradeEndOfUpgradePath:
+			// TODO: Disable the upgrade button if the turret is at the end of the upgrade path
+			// This should not happen as the upgrade button should be disabled
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret at end of upgrade path"));
+			break;
+		case TurretUpgradeNoTurretInSocket:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret in socket with no turret"));
+			break;
+		case TurretUpgradeNullUpgradePath:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null upgrade path"));
+			break;
+		case TurretUpgradeNullPlayerReference:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null player"));
+			break;
+		case TurretUpgradeNullDataAsset:
+			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret with null data asset"));
+			break;
+		case TurretUpgradeSuccess:
+			break;
+		default: ;
+	}
+}
+
 void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelectionOption TurretSelectionOption)
 {
 	if (!SelectedTurretSocket) return;
@@ -184,7 +220,13 @@ void ATowerDefencePlayer::OnTurretSelectionOptionSelected(const ETurretSelection
 
 	switch (TurretSelectionOption)
 	{
-		case Sell:
+		case TurretSelectionUpgrade:
+			{
+				const ETurretUpgradeErrors UpgradeError = SelectedTurretSocket->UpgradeTurret(this);
+				HandleUpgradeError(UpgradeError);
+				break;
+			}
+		case TurretSelectionSell:
 			{
 				float RefundPercent = 1.f;
 				if (LevelSettings)

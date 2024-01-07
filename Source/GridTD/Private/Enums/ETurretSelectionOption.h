@@ -3,5 +3,6 @@
 UENUM()
 enum ETurretSelectionOption
 {
-	Sell
+	TurretSelectionUpgrade,
+	TurretSelectionSell
 };

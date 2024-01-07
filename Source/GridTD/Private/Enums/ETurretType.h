@@ -3,10 +3,10 @@
 UENUM()
 enum ETurretType
 {
-	Gun,
-	Cannon,
-	Rocket,
-	Piercing,
-	Slow,
-	Buff
+	TurretGun,
+	TurretCannon,
+	TurretRocket,
+	TurretPiercing,
+	TurretSlow,
+	TurretBuff
 };

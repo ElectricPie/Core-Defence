@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DataAssets/TurretUpgradePathDataAsset.h"
 #include "GameFramework/Actor.h"
 #include "Enums/ETurretBuildErrors.h"
+#include "Enums/ETurretUpgradeErrors.h"
 #include "TurretSocket.generated.h"
 
 class ATurret;
@@ -29,6 +31,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Used to keep track of what upgrade the turret is on
+	int32 TurretUpgradeIndex = 0;
+	
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* MeshComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
@@ -36,14 +41,30 @@ private:
 	UPROPERTY()
 	ATurret* TurretInSocket;
 	UPROPERTY()
-	const UTurretDataAsset* TurretInSocketDataAsset;
+	const UTurretUpgradePathDataAsset* TurretInSocketUpgradeDataAsset;
 	UPROPERTY()
 	ATowerDefencePlayer* OwningPlayer;
+	
+	void CreateTurret(const TSubclassOf<ATurret> TurretDataAsset);
 
 public:
+	/**
+	 * @brief Attempts to build a turret in the socket taking resources from the owning player if successful
+	 * @param TurretUpgradeDataAsset The turret upgrade data asset to build
+	 * @param NewOwner The player that will own the turret and pay for it
+	 * @return ETurretBuildErrors::TurretBuildSuccess if successful, otherwise the error that occurred
+	 */
 	UFUNCTION(BlueprintCallable)
-	ETurretBuildErrors BuildTurret(const UTurretDataAsset* TurretDataAsset, ATowerDefencePlayer* NewOwner);
+	ETurretBuildErrors BuildTurret(const UTurretUpgradePathDataAsset* TurretUpgradeDataAsset, ATowerDefencePlayer* NewOwner);
 
+	/**
+	 * @brief Attempts to upgrade the turret based on the TurretUpgradeDataAsset that was used to build the turret and
+	 * takes resources from the upgrading player if successful
+	 * @param UpgradingPlayer The player that will pay for the upgrade
+	 * @return ETurretUpgradeErrors::TurretUpgradeSuccess if successful, otherwise the error that occurred
+	 */
+	UFUNCTION(BlueprintCallable)
+	ETurretUpgradeErrors UpgradeTurret(ATowerDefencePlayer* UpgradingPlayer);
 	
 	/**
 	 * @brief Adds resources to the owning player and destroys the turret, the amount of resources added is the turret cost multiplied by the refund percentage
@@ -57,4 +78,6 @@ public:
 	 * @return True if the socket has a turret
 	 */
 	bool HasTurret() const;
+
+	bool IsTurretMaxLevel() const;
 };

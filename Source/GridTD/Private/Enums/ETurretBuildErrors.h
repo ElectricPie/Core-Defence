@@ -3,9 +3,11 @@
 UENUM()
 enum ETurretBuildErrors
 {
-	SocketOccupied,
-	NotEnoughResources,
-	NullDataAsset,
-	NullPlayerReference,
-	Success
+	TurretBuildSocketOccupied,
+	TurretBuildNotEnoughResources,
+	TurretBuildNullUpgradePath,
+	TurretBuildNullDataAsset,
+	TurretBuildEmptyUpgradePath,
+	TurretBuildNullPlayerReference,
+	TurretBuildSuccess
 };

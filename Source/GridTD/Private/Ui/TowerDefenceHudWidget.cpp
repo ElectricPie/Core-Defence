@@ -43,6 +43,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		// TODO: Setup selection buttons
+		TurretSelectedWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::UpgradeTurret);
 		TurretSelectedWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::SellTurret);
 	}
 
@@ -54,43 +55,49 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 
 void UTowerDefenceHudWidget::BuildGunTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Gun);
+	TurretButtonClickedEvent.Broadcast(TurretGun);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildCannonTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Cannon);
+	TurretButtonClickedEvent.Broadcast(TurretCannon);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildRocketTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Rocket);
+	TurretButtonClickedEvent.Broadcast(TurretRocket);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildPiercingTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Piercing);
+	TurretButtonClickedEvent.Broadcast(TurretPiercing);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildSlowTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Slow);
+	TurretButtonClickedEvent.Broadcast(TurretSlow);
 	CloseTurretBuildWidget();
 }
 
 void UTowerDefenceHudWidget::BuildBuffTurret()
 {
-	TurretButtonClickedEvent.Broadcast(Buff);
+	TurretButtonClickedEvent.Broadcast(TurretBuff);
 	CloseTurretBuildWidget();
+}
+
+void UTowerDefenceHudWidget::UpgradeTurret()
+{
+	TurretSelectionButtonClickedEvent.Broadcast(TurretSelectionUpgrade);
+	CloseTurretSelectionWidget();
 }
 
 void UTowerDefenceHudWidget::SellTurret()
 {
-	TurretSelectionButtonClickedEvent.Broadcast(Sell);
+	TurretSelectionButtonClickedEvent.Broadcast(TurretSelectionSell);
 	CloseTurretSelectionWidget();
 }
 
@@ -111,10 +118,15 @@ void UTowerDefenceHudWidget::SelectTurretSocket(const ATurretSocket* TurretSocke
 	// Open to corresponding menu
 	if (TurretSocket->HasTurret())
 	{
+		// Disable upgrade button if turret is max level
+		TurretSelectedWidget->LeftButton->SetIsEnabled(!TurretSocket->IsTurretMaxLevel());
+
+		// Used to move the selection widget to the correct location
 		OpenTurretSelectionMenuEvent();
 	}
 	else
 	{
+		// Used to move the build widget to the correct location
 		OpenTurretBuildMenuEvent();
 	}
 }
