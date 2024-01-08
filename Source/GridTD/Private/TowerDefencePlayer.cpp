@@ -191,7 +191,6 @@ void ATowerDefencePlayer::HandleUpgradeError(const ETurretUpgradeErrors UpgradeE
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Not enough resources to upgrade turret"));
 			break;
 		case TurretUpgradeEndOfUpgradePath:
-			// TODO: Disable the upgrade button if the turret is at the end of the upgrade path
 			// This should not happen as the upgrade button should be disabled
 			UE_LOG(LogTemp, Error, TEXT("TowerDefencePlayer: Attempted to upgrade turret at end of upgrade path"));
 			break;

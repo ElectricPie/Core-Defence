@@ -30,6 +30,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 		TurretBuildWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		// I dont like the way this is done but currently not sure how to do it otherwise. Its dynamic so can't use lambda
+		// Setup turret build buttons
 		TurretBuildWidget->TopLeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildGunTurret);
 		TurretBuildWidget->TopRightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildCannonTurret);
 		TurretBuildWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::BuildRocketTurret);
@@ -42,7 +43,7 @@ void UTowerDefenceHudWidget::SetUpWidgets() const
 	{
 		TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		// TODO: Setup selection buttons
+		// Setup turret selected buttons
 		TurretSelectedWidget->LeftButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::UpgradeTurret);
 		TurretSelectedWidget->RightButton->OnClicked.AddDynamic(this, &UTowerDefenceHudWidget::SellTurret);
 	}
