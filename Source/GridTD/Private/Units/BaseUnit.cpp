@@ -3,6 +3,9 @@
 
 #include "Units/BaseUnit.h"
 
+#include "DrawDebugHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
+
 
 // Sets default values
 ABaseUnit::ABaseUnit()
@@ -10,8 +13,11 @@ ABaseUnit::ABaseUnit()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene Component"));
+	RootComponent = RootSceneComponent;
+
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Component"));
-	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +31,6 @@ void ABaseUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
 	if (Waypoints.Num() == 0) return;
 	if (!Waypoints[CurrentWaypoint]) return;
 
@@ -36,12 +41,15 @@ void ABaseUnit::Tick(float DeltaTime)
 
 void ABaseUnit::MoveToCurrentWaypoint(const FVector& Position)
 {
+	// Move towards the position
 	const FVector Direction = (Position - GetActorLocation()).GetSafeNormal();
 	const FVector NewLocation = GetActorLocation() + Direction * MovementSpeed * GetWorld()->GetDeltaSeconds();
 	SetActorLocation(NewLocation);
 
-	// TODO: Make the units smoothly rotate to the direction they are moving
-	StaticMeshComponent->SetWorldRotation(Direction.Rotation() + FRotator(0, MeshRotationalOffset, 0));
+	// Rotate the static mesh to face the direction of movement
+	const FVector ForwardVector = GetActorForwardVector();
+	const FVector NewForwardVector = FMath::VInterpTo(ForwardVector, Direction, GetWorld()->GetDeltaSeconds(), RotationSpeed);
+	SetActorRotation(NewForwardVector.Rotation());
 }
 
 void ABaseUnit::CheckDistanceToTarget()

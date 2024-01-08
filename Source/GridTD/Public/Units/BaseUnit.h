@@ -34,9 +34,9 @@ private:
 	
 protected:
 	UPROPERTY(VisibleAnywhere, Category="Components")
+	USceneComponent* RootSceneComponent;
+	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(EditAnywhere, Category="Components")
-	float MeshRotationalOffset = -90.f;
 
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float MovementSpeed = 100.f;
@@ -44,6 +44,8 @@ protected:
 	TArray<AActor*> Waypoints;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Movement")
 	int32 CurrentWaypoint;
+	UPROPERTY(EditAnywhere, Category="Movement")
+	float RotationSpeed = 2.f;
 
 	// The distance from a waypoint to change to the next waypoint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
