@@ -35,6 +35,9 @@ private:
 	UWaveDataAsset* WaveDataAsset;
 	
 	int32 UnitSpawnerIndex = 0;
+
+	int32 CurrentWave = 0;
+	int32 UnitSpawnedThisWave = 0;
 	
 	FTimerHandle NextWaveTimerHandle;
 	FTimerHandle CurrentWaveTimerHandle;

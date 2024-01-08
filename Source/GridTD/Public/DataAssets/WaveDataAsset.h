@@ -35,4 +35,5 @@ private:
 
 public:
 	const TSubclassOf<ABaseUnit> GetEnemies(int32 Index) const;
+	const int32 GetWaveEnemyCount(const int32 Index) const;
 };

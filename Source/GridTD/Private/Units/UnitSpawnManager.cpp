@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Units/EnemySpawner.h"
+#include "Units/BaseUnit.h"
 
 
 // Sets default values
@@ -46,15 +47,26 @@ void AUnitSpawnManager::Tick(float DeltaTime)
 
 void AUnitSpawnManager::SpawnNextUnit()
 {
-	// Switch which spawn point to use
-
-	// Temporally use the first spawn point
+	// TODO: Switch which spawn point to use
 	if (SpawnPoints.Num() == 0) return;
-	if (!SpawnPoints[0]) return;
+	if (!SpawnPoints[UnitSpawnerIndex]) return;
 
+	// Get the unit to spawn
 	const TSubclassOf<ABaseUnit> UnitToSpawn = WaveDataAsset->GetEnemies(0);
+	if (!UnitToSpawn)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s attempted to spawn a null unit from %s"), *GetName(), *WaveDataAsset->GetName());
+		return;
+	}
 
-	SpawnPoints[0]->SpawnUnit(UnitToSpawn);
+	SpawnPoints[UnitSpawnerIndex]->SpawnUnit(UnitToSpawn);
+	UnitSpawnedThisWave++;
+	
+	// Stop spawning units if we have spawned all the units for this wave
+	if (UnitSpawnedThisWave == WaveDataAsset->GetWaveEnemyCount(CurrentWave))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(CurrentWaveTimerHandle);
+	}
 }
 
 void AUnitSpawnManager::StartSpawning()

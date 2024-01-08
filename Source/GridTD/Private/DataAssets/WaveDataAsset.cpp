@@ -46,3 +46,13 @@ const TSubclassOf<ABaseUnit> UWaveDataAsset::GetEnemies(const int32 Index) const
 
 	return Enemies[Index];
 }
+
+const int32 UWaveDataAsset::GetWaveEnemyCount(const int32 Index) const
+{
+	if (EnemyCount.Num() == 0 || EnemyCount.Num() <= Index)
+	{
+		return 0;
+	}
+
+	return EnemyCount[Index];
+}
