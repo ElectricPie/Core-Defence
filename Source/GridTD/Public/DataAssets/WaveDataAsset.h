@@ -35,5 +35,7 @@ private:
 
 public:
 	const TSubclassOf<ABaseUnit> GetEnemies(int32 Index) const;
+	const float GetWaveDelay(int32 Index) const;
 	const int32 GetWaveEnemyCount(const int32 Index) const;
+	const int32 GetWaveCount() const { return Enemies.Num(); }
 };

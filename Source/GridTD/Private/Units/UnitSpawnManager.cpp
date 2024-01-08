@@ -36,7 +36,7 @@ void AUnitSpawnManager::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("WaveDataAsset is Null"));
 	}
 
-	StartSpawning();
+	StartNextWave();
 }
 
 // Called every frame
@@ -60,20 +60,45 @@ void AUnitSpawnManager::SpawnNextUnit()
 	}
 
 	SpawnPoints[UnitSpawnerIndex]->SpawnUnit(UnitToSpawn);
-	UnitSpawnedThisWave++;
+	UnitsSpawnedThisWave++;
 	
 	// Stop spawning units if we have spawned all the units for this wave
-	if (UnitSpawnedThisWave == WaveDataAsset->GetWaveEnemyCount(CurrentWave))
+	if (UnitsSpawnedThisWave == WaveDataAsset->GetWaveEnemyCount(CurrentWave))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Stopping spawning"));
 		GetWorld()->GetTimerManager().ClearTimer(CurrentWaveTimerHandle);
 	}
 }
 
 void AUnitSpawnManager::StartSpawning()
 {
+	// Reset the spawning counters
+	UnitsSpawnedThisWave = 0;
+	GetWorld()->GetTimerManager().ClearTimer(CurrentWaveTimerHandle);
+	
 	FTimerDelegate Delegate;
 	Delegate.BindUObject(this, &AUnitSpawnManager::SpawnNextUnit);
 	GetWorld()->GetTimerManager().SetTimer(CurrentWaveTimerHandle, Delegate, SpawnInterval, true);
+}
+
+void AUnitSpawnManager::StartNextWave()
+{
+	GetWorld()->GetTimerManager().ClearTimer(NextWaveTimerHandle);
+
+	CurrentWave++;
+
+	if (CurrentWave >= WaveDataAsset->GetWaveCount())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No more waves"));
+		return;
+	}
+	
+	FTimerDelegate Delegate;
+	Delegate.BindUObject(this, &AUnitSpawnManager::StartNextWave);
+	float NextWaveTime = WaveDataAsset->GetWaveDelay(CurrentWave);
+	GetWorld()->GetTimerManager().SetTimer(NextWaveTimerHandle, Delegate, NextWaveTime, false);
+
+	StartSpawning();
 }
 
 

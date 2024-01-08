@@ -36,12 +36,13 @@ private:
 	
 	int32 UnitSpawnerIndex = 0;
 
-	int32 CurrentWave = 0;
-	int32 UnitSpawnedThisWave = 0;
+	int32 CurrentWave = -1;
+	int32 UnitsSpawnedThisWave = 0;
 	
 	FTimerHandle NextWaveTimerHandle;
 	FTimerHandle CurrentWaveTimerHandle;
 
 	void SpawnNextUnit();
 	void StartSpawning();
+	void StartNextWave();
 };
