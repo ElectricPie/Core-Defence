@@ -4,7 +4,7 @@
 #include "Units/EnemySpawner.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "Units/BasicEnemy.h"
+#include "Units/BaseUnit.h"
 
 // Sets default values
 AEnemySpawner::AEnemySpawner()
@@ -31,7 +31,7 @@ void AEnemySpawner::SpawnUnit()
 {
 	if (!EnemyToSpawn) return;
 
-	ABasicEnemy* NewEnemy = GetWorld()->SpawnActor<ABasicEnemy>(
+	ABaseUnit* NewEnemy = GetWorld()->SpawnActor<ABaseUnit>(
 		EnemyToSpawn,
 		GetActorLocation(),
 		GetActorRotation()

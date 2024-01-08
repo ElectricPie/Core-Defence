@@ -7,7 +7,7 @@
 #include "EnemySpawner.generated.h"
 
 class ALevelSettings;
-class ABasicEnemy;
+class ABaseUnit;
 
 UCLASS()
 class GRIDTD_API AEnemySpawner : public AActor
@@ -30,7 +30,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Spawning", meta = (AllowPrivateAccess))
-	TSubclassOf<ABasicEnemy> EnemyToSpawn;
+	TSubclassOf<ABaseUnit> EnemyToSpawn;
 	
 	// This will need changing if deciding to use A* later
 	UPROPERTY(EditAnywhere, Category = "Pathing", meta = (AllowPrivateAccess=true))

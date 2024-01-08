@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "WaveDataAsset.generated.h"
 
-class ABasicEnemy;
+class ABaseUnit;
 /**
  * 
  */
@@ -17,7 +17,7 @@ class GRIDTD_API UWaveDataAsset : public UDataAsset
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Wave Data", meta=(ToolTip="The number of enemies in the wave, chaning this will change the size of the WaveTimer and EnemyCount arrays"))
-	TArray<TSubclassOf<ABasicEnemy>> Enemies;
+	TArray<TSubclassOf<ABaseUnit>> Enemies;
 	UPROPERTY(EditAnywhere, Category = "Wave Data", meta=(ToolTip="The time before the next wave starts, the size of this array can be changed by changing the size of the Enemies array"))
 	TArray<float> WaveTimer;
 	UPROPERTY(EditAnywhere, Category = "Wave Data", meta=(ToolTip="The number of enemies to spawn for the wave, the size of this array can be changed by changing the size of the Enemies array"))
