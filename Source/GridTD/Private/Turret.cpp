@@ -95,6 +95,7 @@ void ATurret::RotateToPosition(const FVector& TargetPosition, const float DeltaT
 	UpdateTurretPitch(CurrentRotation.Pitch + PitchOffset);
 }
 
+// Maybe use timer?
 void ATurret::Fire(UUnitHealth& TargetHealth)
 {
 	// Check the turret is facing the target

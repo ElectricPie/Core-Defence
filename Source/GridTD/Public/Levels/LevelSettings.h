@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "LevelSettings.generated.h"
 
+class UWaveDataAsset;
 UCLASS()
 class GRIDTD_API ALevelSettings : public AActor
 {
@@ -28,11 +29,15 @@ private:
 	int32 PlayerStartingResources = 100;
 	UPROPERTY(EditAnywhere, Category = "Player Settings", meta=(AllowPrivateAccess = "true", ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
 	float TurretSellRefundPercentage = 0.75f;
+	UPROPERTY(EditAnywhere, Category="Wave Settings")
+	UWaveDataAsset* WaveDataAsset;
 
 public:
 	UFUNCTION(BlueprintPure)
 	int32 GetPlayerStartingResources() const { return PlayerStartingResources; }
 	UFUNCTION(BlueprintPure)
 	float GetTurretSellRefundPercentage() const { return TurretSellRefundPercentage; }
+	UFUNCTION(BlueprintPure)
+	UWaveDataAsset* GetWaveDataAsset() const { return WaveDataAsset; }
 	
 };

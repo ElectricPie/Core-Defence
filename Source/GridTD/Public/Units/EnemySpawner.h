@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "EnemySpawner.generated.h"
 
+class ALevelSettings;
 class ABasicEnemy;
 
 UCLASS()
@@ -25,6 +26,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SpawnUnit();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Spawning", meta = (AllowPrivateAccess))
 	TSubclassOf<ABasicEnemy> EnemyToSpawn;
@@ -32,6 +35,4 @@ private:
 	// This will need changing if deciding to use A* later
 	UPROPERTY(EditAnywhere, Category = "Pathing", meta = (AllowPrivateAccess=true))
 	TArray<AActor*> Waypoints;
-
-	void SpawnEnemy() const;
 };

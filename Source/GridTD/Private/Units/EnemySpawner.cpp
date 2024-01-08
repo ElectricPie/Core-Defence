@@ -2,6 +2,8 @@
 
 
 #include "Units/EnemySpawner.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "Units/BasicEnemy.h"
 
 // Sets default values
@@ -9,17 +11,13 @@ AEnemySpawner::AEnemySpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	//SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene Component"));
-	//RootComponent = SceneComponent;
 }
 
 // Called when the game starts or when spawned
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SpawnEnemy();
+	
 }
 
 // Called every frame
@@ -29,7 +27,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 }
 
-void AEnemySpawner::SpawnEnemy() const
+void AEnemySpawner::SpawnUnit()
 {
 	if (!EnemyToSpawn) return;
 
@@ -41,4 +39,3 @@ void AEnemySpawner::SpawnEnemy() const
 
 	NewEnemy->SetWaypoints(Waypoints);
 }
-
