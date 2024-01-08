@@ -39,6 +39,9 @@ void ABaseUnit::MoveToCurrentWaypoint(const FVector& Position)
 	const FVector Direction = (Position - GetActorLocation()).GetSafeNormal();
 	const FVector NewLocation = GetActorLocation() + Direction * MovementSpeed * GetWorld()->GetDeltaSeconds();
 	SetActorLocation(NewLocation);
+
+	// TODO: Make the units smoothly rotate to the direction they are moving
+	StaticMeshComponent->SetWorldRotation(Direction.Rotation() + FRotator(0, MeshRotationalOffset, 0));
 }
 
 void ABaseUnit::CheckDistanceToTarget()
