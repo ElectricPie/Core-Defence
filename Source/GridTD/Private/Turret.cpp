@@ -3,9 +3,8 @@
 
 #include "Turret.h"
 
-#include "UnitHealth.h"
+#include "Units/UnitHealth.h"
 #include "Components/SphereComponent.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values

@@ -1,9 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemySpawner.h"
-
-#include "BasicEnemy.h"
+#include "Units/EnemySpawner.h"
+#include "Units/BasicEnemy.h"
 
 // Sets default values
 AEnemySpawner::AEnemySpawner()
