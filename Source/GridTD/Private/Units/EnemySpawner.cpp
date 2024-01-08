@@ -27,12 +27,15 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 }
 
-void AEnemySpawner::SpawnUnit()
+void AEnemySpawner::SpawnUnit(const TSubclassOf<ABaseUnit> UnitToSpawn) const
 {
-	if (!EnemyToSpawn) return;
+	if (!UnitToSpawn)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s attempted to spawn a null unit"), *GetName());
+	}
 
 	ABaseUnit* NewEnemy = GetWorld()->SpawnActor<ABaseUnit>(
-		EnemyToSpawn,
+		UnitToSpawn,
 		GetActorLocation(),
 		GetActorRotation()
 	);

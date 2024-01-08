@@ -33,8 +33,7 @@ private:
 	
 	UPROPERTY()
 	UWaveDataAsset* WaveDataAsset;
-
-
+	
 	int32 UnitSpawnerIndex = 0;
 	
 	FTimerHandle NextWaveTimerHandle;

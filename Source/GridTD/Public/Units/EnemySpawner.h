@@ -26,12 +26,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SpawnUnit();
+	void SpawnUnit(const TSubclassOf<ABaseUnit> UnitToSpawn) const;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Spawning", meta = (AllowPrivateAccess))
-	TSubclassOf<ABaseUnit> EnemyToSpawn;
-	
 	// This will need changing if deciding to use A* later
 	UPROPERTY(EditAnywhere, Category = "Pathing", meta = (AllowPrivateAccess=true))
 	TArray<AActor*> Waypoints;

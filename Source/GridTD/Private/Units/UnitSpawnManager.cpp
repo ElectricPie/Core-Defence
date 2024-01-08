@@ -2,6 +2,8 @@
 
 
 #include "Units/UnitSpawnManager.h"
+
+#include "DataAssets/WaveDataAsset.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Units/EnemySpawner.h"
@@ -50,7 +52,9 @@ void AUnitSpawnManager::SpawnNextUnit()
 	if (SpawnPoints.Num() == 0) return;
 	if (!SpawnPoints[0]) return;
 
-	SpawnPoints[0]->SpawnUnit();
+	const TSubclassOf<ABaseUnit> UnitToSpawn = WaveDataAsset->GetEnemies(0);
+
+	SpawnPoints[0]->SpawnUnit(UnitToSpawn);
 }
 
 void AUnitSpawnManager::StartSpawning()

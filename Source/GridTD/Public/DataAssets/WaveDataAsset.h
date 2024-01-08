@@ -15,6 +15,11 @@ class GRIDTD_API UWaveDataAsset : public UDataAsset
 {
 	GENERATED_BODY()
 
+protected:
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Wave Data", meta=(ToolTip="The number of enemies in the wave, chaning this will change the size of the WaveTimer and EnemyCount arrays"))
 	TArray<TSubclassOf<ABaseUnit>> Enemies;
@@ -28,8 +33,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Default Values")
 	int32 DefaultEnemyCount = 1;
 
-#if WITH_EDITOR
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-#endif
-	
+public:
+	const TSubclassOf<ABaseUnit> GetEnemies(int32 Index) const;
 };

@@ -36,3 +36,13 @@ void UWaveDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 	}
 }
 #endif
+
+const TSubclassOf<ABaseUnit> UWaveDataAsset::GetEnemies(const int32 Index) const
+{
+	if (Enemies.Num() == 0 || Enemies.Num() <= Index)
+	{
+		return nullptr;
+	}
+
+	return Enemies[Index];
+}
