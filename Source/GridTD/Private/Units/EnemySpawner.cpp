@@ -1,26 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemySpawner.h"
+#include "Units/EnemySpawner.h"
 
-#include "BasicEnemy.h"
+#include "Kismet/GameplayStatics.h"
+#include "Units/BaseUnit.h"
 
 // Sets default values
 AEnemySpawner::AEnemySpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	//SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene Component"));
-	//RootComponent = SceneComponent;
 }
 
 // Called when the game starts or when spawned
 void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SpawnEnemy();
+	
 }
 
 // Called every frame
@@ -30,16 +27,18 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 }
 
-void AEnemySpawner::SpawnEnemy() const
+void AEnemySpawner::SpawnUnit(const TSubclassOf<ABaseUnit> UnitToSpawn) const
 {
-	if (!EnemyToSpawn) return;
+	if (!UnitToSpawn)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s attempted to spawn a null unit"), *GetName());
+	}
 
-	ABasicEnemy* NewEnemy = GetWorld()->SpawnActor<ABasicEnemy>(
-		EnemyToSpawn,
+	ABaseUnit* NewEnemy = GetWorld()->SpawnActor<ABaseUnit>(
+		UnitToSpawn,
 		GetActorLocation(),
 		GetActorRotation()
 	);
 
 	NewEnemy->SetWaypoints(Waypoints);
 }
-

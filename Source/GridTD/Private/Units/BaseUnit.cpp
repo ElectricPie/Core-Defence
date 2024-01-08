@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BasicEnemy.h"
+#include "Units/BaseUnit.h"
 
 
 // Sets default values
-ABasicEnemy::ABasicEnemy()
+ABaseUnit::ABaseUnit()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,13 +15,13 @@ ABasicEnemy::ABasicEnemy()
 }
 
 // Called when the game starts or when spawned
-void ABasicEnemy::BeginPlay()
+void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
 // Called every frame
-void ABasicEnemy::Tick(float DeltaTime)
+void ABaseUnit::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -34,14 +34,14 @@ void ABasicEnemy::Tick(float DeltaTime)
 	CheckDistanceToTarget();
 }
 
-void ABasicEnemy::MoveToCurrentWaypoint(const FVector& Position)
+void ABaseUnit::MoveToCurrentWaypoint(const FVector& Position)
 {
 	const FVector Direction = (Position - GetActorLocation()).GetSafeNormal();
 	const FVector NewLocation = GetActorLocation() + Direction * MovementSpeed * GetWorld()->GetDeltaSeconds();
 	SetActorLocation(NewLocation);
 }
 
-void ABasicEnemy::CheckDistanceToTarget()
+void ABaseUnit::CheckDistanceToTarget()
 {
 	const float DistanceToWaypoint = FVector::Distance(Waypoints[CurrentWaypoint]->GetActorLocation(),
 	                                                   GetActorLocation());
@@ -56,13 +56,13 @@ void ABasicEnemy::CheckDistanceToTarget()
 	}
 }
 
-void ABasicEnemy::SetWaypoints(const TArray<AActor*>& NewWaypoints)
+void ABaseUnit::SetWaypoints(const TArray<AActor*>& NewWaypoints)
 {
 	CurrentWaypoint = 0;
 	Waypoints = NewWaypoints;
 }
 
-void ABasicEnemy::ReachedExit()
+void ABaseUnit::ReachedExit()
 {
 	OnExit.Broadcast();
 	Destroy();

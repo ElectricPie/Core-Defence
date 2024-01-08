@@ -112,11 +112,10 @@ void ATurretSocket::SellTurret(float RefundPercentage)
 {
 	if (!TurretInSocket) { return; }
 	if (!OwningPlayer) { return; }
-
+	
 	RefundPercentage = FMath::Clamp(RefundPercentage, 0.f, 1.f);
 	
 	// Return the resources to the player
-	// TODO: Handle refund including upgrades
 	float TotalResources = 0;
 	for (int32 i = 0; i < TurretUpgradeIndex; i++)
 	{

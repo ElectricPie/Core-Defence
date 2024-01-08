@@ -3,9 +3,8 @@
 
 #include "Turret.h"
 
-#include "UnitHealth.h"
+#include "Units/UnitHealth.h"
 #include "Components/SphereComponent.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
@@ -96,6 +95,7 @@ void ATurret::RotateToPosition(const FVector& TargetPosition, const float DeltaT
 	UpdateTurretPitch(CurrentRotation.Pitch + PitchOffset);
 }
 
+// Maybe use timer?
 void ATurret::Fire(UUnitHealth& TargetHealth)
 {
 	// Check the turret is facing the target

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BasicEnemy.generated.h"
+#include "BaseUnit.generated.h"
 
 class AHealthOrb;
 class UCapsuleComponent;
@@ -12,13 +12,13 @@ class UCapsuleComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExitSignature);
 
 UCLASS()
-class GRIDTD_API ABasicEnemy : public AActor
+class GRIDTD_API ABaseUnit : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABasicEnemy();
+	ABaseUnit();
 
 protected:
 	// Called when the game starts or when spawned
