@@ -71,6 +71,12 @@ void ABaseUnit::SetWaypoints(const TArray<AActor*>& NewWaypoints)
 {
 	CurrentWaypoint = 0;
 	Waypoints = NewWaypoints;
+
+	// Rotate the unit to face the first waypoint
+	if (Waypoints.Num() == 0) return;
+	if (!Waypoints[CurrentWaypoint]) return;
+	const FVector Direction = (Waypoints[CurrentWaypoint]->GetActorLocation() - GetActorLocation()).GetSafeNormal();
+	SetActorRotation(Direction.Rotation() + FRotator(0, 0, 0));
 }
 
 void ABaseUnit::ReachedExit()
