@@ -3,6 +3,7 @@
 
 #include "DataAssets/WaveDataAsset.h"
 
+#if WITH_EDITOR
 void UWaveDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -13,12 +14,25 @@ void UWaveDataAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChang
 		// Fills the WaveTimer array until it is the same size as the Enemies array
 		for (int i = WaveTimer.Num(); i < Enemies.Num(); i++)
 		{
-			WaveTimer.Add(0.0f);
+			WaveTimer.Add(10.0f);
 		}
 	}
 	else if (Enemies.Num() < WaveTimer.Num())
 	{
-		// TODO: See if possible to work out which enemy element was removed and remove the corresponding element from the WaveTimer array
 		WaveTimer.SetNum(Enemies.Num());
 	}
+
+	if (Enemies.Num() > EnemyCount.Num())
+	{
+		// Fills the EnemyCount array until it is the same size as the Enemies array
+		for (int i = EnemyCount.Num(); i < Enemies.Num(); i++)
+		{
+			EnemyCount.Add(1);
+		}
+	}
+	else if (Enemies.Num() < EnemyCount.Num())
+	{
+		EnemyCount.SetNum(Enemies.Num());
+	}
 }
+#endif
