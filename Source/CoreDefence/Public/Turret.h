@@ -38,11 +38,10 @@ private:
 	float FireCounter = 0.f;
 	float LastFireTime = 0.f;
 
-
 	TArray<TWeakObjectPtr<UUnitHealth>> EnemiesInRange;
 	
 	void RotateToPosition(const FVector& TargetPosition, const float DeltaTime);
-	void Fire(UUnitHealth& Target);
+	void Fire(UUnitHealth& TargetHealth);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Componets")
@@ -64,7 +63,7 @@ protected:
 	float FireRate = 2.f;
 	UPROPERTY(EditAnywhere, Category="Fire Power", meta=(ClampMin=0, UIMin=0))
 	int32 Damage = 2;
-
+	
 	TWeakObjectPtr<UUnitHealth> Target;
 	
 	UFUNCTION(BlueprintImplementableEvent)

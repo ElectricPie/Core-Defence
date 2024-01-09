@@ -36,7 +36,8 @@ void ATurret::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	const TWeakObjectPtr<UUnitHealth> UnitHealth = OtherActor->FindComponentByClass<UUnitHealth>();
 	if (!UnitHealth.IsValid()) return;
-	
+
+	// Only add the unit if it isn't already in the list
 	EnemiesInRange.AddUnique(UnitHealth);
 	
 	if (Target.IsValid()) return;
@@ -67,8 +68,12 @@ void ATurret::Tick(float DeltaTime)
 	// Check for other enemies if no current target
 	if (!Target.IsValid())
 	{
+		// Check if there are any enemies in range
 		if (EnemiesInRange.Num() == 0) return;
-		const TWeakObjectPtr<UUnitHealth> NewTarget = EnemiesInRange.Pop();
+
+		// TODO: Create a system for differentiating between targets base on how close they are to the end
+		// Get the first enemy in range
+		const TWeakObjectPtr<UUnitHealth> NewTarget = EnemiesInRange[0];
 
 		// Confirm that the enemies hasn't been destroyed before setting it as the target
 		if (!NewTarget.IsValid()) return;
