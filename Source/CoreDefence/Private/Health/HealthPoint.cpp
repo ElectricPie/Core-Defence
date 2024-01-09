@@ -102,8 +102,9 @@ FVector& AHealthPoint::GetPosFromOrbCircle(float Angle) const
 
 	// Set the orb in a free position
 	FVector OrbLocation = UnusedOrbLocations.Pop();
-	FOrbLocation(OrbContainer, OrbLocation);
+	FOrbLocation* NewOrbLocation = new FOrbLocation(OrbContainer, OrbLocation);
 	SetOrbsPosition(OrbContainer.GetHealthOrb(), OrbLocation);
+	HealthOrbs.Add(NewOrbLocation);
 	
 	OrbStateChangedEvent.Broadcast(Stored);
 	
