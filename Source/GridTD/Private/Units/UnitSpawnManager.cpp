@@ -52,7 +52,7 @@ void AUnitSpawnManager::SpawnNextUnit()
 	if (!SpawnPoints[UnitSpawnerIndex]) return;
 
 	// Get the unit to spawn
-	const TSubclassOf<ABaseUnit> UnitToSpawn = WaveDataAsset->GetEnemies(0);
+	const TSubclassOf<ABaseUnit> UnitToSpawn = WaveDataAsset->GetEnemies(CurrentWave);
 	if (!UnitToSpawn)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s attempted to spawn a null unit from %s"), *GetName(), *WaveDataAsset->GetName());
