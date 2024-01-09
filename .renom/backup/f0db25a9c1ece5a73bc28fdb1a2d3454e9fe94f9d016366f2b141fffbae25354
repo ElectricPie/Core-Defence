@@ -1,3 +1,5 @@
+
+
 [/Script/EngineSettings.GameMapsSettings]
 GameDefaultMap=/Game/Maps/Menu.Menu
 EditorStartupMap=/Game/Maps/Level1.Level1
@@ -14,8 +16,3 @@ AppliedDefaultGraphicsPerformance=Maximum
 +ActiveGameNameRedirects=(OldGameName="/Script/TP_Blank",NewGameName="/Script/GridTD")
 +ActiveClassRedirects=(OldClassName="TP_BlankGameModeBase",NewClassName="GridTDGameModeBase")
 
-[URL]
-GameName=CoreDefence
-
-[CoreRedirects]
-+PackageRedirects=(OldName="/Script/GridTD",NewName="/Script/CoreDefence")

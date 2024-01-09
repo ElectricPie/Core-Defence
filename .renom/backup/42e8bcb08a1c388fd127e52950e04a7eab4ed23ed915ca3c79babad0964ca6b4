@@ -16,6 +16,3 @@ AppliedDefaultGraphicsPerformance=Maximum
 
 [URL]
 GameName=CoreDefence
-
-[CoreRedirects]
-+PackageRedirects=(OldName="/Script/GridTD",NewName="/Script/CoreDefence")
