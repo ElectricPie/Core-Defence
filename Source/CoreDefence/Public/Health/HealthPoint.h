@@ -41,11 +41,11 @@ private:
 		FHealthOrbContainer& HealthOrb;
 		FVector& OrbPosition;
 	};
-	
+
+	UPROPERTY(VisibleAnywhere, Category="Components")
+	USceneComponent* RootSceneComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(VisibleAnywhere, Category="Components")
-	UBoxComponent* TriggerVolume;
 	UPROPERTY(VisibleAnywhere, Category="Components", meta=(ToolTip="The point health orbs will orbit around"))
 	USceneComponent* HealthOrbOrbitCentre;
 
@@ -75,6 +75,7 @@ private:
 	void SetOrbsPosition(AHealthOrb& HealthOrb, const FVector& OrbRelativePos) const;
 	
 public:
+	// TODO: Make this private and use function to register
 	FOnOrbStateChangedSignature OrbStateChangedEvent;
 	
 	/**
