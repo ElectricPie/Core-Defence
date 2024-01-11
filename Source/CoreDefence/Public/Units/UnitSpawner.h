@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "EnemySpawner.generated.h"
+#include "UnitSpawner.generated.h"
 
 class ALevelSettings;
 class ABaseUnit;
 
 UCLASS()
-class COREDEFENCE_API AEnemySpawner : public AActor
+class COREDEFENCE_API AUnitSpawner : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AEnemySpawner();
+	AUnitSpawner();
 
 protected:
 	// Called when the game starts or when spawned

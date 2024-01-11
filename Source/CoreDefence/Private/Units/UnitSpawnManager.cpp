@@ -6,7 +6,7 @@
 #include "DataAssets/WaveDataAsset.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
-#include "Units/EnemySpawner.h"
+#include "Units/UnitSpawner.h"
 #include "Units/BaseUnit.h"
 
 

@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "UnitSpawnManager.generated.h"
 
-class AEnemySpawner;
+class AUnitSpawner;
 class UWaveDataAsset;
 UCLASS()
 class COREDEFENCE_API AUnitSpawnManager : public AActor
@@ -27,7 +27,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category="Spawning")
-	TArray<AEnemySpawner*> SpawnPoints;
+	TArray<AUnitSpawner*> SpawnPoints;
 	UPROPERTY(EditAnywhere, Category= "Spawning")
 	float SpawnInterval = 2.f;
 	
