@@ -38,6 +38,8 @@ private:
 	UStaticMeshComponent* MeshComponent;
 	UPROPERTY(VisibleAnywhere, Category="Components")
 	USceneComponent* Socket;
+	UPROPERTY(EditAnywhere, Category="Turret")
+	bool HideOnTurretBuild = false;
 	UPROPERTY()
 	ATurret* TurretInSocket;
 	UPROPERTY()
