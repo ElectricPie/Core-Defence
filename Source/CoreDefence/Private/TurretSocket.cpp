@@ -83,6 +83,11 @@ ETurretBuildErrors ATurretSocket::BuildTurret(const UTurretUpgradePathDataAsset*
 
 	// Reset the turret upgrade index to the next upgrade
 	TurretUpgradeIndex = 1;
+
+	if (HideOnTurretBuild)
+	{
+		MeshComponent->SetVisibility(false);
+	}
 	
 	return TurretBuildSuccess;
 }
@@ -129,6 +134,11 @@ void ATurretSocket::SellTurret(float RefundPercentage)
 	TurretInSocket->Destroy();
 	TurretInSocket = nullptr;
 	TurretInSocketUpgradeDataAsset = nullptr;
+	
+	if (HideOnTurretBuild)
+	{
+		MeshComponent->SetVisibility(true);
+	}
 }
 
 bool ATurretSocket::HasTurret() const

@@ -14,12 +14,12 @@ AHealthPoint::AHealthPoint()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene Component"));
+	RootComponent = RootSceneComponent;
+	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetupAttachment(RootComponent);
 	StaticMeshComponent->SetCollisionProfileName(TEXT("IgnoreAll"));
-
-	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Volume"));
-	TriggerVolume->SetupAttachment(RootComponent);
 
 	HealthOrbOrbitCentre = CreateDefaultSubobject<USceneComponent>(TEXT("Orb Orbit Centre"));
 	HealthOrbOrbitCentre->SetupAttachment(RootComponent);
