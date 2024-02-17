@@ -13,6 +13,7 @@
 class UTurretUpgradePathDataAsset;
 class ALevelSettings;
 class UTowerDefenceHudWidget;
+class UPlayerResourceWidget;
 class ATurretSocket;
 class UTurretDataAsset;
 /**
@@ -37,12 +38,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	float SelectionRaycastDistance = 2000.f;
 
-	UPROPERTY(EditDefaultsOnly, Category="UI")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI", meta=(AllowPrivateAccess="true"))
 	TSubclassOf<UTowerDefenceHudWidget> HudWidgetBlueprint;
-	UPROPERTY(EditDefaultsOnly, Category="UI")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI", meta=(AllowPrivateAccess="true"))
 	FText InsufficientResourcesText;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category="UI", meta=(AllowPrivateAccess="true"))
 	UTowerDefenceHudWidget* HudWidget;
+	UPROPERTY(BlueprintReadOnly, Category="UI", meta=(AllowPrivateAccess="true"))
+	UPlayerResourceWidget* ResourceWidget;
 	
 	UPROPERTY(VisibleAnywhere, Category="Resources")
 	int32 Resources = 100;

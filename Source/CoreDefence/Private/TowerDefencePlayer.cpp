@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"
+#include "Ui/PlayerResourceWidget.h"
 #include "Enums/ETurretType.h"
 #include "Enums/ETurretBuildErrors.h"
 #include "Enums/ETurretSelectionOption.h"
@@ -36,11 +37,14 @@ void ATowerDefencePlayer::BeginPlay()
 
 	SetupUi();
 
+	if (!ResourceWidget) return;
+	
 	// Get all health points and update the Hud
 	for (AHealthPoint* HealthPoint : TActorRange<AHealthPoint>(World))
 	{
 		const uint32 AdditionalHealth = HealthPoint->GetOrbCount();
-		HudWidget->AddHealth(AdditionalHealth);
+		
+		ResourceWidget->AddHealthOrbWidgets(AdditionalHealth);
 		
 		MaxHealth += AdditionalHealth;
 		Health += AdditionalHealth;
@@ -97,7 +101,10 @@ void ATowerDefencePlayer::SetupUi()
 	if (!HudWidgetBlueprint) return;
 	HudWidget = CreateWidget<UTowerDefenceHudWidget>(GetWorld(), HudWidgetBlueprint);
 	HudWidget->AddToViewport();
-	HudWidget->UpdateResources(Resources);
+	ResourceWidget = HudWidget->GetResourceWidget();
+	if (ResourceWidget) {
+		ResourceWidget->UpdateResourceValue(Resources);
+	}
 
 	FScriptDelegate TurretBuildDelegate;
 	TurretBuildDelegate.BindUFunction(this, FName("OnTurretToBuildSelected"));
@@ -112,7 +119,9 @@ void ATowerDefencePlayer::SetupUi()
 void ATowerDefencePlayer::OnOrbStateChanged(const EHealthOrbState OrbState)
 {
 	UE_LOG(LogTemp, Warning, TEXT("OrbState"));
-	HudWidget->ChangeOrbState(OrbState);
+	
+	if (!ResourceWidget) return;
+	ResourceWidget->ChangeOrbState(OrbState);
 }
 
 void ATowerDefencePlayer::OnTurretToBuildSelected(const ETurretType TurretType)
@@ -290,7 +299,10 @@ bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
 	if (Resources < Amount) return false;
 	
 	Resources -= Amount;
-	HudWidget->UpdateResources(Resources);
+	if (ResourceWidget)
+	{
+		ResourceWidget->UpdateResourceValue(Resources);		
+	}
 	
 	return true;
 }
@@ -298,5 +310,8 @@ bool ATowerDefencePlayer::RemoveResources(const int32 Amount)
 void ATowerDefencePlayer::AddResources(const int32 Amount)
 {
 	Resources += Amount;
-	HudWidget->UpdateResources(Resources);
+	if (ResourceWidget)
+	{
+		ResourceWidget->UpdateResourceValue(Resources);		
+	}
 }

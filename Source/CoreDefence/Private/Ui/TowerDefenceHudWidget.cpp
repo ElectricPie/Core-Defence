@@ -144,34 +144,6 @@ void UTowerDefenceHudWidget::CloseTurretSelectionWidget() const
 	TurretSelectedWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UTowerDefenceHudWidget::ClearHealth() const
-{
-	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
-	
-	ResourceWidget->ClearOrbWidgets();
-}
-
-void UTowerDefenceHudWidget::AddHealth(const uint32 HealthOrbCount) const
-{
-	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
-	
-	ResourceWidget->AddHealthOrbWidgets(HealthOrbCount);
-}
-
-void UTowerDefenceHudWidget::ChangeOrbState(const EHealthOrbState OrbState)
-{
-	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
-	
-	ResourceWidget->ChangeOrbState(OrbState);
-}
-
-void UTowerDefenceHudWidget::UpdateResources(const int32 Value) const
-{
-	NULLCHECK(ResourceWidget, "TowerDefenceHud is missing referance to ResourceWidget");
-
-	ResourceWidget->UpdateResourceValue(Value);
-}
-
 void UTowerDefenceHudWidget::DisplayError(const FText& ErrorMessage)
 {
 	NULLCHECK(ErrorDisplayWidget, "TowerDefenceHud is missing referance to ErrorDisplayWidget");

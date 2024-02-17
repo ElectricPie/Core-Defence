@@ -26,6 +26,9 @@ class COREDEFENCE_API UTowerDefenceHudWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	UPlayerResourceWidget* GetResourceWidget() const { return ResourceWidget; }
+
 protected:
 	virtual void NativeConstruct() override;
 
@@ -85,15 +88,7 @@ public:
 	
 	void CloseTurretBuildWidget() const;
 	void CloseTurretSelectionWidget() const;
-
-	// Resource widget
-	void ClearHealth() const;
-	void AddHealth(uint32 HealthOrbCount) const;
-
-	void ChangeOrbState(EHealthOrbState OrbState);
-
-	void UpdateResources(int32 Value) const;
-
+	
 	void DisplayError(const FText& ErrorMessage);
 	void HideErrorMessage() const;
 };
