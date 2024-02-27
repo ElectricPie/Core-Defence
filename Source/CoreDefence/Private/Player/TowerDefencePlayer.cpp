@@ -5,8 +5,8 @@
 
 #include "EngineUtils.h"
 #include "Health/HealthPoint.h"
-#include "TurretSocket.h"
-#include "TurretSocketRefComponent.h"
+#include "Turrets/TurretSocket.h"
+#include "Turrets/TurretSocketRefComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Levels/LevelSettings.h"
 #include "Ui/TowerDefenceHudWidget.h"

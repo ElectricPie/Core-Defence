@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TurretSocket.h"
+#include "Turrets/TurretSocket.h"
 
 #include "Player/TowerDefencePlayer.h"
-#include "Turret.h"
+#include "Turrets/Turret.h"
 #include "DataAssets/TurretDataAsset.h"
 #include "Enums/ETurretBuildErrors.h"
-#include "TurretSocketRefComponent.h"
+#include "Turrets/TurretSocketRefComponent.h"
 #include "Enums/ETurretUpgradeErrors.h"
 
 // Sets default values
