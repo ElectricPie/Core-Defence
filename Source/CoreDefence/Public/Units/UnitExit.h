@@ -8,7 +8,7 @@
 class UBoxComponent;
 class ATowerDefencePlayer;
 
-UCLASS(ClassGroup=custom, meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Units), meta=(BlueprintSpawnableComponent))
 class COREDEFENCE_API UUnitExit : public UActorComponent
 {
 	GENERATED_BODY()

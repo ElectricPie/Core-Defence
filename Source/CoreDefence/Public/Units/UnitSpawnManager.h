@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "UnitSpawnManager.generated.h"
 
-class AUnitSpawner;
+class UUnitSpawner;
 class UWaveDataAsset;
 UCLASS()
 class COREDEFENCE_API AUnitSpawnManager : public AActor
@@ -26,8 +26,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(EditAnywhere, Category="Spawning")
-	TArray<AUnitSpawner*> SpawnPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Spawning", meta=(AllowPrivateAccess=true))
+	TArray<AActor*> UnitSpawnersActor;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawning", meta=(AllowPrivateAccess=true))
+	TArray<UUnitSpawner*> UnitSpawnerComponents;
 	UPROPERTY(EditAnywhere, Category= "Spawning")
 	float SpawnInterval = 2.f;
 	

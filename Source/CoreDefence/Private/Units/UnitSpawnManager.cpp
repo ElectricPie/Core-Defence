@@ -21,9 +21,10 @@ AUnitSpawnManager::AUnitSpawnManager()
 void AUnitSpawnManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Get the wave settings
-	ALevelSettings* LevelSettings = Cast<ALevelSettings>(UGameplayStatics::GetActorOfClass(GetWorld(), ALevelSettings::StaticClass()));
+	ALevelSettings* LevelSettings = Cast<ALevelSettings>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ALevelSettings::StaticClass()));
 	if (!LevelSettings)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s cannot find LevelSettings actor"), *GetName());
@@ -36,32 +37,44 @@ void AUnitSpawnManager::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("WaveDataAsset is Null"));
 	}
 
+	for (const auto& UnitSpawner : UnitSpawnersActor)
+	{
+		if (!UnitSpawner) continue;
+		if (UUnitSpawner* SpawnerComponent = Cast<UUnitSpawner>(
+			UnitSpawner->GetComponentByClass(UUnitSpawner::StaticClass())))
+		{
+			UnitSpawnerComponents.Add(SpawnerComponent);
+		}
+	}
+
 	StartNextWave();
 }
 
-// Called every frame
+
 void AUnitSpawnManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
+
 void AUnitSpawnManager::SpawnNextUnit()
 {
 	// TODO: Switch which spawn point to use
-	if (SpawnPoints.Num() == 0) return;
-	if (!SpawnPoints[UnitSpawnerIndex]) return;
+	if (UnitSpawnersActor.Num() == 0) return;
+	if (!UnitSpawnersActor[UnitSpawnerIndex]) return;
 
 	// Get the unit to spawn
 	const TSubclassOf<ABaseUnit> UnitToSpawn = WaveDataAsset->GetEnemies(CurrentWave);
 	if (!UnitToSpawn)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s attempted to spawn a null unit from %s"), *GetName(), *WaveDataAsset->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("%s attempted to spawn a null unit from %s"), *GetName(),
+		       *WaveDataAsset->GetName());
 		return;
 	}
 
-	SpawnPoints[UnitSpawnerIndex]->SpawnUnit(UnitToSpawn);
+	UnitSpawnerComponents[UnitSpawnerIndex]->SpawnUnit(UnitToSpawn);
 	UnitsSpawnedThisWave++;
-	
+
 	// Stop spawning units if we have spawned all the units for this wave
 	if (UnitsSpawnedThisWave == WaveDataAsset->GetWaveEnemyCount(CurrentWave))
 	{
@@ -93,7 +106,7 @@ void AUnitSpawnManager::StartNextWave()
 		UE_LOG(LogTemp, Warning, TEXT("No more waves"));
 		return;
 	}
-	
+
 	FTimerDelegate Delegate;
 	Delegate.BindUObject(this, &AUnitSpawnManager::StartNextWave);
 	const float NextWaveTime = WaveDataAsset->GetWaveDelay(CurrentWave);
@@ -101,5 +114,3 @@ void AUnitSpawnManager::StartNextWave()
 
 	StartSpawning();
 }
-
-

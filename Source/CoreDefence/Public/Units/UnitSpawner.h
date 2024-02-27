@@ -3,20 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "UnitSpawner.generated.h"
 
 class ALevelSettings;
 class ABaseUnit;
 
-UCLASS()
-class COREDEFENCE_API AUnitSpawner : public AActor
+UCLASS(ClassGroup=(Units), meta=(BlueprintSpawnableComponent))
+class COREDEFENCE_API UUnitSpawner : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AUnitSpawner();
+	UUnitSpawner();
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,7 +23,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void SpawnUnit(const TSubclassOf<ABaseUnit> UnitToSpawn) const;
 
