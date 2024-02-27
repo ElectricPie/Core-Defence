@@ -16,6 +16,9 @@ class COREDEFENCE_API UTurretSocketRefComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTurretSocketRefComponent();
+	
+	void SetTurretSocket(ATurretSocket* TurretSocket) { OwningSocket = TurretSocket; }
+	ATurretSocket* GetTurretSocket() const { return OwningSocket; }
 
 protected:
 	// Called when the game starts
@@ -24,11 +27,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	ATurretSocket* OwningSocket;
-	
-public:
-	void SetTurretSocket(ATurretSocket* TurretSocket) { OwningSocket = TurretSocket; }
-	ATurretSocket* GetTurretSocket() const { return OwningSocket; }
 };

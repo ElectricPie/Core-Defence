@@ -9,31 +9,49 @@
 #include "Units/BaseUnit.h"
 
 // Sets default values
-AUnitExit::AUnitExit()
+UUnitExit::UUnitExit()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	
-	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Volume"));
-	RootComponent = TriggerVolume;
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
-void AUnitExit::BeginPlay()
+void UUnitExit::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!GetOwner())
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s cannot find owner!"), *GetName());
+		return;
+	}
+	
 	Player = Cast<ATowerDefencePlayer>(GetWorld()->GetFirstPlayerController());
 	if (!Player)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s cannot find player!"), *GetName());
 	}
+	
+	if (UShapeComponent* TriggerVolume = Cast<UShapeComponent>(GetOwner()->GetComponentByClass(UBoxComponent::StaticClass())))
+	{
+		TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &UUnitExit::OnOverlapBegin);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s cannot find shape component!"), *GetName());
+	}
 }
 
-void AUnitExit::NotifyActorBeginOverlap(AActor* OtherActor)
+// Called every frame
+void UUnitExit::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::NotifyActorBeginOverlap(OtherActor);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
 
+void UUnitExit::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
 	if (!Player) return;
 
 	ABaseUnit* Unit = Cast<ABaseUnit>(OtherActor);
@@ -52,11 +70,3 @@ void AUnitExit::NotifyActorBeginOverlap(AActor* OtherActor)
 	// Destroy the unit
 	Unit->ReachedExit();
 }
-
-// Called every frame
-void AUnitExit::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
