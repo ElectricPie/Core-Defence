@@ -3,7 +3,7 @@
 
 #include "TurretSocket.h"
 
-#include "TowerDefencePlayer.h"
+#include "Player/TowerDefencePlayer.h"
 #include "Turret.h"
 #include "DataAssets/TurretDataAsset.h"
 #include "Enums/ETurretBuildErrors.h"
