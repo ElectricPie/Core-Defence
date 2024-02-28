@@ -39,11 +39,17 @@ void UUnitSpawner::SpawnUnit(const TSubclassOf<ABaseUnit> UnitToSpawn) const
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s attempted to spawn a null unit"), *GetName());
 	}
+	if (Waypoints.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s attempted to set waypoints on unit with empty array"), *GetName());
+		return;
+	}
 
 	ABaseUnit* NewEnemy = GetWorld()->SpawnActor<ABaseUnit>(
 		UnitToSpawn,
 		Owner->GetActorLocation(),
 		Owner->GetActorRotation()
 	);
+	
 	NewEnemy->SetWaypoints(Waypoints);
 }
